@@ -1,1 +1,0 @@
-/home/amnesia/.gitclones/dwm/config.def.h
