@@ -20,6 +20,7 @@ Plug 'habamax/vim-godot'
 Plug 'clktmr/vim-gdscript3'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'aserebryakov/vim-todo-lists'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
