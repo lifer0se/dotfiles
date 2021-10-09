@@ -1,11 +1,11 @@
 #!/bin/sh
 
 TERM="termite"
-SERVER="GODOT"
+SERVER="/tmp/godot"
 
-if [ ! -z `vim --serverlist | grep $SERVER` ]; then
-    vim --servername $SERVER --remote-silent-tab +$2 "$1"
+if [ ! -z `nvr --serverlist | grep $SERVER` ]; then
+    nvr --servername $SERVER +$2 "$1"
 else
     FILE=$(echo $1 | sed 's! !\\ !g')
-    $TERM -e "vim --servername $SERVER +$2 $FILE"
+    $TERM -e "nvr --servername $SERVER +$2 $FILE"
 fi

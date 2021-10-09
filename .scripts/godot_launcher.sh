@@ -18,4 +18,4 @@ godot &
 
 xdotool key Super+5
 
-termite -e "vim --servername GODOT"
+termite -e "nvr --servername /tmp/godot"

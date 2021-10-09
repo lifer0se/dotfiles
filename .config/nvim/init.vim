@@ -1,26 +1,25 @@
-source ~/.config/vim/autoload/plug.vim
+call plug#begin('~/.config/nvim/plugged')
 
-call plug#begin('~/.config/vim/plugged')
-
-Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
-Plug 'preservim/nerdtree'
-Plug 'ryanoasis/vim-devicons'
 Plug 'preservim/nerdcommenter'
-Plug 'ap/vim-css-color'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'puremourning/vimspector'
-Plug 'szw/vim-maximizer'
-Plug 'junegunn/fzf'
+Plug 'tpope/vim-fugitive'
+
+Plug 'ryanoasis/vim-devicons'
 Plug 'morhetz/gruvbox'
-Plug 'shinchu/lightline-gruvbox.vim'
-Plug 'ycm-core/YouCompleteMe'
-Plug 'habamax/vim-godot'
+Plug 'ap/vim-css-color'
+
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'ThePrimeagen/harpoon'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'clktmr/vim-gdscript3'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'aserebryakov/vim-todo-lists'
-Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -35,7 +34,6 @@ syntax enable
 set completeopt=menuone
 set backspace=indent,eol,start
 set ignorecase
-set expandtab
 set shiftround
 set shiftwidth=4
 set softtabstop=-1
@@ -61,17 +59,18 @@ set nowrap
 set noshowmode
 set signcolumn=yes
 set showcmd
-set cmdheight=1
+set cmdheight=2
 
 set noswapfile
 set nobackup
-set undodir=~/.config/vim/undo
 set undofile
-set viminfo+=n~/.config/vim/viminfo/viminfo
 
 set updatetime=300
 set mouse=a
 set autoread
+
+set clipboard=unnamedplus
+
 
 set cursorline
 set background=dark
@@ -90,44 +89,76 @@ hi Search cterm=NONE ctermfg=189 ctermbg=8
 "            Plugin Settings             "
 """"""""""""""""""""""""""""""""""""""""""
 
-hi YcmErrorSign ctermbg=NONE ctermfg=167
-hi YcmWarningSign ctermbg=NONE ctermfg=214
-hi YcmErrorSection ctermbg=NONE
-hi YcmWarningSection ctermbg=NONE
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-let g:ycm_global_ycm_extra_conf = '/home/amnesia/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_auto_hover = ''
-let g:ycm_error_symbol = 'ﰲ'
-let g:ycm_warning_symbol = 'ﰲ'
-let g:ycm_key_list_stop_completion = ['<Enter>', '<Left>']
-let g:ycm_server_log_level = 'error'
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-if !has_key( g:, 'ycm_language_server' )
-  let g:ycm_language_server = []
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> E :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
-let g:ycm_language_server += [
-  \   {
-  \     'name': 'godot',
-  \     'filetypes': [ 'gdscript3' ],
-  \     'project_root_files': [ 'project.godot' ],
-  \     'port': 6008
-  \   }
-  \ ]
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeHighlightCursorLine = 1
-let g:NERDTreeHijackNetrw = 0
+nnoremap <silent> ` :lua require("harpoon.mark").add_file()<cr>
+nnoremap <silent> ~ :lua require("harpoon.ui").toggle_quick_menu()<cr>
+nnoremap <silent> ! :lua require("harpoon.ui").nav_file(1)<cr>
+nnoremap <silent> @ :lua require("harpoon.ui").nav_file(2)<cr>
+nnoremap <silent> # :lua require("harpoon.ui").nav_file(3)<cr>
+nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
+
+let g:airline_theme='angr'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_symbols_ascii = 1
+let g:airline#extensions#coc#enabled = 0
 
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
-
-let g:lightline = {
-      \ 'colorscheme': 'gruvbox'
-     \ }
 
 let g:startify_files_number = 18
 let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
@@ -176,7 +207,7 @@ cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 augroup reload_vimrc
   au!
-  au BufWritePost,FileWritePost *.vim,~/.vimrc,~/.config/vim/vimrc source <afile>
+  au BufWritePost,FileWritePost *.vim,~/.vimrc,~/.config/nvim/init.vim source <afile>
 augroup END
 
 
@@ -186,6 +217,10 @@ augroup END
 
 let mapleader = "\<Space>"
 
+nnoremap <silent> <leader>g<leader> :G<cr>
+nnoremap <leader>gc :Git commit<cr>
+nnoremap <leader>gp :Git push<cr>
+
 nnoremap <C-s> :w<cr>
 inoremap <C-s> <C-c>:w<cr>
 vnoremap <C-s> <C-c>:w<cr>
@@ -193,24 +228,10 @@ vnoremap <C-s> <C-c>:w<cr>
 nnoremap <leader>ll :Startify<cr>
 
 nnoremap Y y$
-noremap <leader>p "_dp
-
-noremap <leader>P "_dP
-vnoremap <leader>p "_dp
-vnoremap <leader>P "_dP
-nnoremap <C-v> "+p
-vnoremap <C-v> "+p
-vnoremap <C-z> "+y
-nnoremap <C-z> "+yy
-vnoremap <C-d> "+d
-nnoremap <C-d> "+dd
-
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>u :UndotreeToggle<cr>
-
-nmap <silent> <leader>d <plug>(YCMHover)
-nnoremap <leader>gd :YcmCompleter GoTo<cr>
-nnoremap <leader>rr :YcmCompleter RefactorRename<space>
+noremap <leader>p "_dP
+noremap <leader>P "_dp
+vnoremap <leader>p "_dP
+vnoremap <leader>P "_dp
 
 map <leader>tn :tabnew<cr>
 noremap L gt
@@ -238,9 +259,8 @@ noremap <leader>h :set hlsearch! hlsearch?<cr>
 
 nnoremap <leader>s<leader> :%s///gc<Left><Left><Left><Left>
 nnoremap <leader>ss :%s///g<Left><Left><Left>
-
-vnoremap <leader>s<leader> y:%s/<C-R>"//gc<Left><Left><Left>
-vnoremap <leader>ss y:%s/<C-R>"//g<Left><Left>
+vnoremap <leader>s<leader> y:%s/<C-R>"//gc<Left><Left><Left><C-R>"
+vnoremap <leader>ss y:%s/<C-R>"//g<Left><Left><C-R>"
 
 vmap s` c`<C-R>"`<Esc>
 vmap s' c'<C-R>"'<Esc>
@@ -255,9 +275,9 @@ vmap s< c<<C-R>"><Esc>
 vmap s> c<<C-R>"><Esc>
 
 nnoremap <silent> <2-LeftMouse> viw
-vnoremap <C-f> y0/<C-r>"<cr>:set hls<cr>
+vnoremap <silent> <C-f> y0/<C-r>"<cr>:set hls<cr>
 
-map <leader>t<leader> :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR>
+map <silent> <leader>t<leader> :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR>
 
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -278,7 +298,7 @@ inoremap } }<c-g>u
 inoremap ( (<c-g>u
 inoremap ) )<c-g>u
 
-vnoremap J :m '>+1<cr>gv=gv
-vnoremap K :m '<-2<cr>gv=gv
-nnoremap J :m .+1<cr>==
-nnoremap K :m .-2<cr>==
+vnoremap <silent> J :m '>+1<cr>gv=gv
+vnoremap <silent> K :m '<-2<cr>gv=gv
+nnoremap <silent> J :m .+1<cr>==
+nnoremap <silent> K :m .-2<cr>==
