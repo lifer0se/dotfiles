@@ -6,8 +6,12 @@ Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'preservim/nerdcommenter'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'tpope/vim-fugitive'
 Plug 'cohama/lexima.vim'
+Plug 'tpope/vim-surround'
+
+
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
 Plug 'ryanoasis/vim-devicons'
 Plug 'morhetz/gruvbox'
@@ -181,6 +185,8 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = '  ☰ '
 let g:airline_symbols.colnr = ':'
 let g:airline_symbols.maxlinenr = ' '
+let g:airline#extensions#tabline#keymap_ignored_filetypes =
+        \ ['vimfiler', 'nerdtree']
 
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
@@ -260,10 +266,10 @@ vnoremap <leader>p "_dP
 vnoremap <leader>P "_dp
 
 map <leader>tn :tabnew<cr>
-noremap L gt
-noremap H gT
+nmap L <Plug>AirlineSelectNextTab
+nmap H <Plug>AirlineSelectPrevTab
 
-noremap <C-c> <C-w>c
+noremap <silent> <C-c> :bd!<cr>
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
@@ -289,18 +295,6 @@ nnoremap <leader>sc :%s///gc<Left><Left><Left><Left>
 nnoremap <leader>ss :%s///g<Left><Left><Left>
 vnoremap <leader>sc y:%s/<C-R>"//gc<Left><Left><Left><C-R>"
 vnoremap <leader>ss y:%s/<C-R>"//g<Left><Left><C-R>"
-
-vmap s` c`<C-R>"`<Esc>
-vmap s' c'<C-R>"'<Esc>
-vmap s" c"<C-R>""<Esc>
-vmap s[ c[<C-R>"]<Esc>
-vmap s] c[<C-R>"]<Esc>
-vmap s{ c{<C-R>"}<Esc>
-vmap s} c{<C-R>"}<Esc>
-vmap s( c(<C-R>")<Esc>
-vmap s) c(<C-R>")<Esc>
-vmap s< c<<C-R>"><Esc>
-vmap s> c<<C-R>"><Esc>
 
 nnoremap <silent> <2-LeftMouse> viw
 nnoremap <silent> <C-f> /<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>:set hls<cr>
