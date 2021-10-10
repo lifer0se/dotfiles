@@ -11,9 +11,10 @@ plugins=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions history-sub
 
 source $ZSH/oh-my-zsh.sh
 
-alias ls="ls -a --color=auto"
+alias vim="nvim"
 alias f="fzf_to_vim.sh"
 alias nc="nordvpn connect"
 alias ncb="nordvpn connect Brazil"
 alias nd="nordvpn disconnect"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias ls="/home/amnesia/.local/share/gem/ruby/3.0.0/gems/colorls-1.4.4/exe/colorls --sd"

@@ -158,11 +158,24 @@ nnoremap <silent> # :lua require("harpoon.ui").nav_file(3)<cr>
 nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
 
 let g:airline_theme='bubblegum'
+let g:airline_extensions = ['branch', 'tabline']
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_symbols_ascii = 1
-let g:airline#extensions#coc#enabled = 0
-let g:airline#extensions#tabline#right_sep = '|'
-let g:airline_extensions = []
+let g:airline#extensions#tabline#left_sep = ' '
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_left_sep = ' '
+let g:airline_left_alt_sep = ' '
+let g:airline_right_sep = ' '
+let g:airline_right_alt_sep = ' '
+let g:airline_symbols.branch = ''
+let g:airline_symbols.dirty='!'
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '  ☰ '
+let g:airline_symbols.colnr = ':'
+let g:airline_symbols.maxlinenr = ' '
 
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
@@ -292,6 +305,8 @@ map <silent> <leader>t :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><
 
 nnoremap n nzzzv
 nnoremap N Nzzzv
+nnoremap u uzzzv
+nnoremap U Uzzzv
 
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
