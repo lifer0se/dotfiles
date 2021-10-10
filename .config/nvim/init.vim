@@ -1,4 +1,4 @@
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -84,6 +84,11 @@ hi Normal ctermbg=NONE
 hi CursorLine ctermbg=NONE
 hi Search cterm=NONE ctermfg=189 ctermbg=8
 
+hi CocErrorSign ctermfg=Red ctermbg=NONE
+hi CocWarningSign ctermfg=DarkYellow ctermbg=NONE
+hi CocErrorHighlight cterm=NONE
+hi CocWarningHighlight cterm=NONE
+
 
 """"""""""""""""""""""""""""""""""""""""""
 "            Plugin Settings             "
@@ -132,7 +137,6 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -153,10 +157,12 @@ nnoremap <silent> @ :lua require("harpoon.ui").nav_file(2)<cr>
 nnoremap <silent> # :lua require("harpoon.ui").nav_file(3)<cr>
 nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
 
-let g:airline_theme='angr'
+let g:airline_theme='bubblegum'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_symbols_ascii = 1
 let g:airline#extensions#coc#enabled = 0
+let g:airline#extensions#tabline#right_sep = '|'
+let g:airline_extensions = []
 
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
@@ -168,14 +174,16 @@ let g:startify_lists = [
   \ { 'type': 'sessions',  'header': ['   Saved sessions'] },
   \ ]
 let g:startify_custom_header = [
-\'  __      _______ __  __ ',
-\'  \ \    / /_   _|  \/  |',
-\'   \ \  / /  | | | \  / |',
-\'    \ \/ /   | | | |\/| |',
-\'     \  /   _| |_| |  | |',
-\'      \/   |_____|_|  |_|',
-\'                         ',
-\'                         ']
+\'                                ',
+\'  __   _ __      _______ __  __ ',
+\' |  \ | |\ \    / /_   _|  \/  |',
+\' | \ \| | \ \  / /  | | | \  / |',
+\' | |\ \ |  \ \/ /   | | | |\/| |',
+\' | | \  |   \  /   _| |_| |  | |',
+\' |_|  \_|    \/   |_____|_|  |_|',
+\'                                ',
+\'                                ']
+
 
 let g:cpp_attributes_highlight = 1
 let g:cpp_member_highlight = 1
@@ -184,7 +192,6 @@ let g:cpp_member_highlight = 1
 """"""""""""""""""""""""""""""""""""""""""
 "              Functions                 "
 """"""""""""""""""""""""""""""""""""""""""
-
 
 if ! has('gui_running')
     set ttimeoutlen=10
@@ -205,6 +212,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Save file as sudo on files that require root permission
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
+command! Vimrc :edit ~/.config/nvim/init.vim
 augroup reload_vimrc
   au!
   au BufWritePost,FileWritePost *.vim,~/.vimrc,~/.config/nvim/init.vim source <afile>
@@ -217,7 +225,7 @@ augroup END
 
 let mapleader = "\<Space>"
 
-nnoremap <silent> <leader>g<leader> :G<cr>
+nnoremap <silent> <leader>gg :G<cr>
 nnoremap <leader>gc :Git commit<cr>
 nnoremap <leader>gp :Git push<cr>
 
@@ -225,7 +233,7 @@ nnoremap <C-s> :w<cr>
 inoremap <C-s> <C-c>:w<cr>
 vnoremap <C-s> <C-c>:w<cr>
 
-nnoremap <leader>ll :Startify<cr>
+nnoremap <leader>u :UndotreeToggle<cr>
 
 nnoremap Y y$
 noremap <leader>p "_dP
@@ -242,6 +250,8 @@ noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
+noremap = <C-w>5>
+noremap - <C-w>5<
 
 nnoremap Q @q
 vnoremap Q :norm @q<cr>
@@ -257,9 +267,9 @@ vnoremap <S-Tab> <<<Esc>gv
 
 noremap <leader>h :set hlsearch! hlsearch?<cr>
 
-nnoremap <leader>s<leader> :%s///gc<Left><Left><Left><Left>
+nnoremap <leader>sc :%s///gc<Left><Left><Left><Left>
 nnoremap <leader>ss :%s///g<Left><Left><Left>
-vnoremap <leader>s<leader> y:%s/<C-R>"//gc<Left><Left><Left><C-R>"
+vnoremap <leader>sc y:%s/<C-R>"//gc<Left><Left><Left><C-R>"
 vnoremap <leader>ss y:%s/<C-R>"//g<Left><Left><C-R>"
 
 vmap s` c`<C-R>"`<Esc>
@@ -275,9 +285,10 @@ vmap s< c<<C-R>"><Esc>
 vmap s> c<<C-R>"><Esc>
 
 nnoremap <silent> <2-LeftMouse> viw
+nnoremap <silent> <C-f> /<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>:set hls<cr>
 vnoremap <silent> <C-f> y0/<C-r>"<cr>:set hls<cr>
 
-map <silent> <leader>t<leader> :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR>
+map <silent> <leader>t :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<
 
 nnoremap n nzzzv
 nnoremap N Nzzzv

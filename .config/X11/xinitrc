@@ -10,6 +10,7 @@ nm-applet &
 blueman-applet &
 volumeicon &
 /opt/urserver/urserver --daemon &
+play-wth-mpv &
 
 #exec dwm
 while true; do
