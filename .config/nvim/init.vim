@@ -7,6 +7,7 @@ Plug 'mbbill/undotree'
 Plug 'preservim/nerdcommenter'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'cohama/lexima.vim'
 
 Plug 'ryanoasis/vim-devicons'
 Plug 'morhetz/gruvbox'
@@ -89,6 +90,10 @@ hi CocWarningSign ctermfg=DarkYellow ctermbg=NONE
 hi CocErrorHighlight cterm=NONE
 hi CocWarningHighlight cterm=NONE
 
+autocmd User AirlineAfterInit hi airline_tabhid ctermbg=238 ctermfg=249
+autocmd User AirlineAfterInit hi airline_tabsel ctermbg=238 ctermfg=150
+autocmd User AirlineAfterInit hi airline_tabmod ctermbg=238 ctermfg=110
+
 
 """"""""""""""""""""""""""""""""""""""""""
 "            Plugin Settings             "
@@ -159,8 +164,8 @@ nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
 
 let g:airline_theme='bubblegum'
 let g:airline_extensions = ['branch', 'tabline']
-let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_symbols_ascii = 1
 let g:airline#extensions#tabline#left_sep = ' '
 if !exists('g:airline_symbols')
