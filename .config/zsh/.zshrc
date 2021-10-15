@@ -3,12 +3,13 @@ export ZSH="/home/amnesia/.config/zsh/.oh-my-zsh"
 
 autoload -U compinit && compinit
 autoload -Uz promptinit && promptinit
-prompt_mytheme_setup() { PS1="%B%F{green}➜ %B%F{blue}%~ %f%b" }
-prompt_themes+=( mytheme )
-prompt mytheme
+#prompt_mytheme_setup() { PS1="%B%F{green}➜ %B%F{blue}%~ %f%b" }
+#prompt_themes+=( rubbyshell )
+#prompt mytheme
 
-plugins=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions history-substring-search)
+plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history-substring-search)
 
+ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
 alias vim="nvim"

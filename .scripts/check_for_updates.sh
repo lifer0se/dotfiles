@@ -22,8 +22,8 @@ fi
 NEWNUM=$(($NUM - $OLDNUM))
 if [[ $NEWNUM -gt 1 ]]
 then
-	notify-send "📦 Repository Sync" "$NEWNUM new updates available."
+	notify-send " Repository Sync" "$NEWNUM new updates available."
 elif [[ $NEWNUM -gt 0 ]]
 then
-	notify-send "📦 Repository Sync" "$NEWNUM new update available."
+	notify-send " Repository Sync" "$NEWNUM new update available."
 fi

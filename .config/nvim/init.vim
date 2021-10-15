@@ -1,14 +1,13 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'preservim/nerdcommenter'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'cohama/lexima.vim'
 Plug 'tpope/vim-surround'
-
+Plug 'aserebryakov/vim-todo-lists'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
@@ -21,10 +20,15 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'ThePrimeagen/harpoon'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'clktmr/vim-gdscript3'
-Plug 'OmniSharp/omnisharp-vim'
-Plug 'aserebryakov/vim-todo-lists'
+Plug 'neovim/nvim-lspconfig'
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'onsails/lspkind-nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 call plug#end()
 
@@ -36,7 +40,7 @@ call plug#end()
 filetype indent plugin on
 syntax enable
 
-set completeopt=menuone
+set completeopt=menuone,noinsert,noselect,preview
 set backspace=indent,eol,start
 set ignorecase
 set shiftround
@@ -76,95 +80,26 @@ set autoread
 
 set clipboard=unnamedplus
 
-
 set cursorline
 set background=dark
 colorscheme gruvbox
-
-let &t_SI = "\e[6 q"
-let &t_EI = "\e[2 q"
 
 hi SignColumn ctermbg=NONE
 hi Normal ctermbg=NONE
 hi CursorLine ctermbg=NONE
 hi Search cterm=NONE ctermfg=189 ctermbg=8
-
-hi CocErrorSign ctermfg=Red ctermbg=NONE
-hi CocWarningSign ctermfg=DarkYellow ctermbg=NONE
-hi CocErrorHighlight cterm=NONE
-hi CocWarningHighlight cterm=NONE
+hi VertSplit ctermbg=NONE ctermfg=black
 
 autocmd User AirlineAfterInit hi airline_tabhid ctermbg=238 ctermfg=249
 autocmd User AirlineAfterInit hi airline_tabsel ctermbg=238 ctermfg=150
-autocmd User AirlineAfterInit hi airline_tabmod ctermbg=238 ctermfg=110
+autocmd User AirlineAfterInit hi airline_tabmod ctermbg=238 ctermfg=179
 
 
 """"""""""""""""""""""""""""""""""""""""""
 "            Plugin Settings             "
 """"""""""""""""""""""""""""""""""""""""""
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> E :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-
-nnoremap <silent> ` :lua require("harpoon.mark").add_file()<cr>
-nnoremap <silent> ~ :lua require("harpoon.ui").toggle_quick_menu()<cr>
-nnoremap <silent> ! :lua require("harpoon.ui").nav_file(1)<cr>
-nnoremap <silent> @ :lua require("harpoon.ui").nav_file(2)<cr>
-nnoremap <silent> # :lua require("harpoon.ui").nav_file(3)<cr>
-nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
+lua require('lsp')
 
 let g:airline_theme='bubblegum'
 let g:airline_extensions = ['branch', 'tabline']
@@ -188,6 +123,13 @@ let g:airline_symbols.maxlinenr = ' '
 let g:airline#extensions#tabline#keymap_ignored_filetypes =
         \ ['vimfiler', 'nerdtree']
 
+nnoremap <silent> ` :lua require("harpoon.mark").add_file()<cr>
+nnoremap <silent> ~ :lua require("harpoon.ui").toggle_quick_menu()<cr>
+nnoremap <silent> ! :lua require("harpoon.ui").nav_file(1)<cr>
+nnoremap <silent> @ :lua require("harpoon.ui").nav_file(2)<cr>
+nnoremap <silent> # :lua require("harpoon.ui").nav_file(3)<cr>
+nnoremap <silent> $ :lua require("harpoon.ui").nav_file(4)<cr>
+
 let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
 let g:startify_files_number = 18
@@ -207,10 +149,6 @@ let g:startify_custom_header = [
 \' |_|  \_|    \/   |_____|_|  |_|',
 \'                                ',
 \'                                ']
-
-
-let g:cpp_attributes_highlight = 1
-let g:cpp_member_highlight = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""
@@ -254,7 +192,7 @@ nnoremap <leader>gc :Git commit<cr>
 nnoremap <leader>gp :Git push<cr>
 
 nnoremap <C-s> :w<cr>
-inoremap <C-s> <C-c>:w<cr>
+inoremap <C-s> <esc>
 vnoremap <C-s> <C-c>:w<cr>
 
 nnoremap <leader>u :UndotreeToggle<cr>
@@ -269,7 +207,8 @@ map <leader>tn :tabnew<cr>
 nmap L <Plug>AirlineSelectNextTab
 nmap H <Plug>AirlineSelectPrevTab
 
-noremap <silent> <C-c> :bd!<cr>
+noremap <silent> <C-q> :bd!<cr>
+noremap <C-c> <C-w>c
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
@@ -304,8 +243,6 @@ map <silent> <leader>t :vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><
 
 nnoremap n nzzzv
 nnoremap N Nzzzv
-nnoremap u uzzzv
-nnoremap U Uzzzv
 
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
