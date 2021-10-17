@@ -15,6 +15,7 @@ Plug('tpope/vim-rhubarb')
 
 Plug('kyazdani42/nvim-web-devicons')
 Plug('morhetz/gruvbox')
+
 Plug('norcalli/nvim-colorizer.lua')
 
 Plug('nvim-lua/popup.nvim')

@@ -38,9 +38,14 @@ require "lsp_signature".setup({
 
 require'colorizer'.setup()
 
+require('config.sumneko')
+
 nvim_lsp.gdscript.setup {
 	on_attach = on_attach,
 	capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
-require('config.sumneko')
+require'lspconfig'.csharp_ls.setup {
+	on_attach = on_attach,
+	capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+}

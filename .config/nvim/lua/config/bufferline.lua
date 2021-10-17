@@ -27,6 +27,10 @@ require'bufferline'.setup{
 			guibg = '#444444',
 			guifg = '#716C5F'
 		},
+		modified_visible = {
+			guibg = '#444444',
+			guifg = '#716C5F'
+		},
 		modified_selected = {
 			guibg = '#3A3A3A',
 			guifg = '#AFD787',

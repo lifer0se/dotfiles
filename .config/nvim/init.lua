@@ -1,4 +1,3 @@
-require('config.plugins')
 
 
 --""""""""""""""""""""""""""""""""""""""""""
@@ -33,6 +32,21 @@ set.clipboard = 'unnamedplus'
 
 set.termguicolors = true
 set.cursorline = true
+
+
+--""""""""""""""""""""""""""""""""""""""""""
+--"            Plugin Settings             "
+--""""""""""""""""""""""""""""""""""""""""""
+
+require('config.plugins')
+require('config.maps')
+require('config.lsp')
+require('config.cmp')
+require('config.treesitter')
+require('config.lualine')
+require('config.bufferline')
+require('config.telescope')
+require('config.nvim-tree')
 vim.cmd[[
 	colorscheme gruvbox
 	highlight Normal guibg=NONE
@@ -43,19 +57,6 @@ vim.cmd[[
 	highlight Visual guibg=#666C87 guifg=#91AFEB gui=NONE
 ]]
 
-
---""""""""""""""""""""""""""""""""""""""""""
---"            Plugin Settings             "
---""""""""""""""""""""""""""""""""""""""""""
-
-require('config.maps')
-require('config.lsp')
-require('config.cmp')
-require('config.treesitter')
-require('config.lualine')
-require('config.bufferline')
-require('config.telescope')
-require('config.nvim-tree')
 
 vim.cmd [[
 
