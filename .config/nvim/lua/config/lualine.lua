@@ -5,10 +5,6 @@ custom_onedark.normal.b.fg = '#ebdbb2'
 custom_onedark.normal.c.bg = '#444444'
 custom_onedark.normal.c.fg = '#ebdbb2'
 
-local function location()
-  return [[ ☰%3l:%-2c]]
-end
-
 require'lualine'.setup {
   options = {
     icons_enabled = true,
@@ -25,7 +21,7 @@ require'lualine'.setup {
     lualine_c = {'filename'},
     lualine_x = {'filetype'},
     lualine_y = {'progress'},
-    lualine_z = { location }
+    lualine_z = {'location'}
   },
   inactive_sections = {
     lualine_a = {},

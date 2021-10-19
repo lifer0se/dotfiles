@@ -2,12 +2,12 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.local/share/nvim/plugged')
 
-Plug('mhinz/vim-startify')
+Plug('goolord/alpha-nvim')
 Plug('mbbill/undotree')
-Plug('preservim/nerdcommenter')
+Plug('winston0410/commented.nvim')
 Plug('tpope/vim-surround')
 Plug('aserebryakov/vim-todo-lists')
-Plug('tmsvg/pear-tree')
+Plug('windwp/nvim-autopairs')
 Plug('kyazdani42/nvim-tree.lua')
 
 Plug('tpope/vim-fugitive')
@@ -22,6 +22,7 @@ Plug('nvim-lua/popup.nvim')
 Plug('nvim-lua/plenary.nvim')
 
 Plug('neovim/nvim-lspconfig')
+Plug('williamboman/nvim-lsp-installer')
 Plug('ray-x/lsp_signature.nvim')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp')
@@ -33,12 +34,14 @@ Plug('ThePrimeagen/harpoon')
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = vim.fn[':TSUpdate']})
 Plug('nvim-treesitter/playground')
+Plug('nvim-treesitter/nvim-treesitter-textobjects')
 
 Plug('nvim-telescope/telescope.nvim')
 Plug('nvim-telescope/telescope-fzy-native.nvim')
-Plug('rudism/telescope-vinegar.nvim')
 
 Plug('hoob3rt/lualine.nvim')
 Plug('akinsho/bufferline.nvim')
+
+
 
 vim.call('plug#end')

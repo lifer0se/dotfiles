@@ -34,6 +34,7 @@ set.termguicolors = true
 set.cursorline = true
 
 
+
 --""""""""""""""""""""""""""""""""""""""""""
 --"            Plugin Settings             "
 --""""""""""""""""""""""""""""""""""""""""""
@@ -47,46 +48,27 @@ require('config.lualine')
 require('config.bufferline')
 require('config.telescope')
 require('config.nvim-tree')
+require('colorizer').setup()
+require('alpha').setup(require'alpha.themes.startify'.opts)
+require('nvim-autopairs').setup{}
+require('commented').setup{
+	keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
+}
+
+
 vim.cmd[[
 	colorscheme gruvbox
 	highlight Normal guibg=NONE
 	highlight SignColumn guibg=NONE
 	highlight CursorLine guibg=NONE
-	highlight Search guibg=#91AFEB guifg=#666C87
+	highlight CursorLineNr guibg=NONE
+	highlight Search guibg=#91AFEB guifg=#515873
 	highlight VertSplit guibg=NONE guifg=#444444
-	highlight Visual guibg=#666C87 guifg=#91AFEB gui=NONE
+	highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
+	highlight DiagnosticError guifg=#AB1E18
+	highlight DiagnosticWarning guifg=#FABD2F
+	highlight DiagnosticHint guifg=#689D6A
 ]]
-
-
-vim.cmd [[
-
-	imap <BS> <Plug>(PearTreeBackspace)
-	let g:pear_tree_smart_openers = 1
-	let g:pear_tree_smart_closers = 1
-	let g:pear_tree_smart_backspace = 1
-
-	let g:pear_tree_map_special_keys = 0
-
-	let g:startify_files_number = 18
-	let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
-	let g:startify_session_persistence = 1
-	let g:startify_lists = [
-		\ { 'type': 'dir',       'header': ['   Recent files'] },
-		\ { 'type': 'sessions',  'header': ['   Saved sessions'] },
-		\ ]
-	let g:startify_custom_header = [
-	\'                                ',
-	\'  __   _ __      _______ __  __ ',
-	\' |  \ | |\ \    / /_   _|  \/  |',
-	\' | \ \| | \ \  / /  | | | \  / |',
-	\' | |\ \ |  \ \/ /   | | | |\/| |',
-	\' | | \  |   \  /   _| |_| |  | |',
-	\' |_|  \_|    \/   |_____|_|  |_|',
-	\'                                ',
-	\'                                ']
-
-]]
-
 
 --""""""""""""""""""""""""""""""""""""""""""
 --"              Functions                 "

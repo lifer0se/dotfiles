@@ -2,16 +2,16 @@ local map = function(key)
   local opts = {noremap = true}
   for i, v in pairs(key) do
     if type(i) == 'string' then opts[i] = v end
-  end
+	end
 
-  local buffer = opts.buffer
+	local buffer = opts.buffer
   opts.buffer = nil
 
   if buffer then
     vim.api.nvim_buf_set_keymap(0, key[1], key[2], key[3], opts)
   else
     vim.api.nvim_set_keymap(key[1], key[2], key[3], opts)
-  end
+	end
 end
 
 vim.g.mapleader = " "
@@ -27,6 +27,7 @@ map { 'n', noremap = false, '<leader>p', '"_dP' }
 map { 'n', noremap = false, '<leader>P', '"_dp' }
 map { 'v', noremap = false, '<leader>p', '"_dP' }
 map { 'v', noremap = false, '<leader>P', '"_dp' }
+map { 'i', noremap = false, '<C-p>', '<C-R>+' }
 map { 'n', noremap = false, '<leader>tn', ':tabnew<cr>' }
 map { 'n', noremap = false, silent = true, '<C-z>', ':bd!<cr>' }
 map { 'n', noremap = false, '<C-c>', '<C-w>c' }
@@ -38,7 +39,7 @@ map { 'n', noremap = true, silent = true, '<C-Up>', ':resize +2<CR>' }
 map { 'n', noremap = true, silent = true, '<C-Down>', ':resize -2<CR>' }
 map { 'n', noremap = true, silent = true, '<C-Left>', ':vertical resize +2<CR>' }
 map { 'n', noremap = true, silent = true, '<C-Right>',':vertical resize -2<CR>' }
-map { 'n', noremap = false, '<Tab>', '  >>' }
+map { 'n', noremap = false, '<Tab>', '>>' }
 map { 'n', noremap = false, '<S-Tab>', '<<' }
 map { 'v', noremap = false, '<Tab>', '  >><Esc>gv' }
 map { 'v', noremap = false, '<S-Tab>', '<<<Esc>gv' }
@@ -49,7 +50,7 @@ map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R
 map { 'v', noremap = false, '<leader>ss', 'y:%s/<C-R>"//g<Left><Left><C-R>"' }
 map { 'n', noremap = false, 'n', 'nzzzv' }
 map { 'n', noremap = false, 'N', 'Nzzzv' }
-map { 'v', noremap = false, 's', '' }
+map { 'v', 's', '' }
 map { 'v', noremap = false, 's`', 'c`<C-R>"`<Esc>' }
 map { 'v', noremap = false, 's\'', 'c\'<C-R>"\'<Esc>' }
 map { 'v', noremap = false, 's"', 'c"<C-R>""<Esc>' }
@@ -80,11 +81,12 @@ map { 'n', noremap = false, silent = true, '<A-4>', ':lua require("harpoon.ui").
 map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
 map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
 map { 'n', noremap = false, silent = true, '<leader>ff', ':Telescope find_files<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fb', '<cmd>lua require(\'telescope\').extensions.vinegar.file_browser()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope find_files cwd=~/.config<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fv', ':Telescope find_files cwd=~/.config/nvim<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fg', ':Telescope live_grep<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', ':Telescope registers<cr>' }
 map { 'n', noremap = false, silent = true, '<C-_>', ':Telescope current_buffer_fuzzy_find<cr>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
-map { 'n', noremap = false, '<leader>e', ':NvimTreeFindFile<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>fb', ':NvimTreeFindFile<cr>' }
+--map { 'n', noremap = false, '<leader>cc', ':call nerdcommenter#Comment(\'n\',\'toggle\')<cr>' }
+--map { 'v', noremap = false, '<leader>cc', ':call nerdcommenter#Comment(\'v\',\'toggle\')<cr>' }

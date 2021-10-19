@@ -8,16 +8,14 @@ local on_attach = function(client, bufnr)
 	buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})<CR>", {})
 	buf_map(bufnr, "n", "ge", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", {})
 	buf_map(bufnr, "n", "gE", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", {})
-
-
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-	underline = false,
 	update_in_insert = false,
 	spacing = 0,
+	underline = false,
 	virtual_text = {
-		prefix = '●',
+		prefix = '●'
 	}
 })
 
@@ -36,16 +34,21 @@ require "lsp_signature".setup({
 	},
 })
 
-require'colorizer'.setup()
-
-require('config.sumneko')
-
 nvim_lsp.gdscript.setup {
 	on_attach = on_attach,
 	capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
-require'lspconfig'.csharp_ls.setup {
-	on_attach = on_attach,
-	capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-}
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+	local opts = {
+		on_attach = on_attach,
+		capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+		}
+		if server.name == 'omnisharp' then
+			opts.cmd = { "/home/amnesia/.local/share/nvim/lsp_servers/omnisharp/omnisharp/run", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) };
+			opts.root_dir = nvim_lsp.util.root_pattern("*.csproj","*.sln");
+		end
+	server:setup(opts)
+	vim.cmd [[ do User LspAttachBuffers ]]
+end)
