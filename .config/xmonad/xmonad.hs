@@ -224,7 +224,7 @@ myConfig  = def
     , manageHook         = myManageHook
     , startupHook        = myStartupHook
     }
-    `additionalKeysP` myAditionalKeys `additionalMouseBindings` myMouseBindings
+    `additionalKeysP` myAditionalKeys
 
 ------------------------------------------------------------------------
 --
