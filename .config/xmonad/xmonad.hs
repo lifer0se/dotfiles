@@ -4,8 +4,7 @@ import System.Exit
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-import Data.Maybe (fromJust, Maybe( Just ))
-import XMonad.Actions.UpdatePointer
+import Data.Maybe
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
@@ -24,31 +23,65 @@ import XMonad.Util.Run
 import XMonad.Util.ClickableWorkspaces
 import XMonad.Util.NamedScratchpad
 
-import XMonad.Actions.UpdatePointer as UP
 import XMonad.Actions.CycleWS
+import XMonad.Actions.UpdatePointer
 
 import XMonad.Layout.MultiToggle.Instances (StdTransformers (NOBORDERS))
 import XMonad.Layout.MultiToggle (EOT (EOT), Toggle (Toggle), mkToggle, (??))
 
-import XMonad.Prelude (find, findIndex, isJust, isNothing, liftM2)
-
 
 myTerminal = "termite"
+myWorkspaces = ["  1  ","  2  ","  3  ","  4  ","  5  ","  6  ","  7  ","  8  ","  9  "]
 
-myWorkspaces    = ["  1  ","  2  ","  3  ","  4  ","  5  ","  6  ","  7  ","  8  ","  9  "]
-myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
-clickable ws = "<action=xdotool key super+" ++ show i ++ ">" ++ ws ++ "</action>"
-    where
-      i = fromJust $ M.lookup ws myWorkspaceIndices
-      --  t = "<fn=2>  \xf111  </fn>" else "a"
+------------------------------------------------------------------------
+--
 
+myScratchPads :: [NamedScratchpad]
+myScratchPads = [ NS "gcolor" spawnGc findGc manageGc
+                , NS "galculator" spawnCalc findCalc manageCalc
+                , NS "bashtop" spawnBt findBt manageBt
+                , NS "calendar" spawnGsc findGsc manageGsc
+                ]
+  where
+    spawnGc    = "gcolor2"
+    findGc     = className =? "Gcolor2"
+    manageGc   = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.3
+                 w = 0.3
+                 t = 0.5 -h / 2
+                 l = 0.5 -w / 2
+    spawnCalc  = "galculator"
+    findCalc   = className =? "Galculator"
+    manageCalc = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.5
+                 w = 0.2
+                 t = 0.5 -h / 2
+                 l = 0.5 -w / 2
+    spawnBt    = myTerminal ++ " --class BashTOP -e bashtop"
+    findBt     = className =? "BashTOP"
+    manageBt   = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.7
+                 w = 0.7
+                 t = 0.52 -h / 2
+                 l = 0.5 -w / 2
+    spawnGsc   = "gsimplecal"
+    findGsc    = className =? "Gsimplecal"
+    manageGsc  = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.19
+                 w = 0.13
+                 t = 0.04
+                 l = 0.5 -w / 2
 
 ------------------------------------------------------------------------
 --
 myAditionalKeys :: [(String, X ())]
 myAditionalKeys =
 
-      -- apps
+    -- apps
     [ ("M-<Return>", spawn (myTerminal))
     , ("M-v", spawn (myTerminal ++ " -e nvim"))
     , ("M-f", spawn (myTerminal ++ " -e ranger"))
@@ -60,50 +93,63 @@ myAditionalKeys =
     , ("M-s", spawn "spotify")
     , ("M-q", kill)
 
-    --  spotify controls
+    -- scratchpads
+		, ("M-g", namedScratchpadAction myScratchPads "gcolor")
+    , ("M-c", namedScratchpadAction myScratchPads "galculator")
+    , ("M-y", namedScratchpadAction myScratchPads "bashtop")
+    , ("M-m", namedScratchpadAction myScratchPads "calendar")
+
+    -- spotify controls
     , ("M-<F9>", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
     , ("M-<F11>", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
     , ("M-<F12>", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
 
-    --  volume controls
+    -- volume controls
     , ("M-<Print>", spawn "amixer set Master toggle")
     , ("M-<Scroll_lock>", spawn "amixer set Master 5%-")
     , ("M-<Pause>", spawn "amixer set Master 5%+")
 
-      --
+    -- window controls
     , ("M-j", windows W.focusDown)
     , ("M-k", windows W.focusUp)
     , ("M-h", windows W.focusMaster)
-    , ("M-comma", sendMessage (IncMasterN 1))
-    , ("M-period", sendMessage (IncMasterN (-1)))
     , ("M-C-h", sendMessage Shrink)
     , ("M-C-l", sendMessage Expand)
     , ("M-S-l", windows W.swapDown)
     , ("M-S-j", windows W.swapDown)
     , ("M-S-k", windows W.swapUp)
     , ("M-S-h", windows W.swapMaster)
+		, ("M-comma", sendMessage (IncMasterN 1))
+		, ("M-period", sendMessage (IncMasterN (-1)))
     , ("M-<Space>", withFocused $ windows . W.sink)
+
+		-- layout controls
     , ("M-a", sequence_ [sendMessage ToggleStruts, toggleScreenSpacingEnabled, toggleWindowSpacingEnabled])
     , ("M-S-a",sendMessage $ Toggle NOBORDERS)
     , ("M-n", sendMessage NextLayout)
+
+		-- workspace controls
+		, ("M-<Left>", prevWS)
+		, ("M-<Right>", nextWS)
+
+		-- screen controll
     , ("M-o", nextScreen)
     , ("M-S-o", shiftNextScreen)
-    , ("M-<Left>", prevWS)
-    , ("M-<Right>", nextWS)
     , ("M-S-<Left>", shiftToPrev)
     , ("M-S-<Right>", shiftToNext)
 
+		-- kill / restart xmonad
     , ("M-S-q", io (exitWith ExitSuccess))
     , ("M-S-r", spawn ("killall xmobar; xmonad --recompile; xmonad --restart"))
 
     ]
 
-myMouseBindings =
-    [ ((4, 1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-    , ((4, 2), (\w -> focus w >> windows W.shiftMaster))
-    , ((4, 3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-    , ((4, 4), (\_ -> nextWS))
-    , ((4, 5), (\_ -> prevWS))
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
+    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
+    , ((modm, button4), (\_ -> prevWS))
+    , ((modm, button5), (\_ -> nextWS))
     ]
 
 ------------------------------------------------------------------------
@@ -118,11 +164,10 @@ myLayout = avoidStruts ( layoutTall ||| layoutFull)
 ------------------------------------------------------------------------
 --
 myManageHook = composeAll
-    [ className =? "BashTOP"        --> doFloat
+    [ insertPosition End Newer
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
-    , insertPosition End Newer
-    ] <+> manageDocks
+    ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------
 --
@@ -172,13 +217,12 @@ myConfig  = def
     , modMask            = mod4Mask
     , normalBorderColor  = "#555E70"
     , focusedBorderColor = "#8BABF0"
-
     , terminal           = myTerminal
     , workspaces         = myWorkspaces
+    , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
     , manageHook         = myManageHook
     , startupHook        = myStartupHook
-    --  , logHook            = updatePointer (0.75, 0.75) (0, 0)
     }
     `additionalKeysP` myAditionalKeys `additionalMouseBindings` myMouseBindings
 
