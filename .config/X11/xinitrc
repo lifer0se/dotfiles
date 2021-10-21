@@ -1,21 +1,11 @@
 xrdb ~/.Xresources
+xsetroot -cursor_name left_ptr &
 
-picom &
-numlockx &
-setxkbmap -option caps:escape &
-nitrogen --restore &
-dunst &
-dwmblocks &
-nm-applet &
-blueman-applet &
-volumeicon &
-/opt/urserver/urserver --daemon &
-play-wth-mpv &
-
+exec xmonad
 #exec dwm
-while true; do
+#while true; do
     #Log stderror to a file
     #dwm 2> ~/.dwm.log
     #No error logging
-    dwm >/dev/null 2>&1
-done
+    #dwm >/dev/null 2>&1
+#done

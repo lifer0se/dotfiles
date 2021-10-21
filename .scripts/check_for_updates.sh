@@ -6,7 +6,7 @@ ping -q -c 1 example.org > /dev/null || exit
 
 sudo pacman -Syyuw --noconfirm || notify-send "Error downloading updates.
 Check your internet connection, if pacman is already running, or run update manually to see errors."
-pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"
+[[ $(pidof dwmblocks) ]] && pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"
 
 OLDNUM=$( [[ -f ~/.local/share/.pacman_updates_count ]] && cat ~/.local/share/.pacman_updates_count)
 NUM=$(pacman -Qu | grep -Fcv "[ignored]")

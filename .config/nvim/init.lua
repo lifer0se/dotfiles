@@ -7,6 +7,8 @@
 local set = vim.opt
 set.completeopt = { 'menuone', 'noinsert', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
+set.list = true
+set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
 set.shiftwidth = 2
 set.tabstop = 2
 set.smartindent = true

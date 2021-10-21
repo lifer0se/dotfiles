@@ -17,6 +17,7 @@ end
 vim.g.mapleader = " "
 map { 'n', noremap = false, 'Q', '@q' }
 map { 'n', noremap = false, '<C-s>', ':w<cr>' }
+map { 'v', noremap = false, '<C-s>', ':w<cr>' }
 map { 'i', noremap = false, '<C-s>', '<esc>' }
 map { 'n', noremap = false, silent = true, '<leader>gg', ':G<cr>' }
 map { 'n', noremap = false, '<leader>gc', ':Git commit<cr>' }
@@ -43,13 +44,14 @@ map { 'n', noremap = false, '<Tab>', '>>' }
 map { 'n', noremap = false, '<S-Tab>', '<<' }
 map { 'v', noremap = false, '<Tab>', '  >><Esc>gv' }
 map { 'v', noremap = false, '<S-Tab>', '<<<Esc>gv' }
-map { 'n', noremap = false, '<leader>h', ':set hlsearch! hlsearch?<cr>' }
+map { 'n', noremap = false, '<leader>hi', ':set hlsearch! hlsearch?<cr>' }
 map { 'n', noremap = false, '<leader>sc', ':%s///gc<Left><Left><Left><Left>' }
 map { 'n', noremap = false, '<leader>ss', ':%s///g<Left><Left><Left>' }
 map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R>"' }
 map { 'v', noremap = false, '<leader>ss', 'y:%s/<C-R>"//g<Left><Left><C-R>"' }
 map { 'n', noremap = false, 'n', 'nzzzv' }
 map { 'n', noremap = false, 'N', 'Nzzzv' }
+map { 'n', 's', '' }
 map { 'v', 's', '' }
 map { 'v', noremap = false, 's`', 'c`<C-R>"`<Esc>' }
 map { 'v', noremap = false, 's\'', 'c\'<C-R>"\'<Esc>' }
@@ -66,8 +68,8 @@ map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/nu
 map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>:set hls<cr>' }
 map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>:set hls<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>f', ':h <C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
-map { 'v', noremap = false, silent = true, '<leader>f', 'y:h <C-r>"<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>t', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }
+map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>td', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }
 map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<cr>gv=gv' }
 map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<cr>gv=gv' }
 map { 'n', noremap = false, silent = true, 'J', ':m .+1<cr>==' }
@@ -87,6 +89,6 @@ map { 'n', noremap = false, silent = true, '<leader>fg', ':Telescope live_grep<c
 map { 'n', noremap = false, silent = true, '<leader>fr', ':Telescope registers<cr>' }
 map { 'n', noremap = false, silent = true, '<C-_>', ':Telescope current_buffer_fuzzy_find<cr>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeToggle<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fb', ':NvimTreeFindFile<cr>' }
---map { 'n', noremap = false, '<leader>cc', ':call nerdcommenter#Comment(\'n\',\'toggle\')<cr>' }
---map { 'v', noremap = false, '<leader>cc', ':call nerdcommenter#Comment(\'v\',\'toggle\')<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<cr>' }
