@@ -1,10 +1,10 @@
 import XMonad
-import Data.Monoid
+--  import Data.Monoid
 import System.Exit
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-import Data.Maybe
+import Data.Maybe (fromJust)
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
@@ -16,22 +16,41 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Named
+import XMonad.Layout.DraggingVisualizer
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.WindowNavigation
 
 import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
-import XMonad.Util.Run
+--  import XMonad.Util.Run
 import XMonad.Util.ClickableWorkspaces
 import XMonad.Util.NamedScratchpad
 
 import XMonad.Actions.CycleWS
-import XMonad.Actions.UpdatePointer
+--  import XMonad.Actions.UpdatePointer
+import XMonad.Actions.TiledWindowDragging
+
+import XMonad.Prelude (isNothing)
 
 import XMonad.Layout.MultiToggle.Instances (StdTransformers (NOBORDERS))
 import XMonad.Layout.MultiToggle (EOT (EOT), Toggle (Toggle), mkToggle, (??))
 
 
+myTerminal :: [Char]
 myTerminal = "termite"
+
+
+
+myWorkspaces :: [[Char]]
 myWorkspaces = ["  1  ","  2  ","  3  ","  4  ","  5  ","  6  ","  7  ","  8  ","  9  "]
+
+myWorkspaceIndices :: M.Map [Char] Integer
+myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
+
+clickable :: [Char] -> [Char]
+clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
+    where
+       i = fromJust $ M.lookup ws myWorkspaceIndices
 
 ------------------------------------------------------------------------
 --
@@ -82,7 +101,7 @@ myAditionalKeys :: [(String, X ())]
 myAditionalKeys =
 
     -- apps
-    [ ("M-<Return>", spawn (myTerminal))
+    [ ("M-<Return>", spawn myTerminal)
     , ("M-v", spawn (myTerminal ++ " -e nvim"))
     , ("M-f", spawn (myTerminal ++ " -e ranger"))
     , ("M-d", spawn "dmenu_run")
@@ -94,7 +113,7 @@ myAditionalKeys =
     , ("M-q", kill)
 
     -- scratchpads
-		, ("M-g", namedScratchpadAction myScratchPads "gcolor")
+    , ("M-g", namedScratchpadAction myScratchPads "gcolor")
     , ("M-c", namedScratchpadAction myScratchPads "galculator")
     , ("M-y", namedScratchpadAction myScratchPads "bashtop")
     , ("M-m", namedScratchpadAction myScratchPads "calendar")
@@ -110,59 +129,65 @@ myAditionalKeys =
     , ("M-<Pause>", spawn "amixer set Master 5%+")
 
     -- window controls
-    , ("M-j", windows W.focusDown)
-    , ("M-k", windows W.focusUp)
-    , ("M-h", windows W.focusMaster)
+    , ("M-h", sendMessage $ Go L)
+    , ("M-j", sendMessage $ Go D)
+    , ("M-k", sendMessage $ Go U)
+    , ("M-l", sendMessage $ Go R)
+    , ("M-S-h", sendMessage $ Swap L)
+    , ("M-S-j", sendMessage $ Swap D)
+    , ("M-S-k", sendMessage $ Swap U)
+    , ("M-S-l", sendMessage $ Swap R)
     , ("M-C-h", sendMessage Shrink)
     , ("M-C-l", sendMessage Expand)
-    , ("M-S-l", windows W.swapDown)
-    , ("M-S-j", windows W.swapDown)
-    , ("M-S-k", windows W.swapUp)
-    , ("M-S-h", windows W.swapMaster)
-		, ("M-comma", sendMessage (IncMasterN 1))
-		, ("M-period", sendMessage (IncMasterN (-1)))
+
+    , ("M-comma", sendMessage (IncMasterN 1))
+    , ("M-period", sendMessage (IncMasterN (-1)))
     , ("M-<Space>", withFocused $ windows . W.sink)
 
-		-- layout controls
+    -- layout controls
     , ("M-a", sequence_ [sendMessage ToggleStruts, toggleScreenSpacingEnabled, toggleWindowSpacingEnabled])
     , ("M-S-a",sendMessage $ Toggle NOBORDERS)
     , ("M-n", sendMessage NextLayout)
 
-		-- workspace controls
-		, ("M-<Left>", prevWS)
-		, ("M-<Right>", nextWS)
+    -- workspace controls
+    , ("M-<Left>", prevWS)
+    , ("M-<Right>", nextWS)
 
-		-- screen controll
+    -- screen controll
     , ("M-o", nextScreen)
     , ("M-S-o", shiftNextScreen)
     , ("M-S-<Left>", shiftToPrev)
     , ("M-S-<Right>", shiftToNext)
 
-		-- kill / restart xmonad
-    , ("M-S-q", io (exitWith ExitSuccess))
-    , ("M-S-r", spawn ("killall xmobar; xmonad --recompile; xmonad --restart"))
+    -- kill / restart xmonad
+    , ("M-S-q", io exitSuccess)
+    , ("M-S-r", spawn "killall xmobar; xmonad --recompile; xmonad --restart")
 
     ]
 
-myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-    , ((modm, button4), (\_ -> prevWS))
-    , ((modm, button5), (\_ -> nextWS))
+myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
+    [ ((modm, button1), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)
+    , ((modm .|. shiftMask, button1), dragWindow)
+    , ((modm, button2), const kill)
+    , ((modm, button3), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster)
+    , ((modm, button4), const prevWS)
+    , ((modm, button5), const nextWS)
     ]
 
 ------------------------------------------------------------------------
 --
+mySpacing :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
+
 myLayout = avoidStruts ( layoutTall ||| layoutFull)
     where
-      layoutTall = named "[]=" $ smartBorders $ mySpacing 65 15 $ Tall 1 (3/100) (3/5)
-      layoutFull = mkToggle (NOBORDERS ?? EOT) . named "[F]" $ smartBorders $ mySpacing 65 15 $ Full
+      layoutTall = named "[]=" $ windowNavigation $ draggingVisualizer $ smartBorders $ mySpacing 55 17 $ Tall 1 (3/100) (3/5)
+      layoutFull = mkToggle (NOBORDERS ?? EOT) . named "[F]" $ smartBorders $ mySpacing 55 17 Full
 
 
 ------------------------------------------------------------------------
 --
+myManageHook :: ManageHook
 myManageHook = composeAll
     [ insertPosition End Newer
     , resource  =? "desktop_window" --> doIgnore
@@ -171,6 +196,7 @@ myManageHook = composeAll
 
 ------------------------------------------------------------------------
 --
+myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "picom &"
     spawnOnce "numlockx &"
@@ -186,27 +212,33 @@ myStartupHook = do
 
 ------------------------------------------------------------------------
 --
+myStatusBarSpawner :: String -> StatusBarConfig
+myStatusBarSpawner n =
+    statusBarProp ("xmobar -x " ++ n ++ " ~/.config/xmonad/xmobar/xmobar" ++ n ++ ".config") (pure myXmobarPP)
+
+------------------------------------------------------------------------
+--
 myXmobarPP :: PP
 myXmobarPP = def
     { ppSep = "   "
-    , ppCurrent = xmobarColor blue "" . xmobarBorder position blue 2
-    , ppVisible = xmobarColor grey3 "" . xmobarBorder position grey3 2
-    , ppVisibleNoWindows = Just (xmobarColor grey3 "" . xmobarBorder position grey3 2)
-    , ppHidden = xmobarColor grey1 "" . xmobarBorder position grey1 2
-    , ppHiddenNoWindows = xmobarColor grey1 ""
-    , ppUrgent = xmobarColor orange "" . xmobarBorder position orange 2
-    , ppTitle = xmobarColor grey2 "" . shorten 60
+    , ppCurrent = xmobarColor blue "" . const wsIconFull -- . clickable
+    , ppVisible = xmobarColor grey3 "" . const wsIconFull -- . clickable
+    , ppVisibleNoWindows = Just (xmobarColor grey3 ""  . const wsIconFull) -- . clickable
+    , ppHidden = xmobarColor grey1 "" . const wsIconFull -- . clickable
+    , ppHiddenNoWindows = xmobarColor grey1 "" . const wsIconEmpty -- . clickable
+    , ppUrgent = xmobarColor orange "" . const wsIconFull -- . clickable
+    , ppLayout = xmobarColor grey3 "" .xmobarAction "xdotool key super+n" "1"
+    , ppTitle = xmobarColor grey2 "" . xmobarAction "xdotool key super+q" "2" . shorten 80
     , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
     }
   where
-    position, grey1, grey2, grey3, blue, orange :: String
-    position = "Bottom"
+    wsIconFull = " <fn=2>\xf111</fn> "
+    wsIconEmpty = " <fn=2>\xf10c</fn> "
     grey1    = "#555E70"
     grey2    = "#747880"
     grey3    = "#929AAD"
     blue     = "#8BABF0"
     orange   = "#C45500"
-
 
 ------------------------------------------------------------------------
 --
@@ -228,10 +260,10 @@ myConfig  = def
 
 ------------------------------------------------------------------------
 --
+
 main :: IO ()
 main = xmonad
      . ewmhFullscreen
      . ewmh
-     . withEasySB (statusBarProp "xmobar -x 0 ~/.config/xmonad/xmobar/xmobar0.config" (clickablePP myXmobarPP)) defToggleStrutsKey
-     . withEasySB (statusBarProp "xmobar -x 1 ~/.config/xmonad/xmobar/xmobar1.config" (clickablePP myXmobarPP)) defToggleStrutsKey
+     . withEasySB ( myStatusBarSpawner "0" <+> myStatusBarSpawner "1") defToggleStrutsKey
      $ myConfig

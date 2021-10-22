@@ -67,7 +67,7 @@ vim.cmd[[
 	highlight Search guibg=#91AFEB guifg=#515873
 	highlight VertSplit guibg=NONE guifg=#444444
 	highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
-	highlight DiagnosticError guifg=#AB1E18
+	highlight DiagnosticError guifg=#A30600
 	highlight DiagnosticWarning guifg=#FABD2F
 	highlight DiagnosticHint guifg=#689D6A
 ]]

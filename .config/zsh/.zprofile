@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 export PATH=$HOME/.local/bin:$HOME/.scripts:$PATH
+export PATH=$HOME/.cabal/bin:$PATH
 
 export TERMINAL=termite
 export BROWSER=brave
