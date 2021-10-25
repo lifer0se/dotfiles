@@ -1,6 +1,6 @@
 local M = {}
 
-function scandir(directory)
+local function scandir(directory)
     local i, t, popen = 0, {}, io.popen
     local pfile = popen('ls -LR "'..directory..'"')
 		local p = 'nil'

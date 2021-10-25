@@ -19,4 +19,4 @@ export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export ERRFILE="${XDG_DATA_HOME:-$HOME/.local/share}/xsession-errors"
 
-startx $XINITRC
+[[ $(pidof xinit) == "" ]] && startx $XINITRC

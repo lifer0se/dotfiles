@@ -67,7 +67,7 @@ map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<cr>' }
 map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>:set hls<cr>' }
 map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>:set hls<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>f', ':h <C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
+map { 'n', noremap = false, silent = true, '<leader>hh', ':h <C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
 map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>td', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }
 map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<cr>gv=gv' }
@@ -82,13 +82,13 @@ map { 'n', noremap = false, silent = true, '<A-3>', ':lua require("harpoon.ui").
 map { 'n', noremap = false, silent = true, '<A-4>', ':lua require("harpoon.ui").nav_file(4)<cr>' }
 map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
 map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
-map { 'n', noremap = false, silent = true, '<leader>ff', ':Telescope find_files<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope find_files cwd=~/.config find_command=rg,--ignore,--hidden,--files<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fv', ':Telescope find_files cwd=~/.config/nvim<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fg', ':Telescope live_grep<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', ':Telescope registers<cr>' }
-map { 'n', noremap = false, silent = true, '<C-_>', ':Telescope current_buffer_fuzzy_find<cr>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeToggle<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fb', ':NvimTreeFindFile<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<cr>:NvimTreeToggle<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>fb', ':NvimTreeRefresh<cr>:NvimTreeFindFile<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("ezbookmarks").AddBookmark()<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<cr>' }

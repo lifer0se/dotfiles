@@ -50,8 +50,6 @@ lsp_installer.on_server_ready(function(server)
 			opts.root_dir = nvim_lsp.util.root_pattern("*.csproj","*.sln");
 		elseif server.name == 'hls' then
 			opts.cmd =  { "haskell-language-server-wrapper", "--lsp" }
-			-- opts.cwd = "/home/amnesia/.config/xmonad/xmonad"
-			-- opts.root_dir = nvim_lsp.util.root_pattern("hie.yaml")
 		end
 	server:setup(opts)
 	vim.cmd [[ do User LspAttachBuffers ]]

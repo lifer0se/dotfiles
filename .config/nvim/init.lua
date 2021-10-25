@@ -50,12 +50,18 @@ require('config.lualine')
 require('config.bufferline')
 require('config.telescope')
 require('config.nvim-tree')
+require('config.toggleterm')
 require('colorizer').setup()
 require('alpha').setup(require'alpha.themes.startify'.opts)
-require('nvim-autopairs').setup{}
 require('commented').setup{
 	keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
+-- require('ezbookmarks').setup()
+
+vim.g.pear_tree_smart_openers = 1
+vim.g.pear_tree_smart_closers = 1
+vim.g.pear_tree_map_special_keys = 0
+vim.g.pear_tree_ft_disabled = { "TelescopePrompt" }
 
 
 vim.cmd[[
@@ -70,21 +76,27 @@ vim.cmd[[
 	highlight DiagnosticError guifg=#A30600
 	highlight DiagnosticWarning guifg=#FABD2F
 	highlight DiagnosticHint guifg=#689D6A
+	highlight NvimTreeCursorLine guibg=#8094B4 guifg=#223E69
 ]]
 
 --""""""""""""""""""""""""""""""""""""""""""
 --"              Functions                 "
 --""""""""""""""""""""""""""""""""""""""""""
 
-local au = require('utils.au')
+local autocmd = require('utils.au')
 
 -- Automatically deletes all trailing whitespace and newlines at end of file on save.
-au.BufWritePre = function()
+autocmd.BufWritePre = function()
 	vim.cmd('%s/\\s\\+$//e')
 	vim.cmd('%s/\\n\\+\\%$//e')
 end
 
 -- Disables automatic commenting on newline:
-au.FileType = function()
+autocmd.FileType = function()
 	vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
 end
+
+-- cd buffer directory on enter
+-- autocmd.BufEnter = function()
+	-- vim.cmd("silent! lcd %:p:h")
+-- end
