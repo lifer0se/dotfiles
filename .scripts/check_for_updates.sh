@@ -2,10 +2,9 @@
 
 ping -q -c 1 example.org > /dev/null || exit
 
-! [[ $(echo $DBUS_SESSION_BUS_ADDRESS) ]] && export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$(pidof dwm)/environ | cut -d= -f2-)
+! [[ $(echo $DBUS_SESSION_BUS_ADDRESS) ]] && export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$(pgrep -u $LOGNAME session)/environ | cut -d= -f2-)
 
-sudo pacman -Syyuw --noconfirm || notify-send "Error downloading updates.
-Check your internet connection, if pacman is already running, or run update manually to see errors."
+sudo pacman -Syyuw --noconfirm || notify-send "Error downloading updates." "Check your internet connection, if pacman is already running, or run update manually to see errors."
 # pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"
 
 OLDNUM=$( [[ -f ~/.local/share/.pacman_updates_count ]] && cat ~/.local/share/.pacman_updates_count)

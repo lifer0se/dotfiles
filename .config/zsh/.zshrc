@@ -20,3 +20,4 @@ alias nd="nordvpn disconnect"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ls="/home/amnesia/.local/share/gem/ruby/3.0.0/gems/colorls-1.4.4/exe/colorls -A -1"
 alias xmonadrc="cd ~/.config/xmonad && nvim xmonad.hs"
+alias cat="bat"

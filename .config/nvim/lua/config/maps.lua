@@ -83,7 +83,7 @@ map { 'n', noremap = false, silent = true, '<A-4>', ':lua require("harpoon.ui").
 map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
 map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
 map { 'n', noremap = false, silent = true, '<leader>fv', ':Telescope find_files cwd=~/.config/nvim<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fg', ':Telescope live_grep<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>fs', ':Telescope sessions<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', ':Telescope registers<cr>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<cr>:NvimTreeToggle<cr>' }

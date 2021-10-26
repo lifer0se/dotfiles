@@ -11,6 +11,7 @@ set.list = true
 set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
 set.shiftwidth = 2
 set.tabstop = 2
+set.expandtab = true
 set.smartindent = true
 set.ignorecase = true
 set.title = true
@@ -51,16 +52,17 @@ require('config.bufferline')
 require('config.telescope')
 require('config.nvim-tree')
 require('config.toggleterm')
+require('config.session_manager')
+
 require('colorizer').setup()
 require('alpha').setup(require'alpha.themes.startify'.opts)
 require('commented').setup{
 	keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
--- require('ezbookmarks').setup()
 
 vim.g.pear_tree_smart_openers = 1
 vim.g.pear_tree_smart_closers = 1
-vim.g.pear_tree_map_special_keys = 0
+vim.g.pear_tree_map_special_keys = 1
 vim.g.pear_tree_ft_disabled = { "TelescopePrompt" }
 
 
@@ -78,6 +80,7 @@ vim.cmd[[
 	highlight DiagnosticHint guifg=#689D6A
 	highlight NvimTreeCursorLine guibg=#8094B4 guifg=#223E69
 ]]
+
 
 --""""""""""""""""""""""""""""""""""""""""""
 --"              Functions                 "
@@ -99,4 +102,8 @@ end
 -- cd buffer directory on enter
 -- autocmd.BufEnter = function()
 	-- vim.cmd("silent! lcd %:p:h")
+-- end
+
+-- autocmd.CursorHold = function()
+  -- vim.cmd("let @/ = '\\V\\<'.escape(expand('<cword>'), '\\').'\\>'")
 -- end

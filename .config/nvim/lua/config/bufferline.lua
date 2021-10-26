@@ -8,73 +8,73 @@ require'bufferline'.setup{
 	highlights = {
 		fill = {
 			guifg = '#AFA58A',
-			guibg = '#444444'
+			guibg = '#2B2E37'
 		},
 		background = {
 			guifg = '#AFA58A',
-			guibg = '#444444'
+			guibg = '#2B2E37'
 		},
 		buffer_visible = {
 			guifg = '#AFA58A',
-			guibg = '#444444'
+			guibg = '#2B2E37'
 		},
 		buffer_selected = {
-			guibg = '#3A3A3A',
+			guibg = '#2B2E37',
 			guifg = '#AFD787',
 			gui = "bold"
 		},
 		modified = {
-			guibg = '#444444',
+			guibg = '#2B2E37',
 			guifg = '#716C5F'
 		},
 		modified_visible = {
-			guibg = '#444444',
+			guibg = '#2B2E37',
 			guifg = '#716C5F'
 		},
 		modified_selected = {
-			guibg = '#3A3A3A',
+			guibg = '#2B2E37',
 			guifg = '#AFD787',
 		},
 		duplicate_selected = {
-			guibg = '#3A3A3A',
+			guibg = '#2B2E37',
 			guifg = '#83A165',
 			gui = "italic",
 		},
 		duplicate_visible = {
 			guifg = '#827B67',
-			guibg = '#444444',
+			guibg = '#2B2E37',
 			gui = "italic",
 		},
 		duplicate = {
 			guifg = '#827B67',
-			guibg = '#444444',
+			guibg = '#2B2E37',
 			gui = "italic",
 		},
 		close_button = {
-			guibg = '#444444',
-			guifg = '#444444',
+			guibg = '#2B2E37',
+			guifg = '#2B2E37',
 		},
 		close_button_visible = {
-			guibg = '#444444',
+			guibg = '#2B2E37',
 		},
 		close_button_selected = {
-			guibg = '#3A3A3A',
+			guibg = '#2B2E37',
 		},
 		separator_selected = {
-			guibg = '#3A3A3A',
-			guifg = '#3A3A3A'
+			guibg = '#2B2E37',
+			guifg = '#2B2E37'
 		},
 		separator_visible = {
-			guibg = '#444444',
-			guifg = '#444444'
+			guibg = '#2B2E37',
+			guifg = '#2B2E37'
 		},
 		separator = {
-			guibg = '#444444',
-			guifg = '#444444'
+			guibg = '#2B2E37',
+			guifg = '#2B2E37'
 		},
 		indicator_selected = {
-			guifg = '#3A3A3A',
-			guibg = '#3A3A3A'
+			guifg = '#2B2E37',
+			guibg = '#2B2E37'
 		},
 	};
 }

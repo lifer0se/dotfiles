@@ -1,8 +1,8 @@
 
 local custom_onedark = require'lualine.themes.onedark'
-custom_onedark.normal.b.bg = '#3A3A3A'
+custom_onedark.normal.b.bg = '#20222E'
 custom_onedark.normal.b.fg = '#ebdbb2'
-custom_onedark.normal.c.bg = '#444444'
+custom_onedark.normal.c.bg = '#2B2E37'
 custom_onedark.normal.c.fg = '#ebdbb2'
 
 require'lualine'.setup {
@@ -18,7 +18,7 @@ require'lualine'.setup {
     lualine_b = {'branch', 'diff',
       symbols = {added = '+', modified = '~', removed = '-'}
 	},
-    lualine_c = {'filename'},
+    lualine_c = {''},
     lualine_x = {'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
