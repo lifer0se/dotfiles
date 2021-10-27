@@ -124,7 +124,7 @@ myAditionalKeys =
   , ("M-comma", sendMessage $ IncMasterN 1)
   , ("M-period", sendMessage $ IncMasterN (-1))
   , ("M-<Space>", withFocused $ windows . W.sink)
-  , ("M-t", spawn "rofi -show window")
+  , ("M-e", spawn "rofi-window-finder.sh")
 
   -- layout controls
   , ("M-a", sendMessage $ Toggle NBFULL)

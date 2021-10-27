@@ -4,9 +4,9 @@ configuration {
   combi-modi: "drun,run";
   combi-hide-mode-prefix: true;
   font: "Roboto 13";
-  show-icons: true;
-  icon-theme: "Papirus";
+  show-icons: false;
   drun-display-format: "{name} [<span weight='light' size='small'>({generic})</span>]";
+  matching: "fuzzy";
   me-select-entry: "";
   me-accept-entry: "MousePrimary";
   hover-select: true;
