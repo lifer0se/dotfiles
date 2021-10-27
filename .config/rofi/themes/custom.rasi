@@ -1,0 +1,99 @@
+/************************************************
+ * ROFI Color theme
+ * User: leofa
+ * Copyright: 2017 leofa
+ ***********************************************/
+/* grey1  = "#2B2E37" */
+/* grey2  = "#555E70" */
+/* grey3  = "#747880" */
+/* grey4  = "#8691A8" */
+/* blue   = "#8BABF0" */
+/* orange = "#C45500" */
+* {
+    background-color:            rgba ( 0, 0, 0, 0 % );
+    border-color:                rgba ( 139, 171, 240, 100 % );
+    foreground:                  rgba ( 134, 145, 168, 100 % );
+    urgent-foreground:           rgba ( 218, 121, 47, 100 % );
+    selected-foreground:         rgba ( 180, 194, 224, 100 % );
+    selected-urgent-foreground:  rgba ( 230, 230, 230, 100 % );
+    background:                  rgba ( 45, 48, 59, 0 % );
+    selected-background:         rgba ( 64, 132, 214, 40 % );
+    selected-urgent-background:  rgba ( 218, 121, 47, 40 % );
+}
+window {
+    background-color: @background;
+    border:           3;
+    padding:          25;
+}
+listview {
+    spacing:      3px;
+    scrollbar:    false;
+    padding:      10px 5px 5px;
+}
+element {
+    padding: 5px;
+}
+element-text {
+    background-color: @background;
+    text-color:       inherit;
+}
+element.normal.normal {
+    background-color: @background;
+    text-color:       @foreground;
+}
+element.normal.urgent {
+    background-color: @background;
+    text-color:       @urgent-foreground;
+}
+element.normal.active {
+    background-color: @background;
+    text-color:       @foreground;
+}
+element.selected.normal {
+    background-color: @selected-background;
+    text-color:       @selected-foreground;
+}
+element.selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color:       @selected-urgent-foreground;
+}
+element.selected.active {
+    background-color: @selected-background;
+    text-color:       @selected-foreground;
+}
+element.alternate.normal {
+    background-color: @background;
+    text-color:       @foreground;
+}
+element.alternate.urgent {
+    background-color: @background;
+    text-color:       @urgent-foreground;
+}
+element.alternate.active {
+    background-color: @background;
+    text-color:       @foreground;
+}
+
+inputbar {
+    text-color: @foreground;
+    padding:    5px;
+    children:   [ prompt,textbox-prompt-colon,entry ];
+}
+entry {
+    spacing:    0;
+    text-color: @selected-foreground;
+}
+element-icon {
+    size:       24px;
+    margin:     1px 7px 0px 0px;
+}
+prompt {
+    spacing:    0;
+    text-color: @selected-foreground;
+}
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em;
+    text-color: @foreground;
+}

@@ -6,21 +6,20 @@ import Data.Maybe (fromJust)
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
-import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position(End))
+import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position (Master, End))
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 
-import XMonad.Layout.Spacing
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Named
-import XMonad.Layout.DraggingVisualizer
-import XMonad.Layout.LayoutModifier
+import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Named (named)
+import XMonad.Layout.Decoration (ModifiedLayout)
+import XMonad.Layout.DraggingVisualizer (draggingVisualizer)
 import XMonad.Layout.MultiToggle.Instances (StdTransformers (NBFULL))
 import XMonad.Layout.MultiToggle (EOT (EOT), Toggle (Toggle), mkToggle, (??))
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Tabbed
 
-import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL)
@@ -28,7 +27,7 @@ import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
-import XMonad.Actions.WindowBringer
+import XMonad.Util.EZConfig (additionalKeysP)
 
 
 myTerminal :: [Char]
@@ -81,10 +80,10 @@ myAditionalKeys =
 
     -- apps
   [ ("M-<Return>", spawn myTerminal)
-  , ("M-v", spawn $ myTerminal ++ " -e nvim")
-  , ("M-f", spawn $ myTerminal ++ " -e ranger")
-  , ("M-d", spawn "dmenu_run")
-  , ("M-p", spawn "passmenu")
+  , ("M-v", spawn $ myTerminal ++ " --class Nvim -e nvim")
+  , ("M-f", spawn $ myTerminal ++ " --class Ranger -e ranger")
+  , ("M-d", spawn "rofi -show combi")
+  , ("M-p", spawn "passmenu -p pass")
   , ("M-w", spawn "brave")
   , ("M-S-w", spawn "brave --incognito")
   , ("M-S-f", spawn "pcmanfm")
@@ -125,7 +124,7 @@ myAditionalKeys =
   , ("M-comma", sendMessage $ IncMasterN 1)
   , ("M-period", sendMessage $ IncMasterN (-1))
   , ("M-<Space>", withFocused $ windows . W.sink)
-  , ("M-t", gotoMenu' "dmenu")
+  , ("M-t", spawn "rofi -show window")
 
   -- layout controls
   , ("M-a", sendMessage $ Toggle NBFULL)
@@ -186,9 +185,9 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
 
 myManageHook :: ManageHook
 myManageHook = composeAll
-  [ insertPosition End Newer
-  , resource  =? "desktop_window" --> doIgnore
-  , resource  =? "kdesktop"       --> doIgnore
+  [ resource  =? "desktop_window" --> doIgnore
+  , className =? "Termite" --> insertPosition End Newer
+  , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
 
@@ -257,6 +256,7 @@ main :: IO ()
 main = xmonad
      . ewmhFullscreen
      . ewmh
+     . docks
      . dynamicSBs myStatusBarSpawner
      $ def
        { focusFollowsMouse  = True
@@ -270,7 +270,6 @@ main = xmonad
        , mouseBindings      = myMouseBindings
        , layoutHook         = myLayout
        , manageHook         = myManageHook
-       , handleEventHook    = docksEventHook
        , startupHook        = myStartupHook
        }
        `additionalKeysP` myAditionalKeys

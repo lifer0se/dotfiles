@@ -65,8 +65,8 @@ map { 'v', noremap = false, 's)', 'c(<C-R>")<Esc>' }
 map { 'v', noremap = false, 's<', 'c<<C-R>"><Esc>' }
 map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<cr>' }
-map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>:set hls<cr>' }
-map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>:set hls<cr>' }
+map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
+map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>hh', ':h <C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
 map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>td', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }

@@ -18,7 +18,7 @@ set.title = true
 set.splitbelow = true
 set.splitright = true
 set.wrap = false
-set.hlsearch = false
+set.hlsearch = true
 set.showmode = false
 set.laststatus = 2
 set.cmdheight = 2
@@ -72,7 +72,7 @@ vim.cmd[[
 	highlight SignColumn guibg=NONE
 	highlight CursorLine guibg=NONE
 	highlight CursorLineNr guibg=NONE
-	highlight Search guibg=#91AFEB guifg=#515873
+	highlight Search guibg=#EBB791 guifg=#515873
 	highlight VertSplit guibg=NONE guifg=#444444
 	highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
 	highlight DiagnosticError guifg=#A30600
