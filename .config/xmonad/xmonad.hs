@@ -38,20 +38,16 @@ grey1, grey2, grey3, grey4, blue, orange :: String
 grey1  = "#2B2E37"
 grey2  = "#555E70"
 grey3  = "#747880"
-grey4  = "#929AAD"
+grey4  = "#8691A8"
 blue   = "#8BABF0"
 orange = "#C45500"
 
 myWorkspaces :: [[Char]]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-actionPrefix :: [Char]
+actionPrefix, actionButton, actionSuffix :: [Char]
 actionPrefix = "<action=`xdotool key super+"
-
-actionButton :: [Char]
 actionButton = "` button="
-
-actionSuffix :: [Char]
 actionSuffix = "</action>"
 
 addActions :: [(String, Int)] -> String -> String
@@ -174,7 +170,7 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
     layoutTall = mkToggle (NBFULL ?? EOT) . named "[]=" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
     layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ t ]" $ smartBorders $ mySpacing 55 15 $ tabbed shrinkText myTabTheme
     myTabTheme = def
-      { fontName      = "xft:Roboto:size=12:bold"
+      { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
       , inactiveColor       = grey1
       , activeBorderColor   = grey1
@@ -221,7 +217,7 @@ myWorkspaceIndices :: M.Map [Char] Integer
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..]
 
 clickable :: [Char] -> [Char] -> [Char]
-clickable ic ws  = addActions [ (show i, 1), ("Left", 4), ("Right", 5) ] ic
+clickable ic ws  = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
 xmobar0, xmobar1 :: StatusBarConfig
@@ -238,16 +234,16 @@ myXmobarPP s = pure $ filterOutWsPP [ scratchpadWorkspaceTag ] $ def
   { ppSep = "     "
   , ppCurrent = xmobarColor blue "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
-  , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconFull)
+  , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconEmpty)
   , ppHidden = xmobarColor grey2 "" . clickable wsIconFull
   , ppHiddenNoWindows = xmobarColor grey2 "" . clickable wsIconEmpty
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
   , ppLayout = xmobarColor grey4 ""
   , ppTitle = xmobarColor grey3 ""
+  , ppOrder = \(ws : _ : _ : extras) -> ws : extras
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen s
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen s
                 ]
-  , ppOrder = \(ws : _ : _ : extras) -> ws : extras
   }
   where
     wsIconFull = "  <fn=2>\xf111</fn>  "
