@@ -13,6 +13,7 @@ ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
 alias vim="nvim"
+alias v="nvim"
 alias f="fzf_to_vim.sh"
 alias nc="nordvpn connect"
 alias ncb="nordvpn connect Brazil"

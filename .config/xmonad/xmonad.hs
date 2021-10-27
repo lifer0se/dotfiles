@@ -3,7 +3,9 @@ import System.Exit
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
+import Data.Semigroup
 
+import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position (Master, End))
@@ -125,6 +127,7 @@ myAditionalKeys =
   , ("M-period", sendMessage $ IncMasterN (-1))
   , ("M-<Space>", withFocused $ windows . W.sink)
   , ("M-e", spawn "rofi-window-finder.sh")
+  , ("M-S-e", spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}'")
 
   -- layout controls
   , ("M-a", sendMessage $ Toggle NBFULL)
@@ -187,9 +190,16 @@ myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , className =? "Termite" --> insertPosition End Newer
+  , className =? "Godot" --> doShift ( myWorkspaces !! 6)
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
+
+------------------------------------------------------------------------
+--
+
+myHandleEventHook :: Event -> X All
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "9")
 
 ------------------------------------------------------------------------
 --
@@ -206,6 +216,7 @@ myStartupHook = do
   spawnOnce "nm-applet &"
   spawnOnce "blueman-applet &"
   spawnOnce "volumeicon &"
+  spawnOnce "/usr/bin/greenclip daemon &"
   spawnOnce "/opt/urserver/urserver --daemon &"
 
 
@@ -234,7 +245,7 @@ myXmobarPP s = pure $ filterOutWsPP [ scratchpadWorkspaceTag ] $ def
   , ppCurrent = xmobarColor blue "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
   , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconEmpty)
-  , ppHidden = xmobarColor grey2 "" . clickable wsIconFull
+  , ppHidden = xmobarColor grey2 "" . clickable wsIconHidden
   , ppHiddenNoWindows = xmobarColor grey2 "" . clickable wsIconEmpty
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
   , ppLayout = xmobarColor grey4 ""
@@ -245,8 +256,9 @@ myXmobarPP s = pure $ filterOutWsPP [ scratchpadWorkspaceTag ] $ def
                 ]
   }
   where
-    wsIconFull = "  <fn=2>\xf111</fn>  "
-    wsIconEmpty = "  <fn=2>\xf10c</fn>  "
+    wsIconFull   = "  <fn=2>\xf111</fn>  "
+    wsIconHidden = "  <fn=2>\xf192</fn>  "
+    wsIconEmpty  = "  <fn=2>\xf10c</fn>  "
 
 
 ------------------------------------------------------------------------
@@ -270,6 +282,7 @@ main = xmonad
        , mouseBindings      = myMouseBindings
        , layoutHook         = myLayout
        , manageHook         = myManageHook
+       , handleEventHook    = myHandleEventHook
        , startupHook        = myStartupHook
        }
        `additionalKeysP` myAditionalKeys

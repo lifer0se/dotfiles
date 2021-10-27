@@ -9,5 +9,4 @@ configuration {
   matching: "fuzzy";
   me-select-entry: "";
   me-accept-entry: "MousePrimary";
-  hover-select: true;
 }
