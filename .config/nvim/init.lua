@@ -45,6 +45,7 @@ set.cursorline = true
 require('config.plugins')
 require('config.maps')
 require('config.lsp')
+require('config.lspkind')
 require('config.cmp')
 require('config.treesitter')
 require('config.lualine')
@@ -65,20 +66,31 @@ vim.g.pear_tree_smart_closers = 1
 vim.g.pear_tree_map_special_keys = 1
 vim.g.pear_tree_ft_disabled = { "TelescopePrompt" }
 
-
 vim.cmd[[
-	colorscheme gruvbox
-	highlight Normal guibg=NONE
-	highlight SignColumn guibg=NONE
-	highlight CursorLine guibg=NONE
-	highlight CursorLineNr guibg=NONE
-	highlight Search guibg=#EBB791 guifg=#515873
-	highlight VertSplit guibg=NONE guifg=#444444
-	highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
-	highlight DiagnosticError guifg=#A30600
-	highlight DiagnosticWarning guifg=#FABD2F
-	highlight DiagnosticHint guifg=#689D6A
-	highlight NvimTreeCursorLine guibg=#8094B4 guifg=#223E69
+  colorscheme gruvbox
+  highlight Normal guibg=NONE
+  highlight SignColumn guibg=NONE
+  highlight CursorLine guibg=NONE
+  highlight CursorLineNr guibg=NONE
+  highlight Search guibg=#EBB791 guifg=#515873
+  highlight VertSplit guibg=NONE guifg=#2B2E37
+  highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
+  highlight DiagnosticError guifg=#cc241d
+  highlight DiagnosticWarning guifg=#FABD2F
+  highlight DiagnosticHint guifg=#689D6A
+  highlight NvimTreeCursorLine guibg=#515873 guifg=#91AFEB
+  highlight Pmenu guibg=#2B2E37
+  highlight PmenuSbar guibg=#2B2E37
+  highlight PmenuThumb guibg=#515873
+  highlight CmpItemAbbrDefault guifg=#AFA58A
+  highlight CmpItemAbbrMatch guifg=#91AFEB
+  highlight CmpItemAbbrMatchFuzzy guifg=#91AFEB
+  highlight CmpItemKind guifg=#AFAFAF
+  highlight CmpItemMenuDefault guifg=#AFAFAF
+  highlight NormalFloat guifg=#358292 guibg=None
+  highlight FloatBorder guifg=#358292 guibg=None
+  highlight TelescopeBorder guifg=#358292
+  highlight TelescopeMatching guifg=#EBB791
 ]]
 
 
@@ -97,6 +109,10 @@ end
 -- Disables automatic commenting on newline:
 autocmd.FileType = function()
 	vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
+end
+
+autocmd.TextYankPost = function ()
+  vim.highlight.on_yank{on_visual=false}
 end
 
 -- cd buffer directory on enter

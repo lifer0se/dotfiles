@@ -1,9 +1,5 @@
-vim.highlight.create('CmpItemAbbrMatch', {ctermfg=109, guifg='#87afaf' }, false)
-vim.highlight.create('CmpItemAbbrMatchFuzzy', {ctermfg=109, guifg='#87afaf' }, false)
-vim.highlight.create('CmpItemKind', {ctermfg=145, guifg='#afafaf' }, false)
-
-
 local cmp = require"cmp"
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -18,21 +14,25 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
   },
   formatting = {
-    format = require('lspkind').cmp_format({
-      with_text = false,
-      maxwidth = 50,
-    })
+    format = require("lspkind").cmp_format({with_text = true, menu = ({
+      buffer = "",
+      nvim_lsp = "曆",
+      luasnip = "",
+      nvim_lua = "",
+    })}),
   },
   documentation = {
     border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
   },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'nvim_lua' },
-    { name = 'path' },
-    { name = 'buffer' },
-  },
   experimental = {
     ghost_text = true,
   },
+  sources = cmp.config.sources{
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'path' },
+    { name = 'utlisnips' },
+    { name = 'treesitter' },
+    { name = 'buffer' },
+  }
 })

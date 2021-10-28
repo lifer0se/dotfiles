@@ -1,5 +1,3 @@
-vim.cmd [[autocmd ColorScheme * highlight NormalFloat guifg=#358292 guibg=None]]
-vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=#358292 guibg=None]]
 local border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 
 local nvim_lsp = require "lspconfig"

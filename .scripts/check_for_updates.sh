@@ -19,7 +19,7 @@ then
     OLDNUM=0
 fi
 
-ICON=/usr/share/icons/Papirus-Dark/128x128/apps/mx-packageinstaller.svg
+ICON=/usr/share/icons/Papirus-Dark/64x64/apps/mx-packageinstaller.svg
 NEWNUM=$(($NUM - $OLDNUM))
 if [[ $NEWNUM -gt 1 ]]
 then
