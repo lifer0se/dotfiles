@@ -10,15 +10,15 @@ require('telescope').setup{
 				preview_width = 0.6,
 	 		},
 		},
-		file_browser = {
+		help_tags = {
 			layout_config = {
-				preview_width = 0.6,
+				preview_width = 0.7,
 	 		},
 		},
 		current_buffer_fuzzy_find = {
 			sorting_strategy = 'ascending',
 			layout_config = {
-				preview_width = 0.4,
+				preview_width = 0.5,
 	 		},
 		},
 	},

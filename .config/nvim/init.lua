@@ -72,7 +72,7 @@ vim.cmd[[
   highlight SignColumn guibg=NONE
   highlight CursorLine guibg=NONE
   highlight CursorLineNr guibg=NONE
-  highlight Search guibg=#EBB791 guifg=#515873
+  highlight Search guibg=#EDA36D guifg=#515873
   highlight VertSplit guibg=NONE guifg=#2B2E37
   highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
   highlight DiagnosticError guifg=#cc241d
@@ -90,7 +90,7 @@ vim.cmd[[
   highlight NormalFloat guifg=#358292 guibg=None
   highlight FloatBorder guifg=#358292 guibg=None
   highlight TelescopeBorder guifg=#358292
-  highlight TelescopeMatching guifg=#EBB791
+  highlight TelescopeMatching guifg=#EDA36D
 ]]
 
 

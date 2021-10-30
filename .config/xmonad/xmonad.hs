@@ -29,7 +29,10 @@ import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
+import XMonad.Actions.OnScreen
+
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Layout.IndependentScreens
 
 
 myTerminal :: [Char]
@@ -136,19 +139,28 @@ myAditionalKeys =
 
   -- workspace controls
   , ("M-<Left>", moveTo Prev nonNSP)
-  , ("M-<Right>", moveTo Next nonNSP)
+  , ("M-<Right>", nextWS)
 
   -- screen controll
   , ("M-o", nextScreen)
   , ("M-S-o", shiftNextScreen)
-  , ("M-S-<Left>", shiftToPrev)
-  , ("M-S-<Right>", shiftToNext)
 
   -- kill / restart xmonad
   , ("M-S-q", io exitSuccess)
   , ("M-S-r", spawn "killall xmobar; xmonad --recompile; xmonad --restart")
 
   ]
+
+myKeys :: Int -> XConfig l -> M.Map (KeyMask, KeySym) (X ())
+myKeys n conf@XConfig {XMonad.modMask = modm} = M.fromList $
+ [((m .|. modm, k), windows $ onCurrentScreen f i)
+       | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
+       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+    ++
+
+    [ ((modm, xK_Tab), if n > 1 then nextScreen else moveTo Next nonNSP)
+    ]
 
 myMouseBindings :: XConfig l -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
@@ -206,19 +218,19 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "lxsession"
-  spawnOnce "numlockx &"
-  spawnOnce "setxkbmap -option caps:escape &"
+  spawnOnce "lxsession" -- move
+  spawnOnce "numlockx &" -- move
+  spawnOnce "setxkbmap -option caps:escape &" -- move
   spawnOnce "nitrogen --restore &"
+  spawnOnce "check_from_updates.sh"
   spawnOnce "dunst &"
   spawnOnce "picom &"
   spawnOnce "trayer --monitor 2 --edge top --align right --widthtype request --padding 10 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 25 --distance 5 &"
-  spawnOnce "nm-applet &"
-  spawnOnce "blueman-applet &"
-  spawnOnce "volumeicon &"
-  spawnOnce "/usr/bin/greenclip daemon &"
-  spawnOnce "/opt/urserver/urserver --daemon &"
-
+  spawnOnce "nm-applet &" -- move
+  spawnOnce "blueman-applet &" -- move
+  spawnOnce "volumeicon &" -- move
+  spawnOnce "/usr/bin/greenclip daemon &" -- move
+  spawnOnce "/opt/urserver/urserver --daemon &" -- move
 
 ------------------------------------------------------------------------
 --
@@ -227,32 +239,29 @@ myWorkspaceIndices :: M.Map [Char] Integer
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..]
 
 clickable :: [Char] -> [Char] -> [Char]
-clickable ic ws  = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
+clickable ic ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
-xmobar0, xmobar1 :: StatusBarConfig
-xmobar0 = statusBarPropTo "xmobar0" "xmobar -x 0 ~/.config/xmonad/xmobar/xmobar0.config" (myXmobarPP 0)
-xmobar1 = statusBarPropTo "xmobar1" "xmobar -x 1 ~/.config/xmonad/xmobar/xmobar1.config" (myXmobarPP 1)
+myStatusBarSpawner :: Int -> StatusBarConfig
+myStatusBarSpawner n = statusBarPropTo
+          ("xmobar" ++ show n)
+          ("xmobar -x " ++ show n ++ " ~/.config/xmonad/xmobar/xmobar" ++ show n ++ ".config")
+          $ pure (marshallPP (S n) (myXmobarPP n))
 
-myStatusBarSpawner :: ScreenId -> IO StatusBarConfig
-myStatusBarSpawner 0 = pure xmobar0
-myStatusBarSpawner 1 = pure xmobar1
-myStatusBarSpawner _ = mempty
-
-myXmobarPP :: ScreenId -> X PP
-myXmobarPP s = pure $ filterOutWsPP [ scratchpadWorkspaceTag ] $ def
+myXmobarPP :: Int -> PP
+myXmobarPP s = def
   { ppSep = "     "
   , ppCurrent = xmobarColor blue "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
-  , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconEmpty)
+  , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconFull)
   , ppHidden = xmobarColor grey2 "" . clickable wsIconHidden
   , ppHiddenNoWindows = xmobarColor grey2 "" . clickable wsIconEmpty
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
   , ppLayout = xmobarColor grey4 ""
   , ppTitle = xmobarColor grey3 ""
   , ppOrder = \(ws : _ : _ : extras) -> ws : extras
-  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen s
-                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen s
+  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen (S s)
+                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen (S s)
                 ]
   }
   where
@@ -266,10 +275,10 @@ myXmobarPP s = pure $ filterOutWsPP [ scratchpadWorkspaceTag ] $ def
 
 main :: IO ()
 main = xmonad
-     . ewmhFullscreen
      . ewmh
+     . ewmhFullscreen
+     . withSB (myStatusBarSpawner 0 <> myStatusBarSpawner 1)
      . docks
-     . dynamicSBs myStatusBarSpawner
      $ def
        { focusFollowsMouse  = True
        , clickJustFocuses   = False
@@ -278,7 +287,8 @@ main = xmonad
        , normalBorderColor  = grey2
        , focusedBorderColor = blue
        , terminal           = myTerminal
-       , workspaces         = myWorkspaces
+       , keys               = myKeys 2
+       , workspaces         = withScreens 2 myWorkspaces
        , mouseBindings      = myMouseBindings
        , layoutHook         = myLayout
        , manageHook         = myManageHook
