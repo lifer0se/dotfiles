@@ -38,6 +38,16 @@ nvim_lsp.gdscript.setup {
 	capabilities = capabilities
 }
 
+nvim_lsp.graphql.setup{
+	on_attach = on_attach,
+	capabilities = capabilities
+}
+
+nvim_lsp.jsonls.setup{
+	on_attach = on_attach,
+	capabilities = capabilities
+}
+
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
 	local opts = {

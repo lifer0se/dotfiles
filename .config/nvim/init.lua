@@ -71,15 +71,17 @@ vim.cmd[[
   highlight Normal guibg=NONE
   highlight SignColumn guibg=NONE
   highlight CursorLine guibg=NONE
-  highlight CursorLineNr guibg=NONE
-  highlight Search guibg=#EDA36D guifg=#515873
+  highlight CursorLineNr guibg=NONE guifg=#FABD2F
+  highlight Search guibg=#515873 guifg=#EDA36D gui=NONE
   highlight VertSplit guibg=NONE guifg=#2B2E37
   highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
-  highlight DiagnosticError guifg=#cc241d
-  highlight DiagnosticWarning guifg=#FABD2F
-  highlight DiagnosticHint guifg=#689D6A
+  highlight ErrorMsg guibg=NONE guifg=#cc241d gui=bold
+  highlight DiagnosticError guifg=#cc241d guibg=NONE
+  highlight DiagnosticWarning guifg=#FABD2F guibg=NONE
+  highlight DiagnosticHint guifg=#688D6A guibg=NONE
   highlight NvimTreeCursorLine guibg=#515873 guifg=#91AFEB
   highlight Pmenu guibg=#2B2E37
+  highlight PmenuSel guibg=#91AFEB
   highlight PmenuSbar guibg=#2B2E37
   highlight PmenuThumb guibg=#515873
   highlight CmpItemAbbrDefault guifg=#AFA58A
@@ -92,7 +94,7 @@ vim.cmd[[
   highlight TelescopeBorder guifg=#358292
   highlight TelescopeMatching guifg=#EDA36D
 ]]
-
+-- t
 
 --""""""""""""""""""""""""""""""""""""""""""
 --"              Functions                 "

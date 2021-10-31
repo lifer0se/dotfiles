@@ -7,7 +7,6 @@ import Data.Semigroup
 
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.StatusBar
 import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position (Master, End))
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
@@ -21,18 +20,21 @@ import XMonad.Layout.MultiToggle.Instances (StdTransformers (NBFULL))
 import XMonad.Layout.MultiToggle (EOT (EOT), Toggle (Toggle), mkToggle, (??))
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Tabbed
+import XMonad.Layout.IndependentScreens
 
 import XMonad.Util.SpawnOnce
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL)
+import XMonad.Util.EZConfig (additionalKeysP)
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
-import XMonad.Actions.OnScreen
+import XMonad.Util.Run (spawnPipe)
+import System.IO (hPutStrLn)
+import Prelude hiding (log)
+import GHC.IO.Handle (Handle)
 
-import XMonad.Util.EZConfig (additionalKeysP)
-import XMonad.Layout.IndependentScreens
 
 
 myTerminal :: [Char]
@@ -139,7 +141,7 @@ myAditionalKeys =
 
   -- workspace controls
   , ("M-<Left>", moveTo Prev nonNSP)
-  , ("M-<Right>", nextWS)
+  , ("M-<Right>",  moveTo Next nonNSP)
 
   -- screen controll
   , ("M-o", nextScreen)
@@ -151,16 +153,11 @@ myAditionalKeys =
 
   ]
 
-myKeys :: Int -> XConfig l -> M.Map (KeyMask, KeySym) (X ())
-myKeys n conf@XConfig {XMonad.modMask = modm} = M.fromList $
+myKeys :: XConfig l -> M.Map (KeyMask, KeySym) (X ())
+myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
  [((m .|. modm, k), windows $ onCurrentScreen f i)
        | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-    ++
-
-    [ ((modm, xK_Tab), if n > 1 then nextScreen else moveTo Next nonNSP)
-    ]
 
 myMouseBindings :: XConfig l -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
@@ -213,24 +210,6 @@ myManageHook = composeAll
 myHandleEventHook :: Event -> X All
 myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "9")
 
-------------------------------------------------------------------------
---
-
-myStartupHook :: X ()
-myStartupHook = do
-  spawnOnce "lxsession" -- move
-  spawnOnce "numlockx &" -- move
-  spawnOnce "setxkbmap -option caps:escape &" -- move
-  spawnOnce "nitrogen --restore &"
-  spawnOnce "check_from_updates.sh"
-  spawnOnce "dunst &"
-  spawnOnce "picom &"
-  spawnOnce "trayer --monitor 2 --edge top --align right --widthtype request --padding 10 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 25 --distance 5 &"
-  spawnOnce "nm-applet &" -- move
-  spawnOnce "blueman-applet &" -- move
-  spawnOnce "volumeicon &" -- move
-  spawnOnce "/usr/bin/greenclip daemon &" -- move
-  spawnOnce "/opt/urserver/urserver --daemon &" -- move
 
 ------------------------------------------------------------------------
 --
@@ -242,15 +221,11 @@ clickable :: [Char] -> [Char] -> [Char]
 clickable ic ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
-myStatusBarSpawner :: Int -> StatusBarConfig
-myStatusBarSpawner n = statusBarPropTo
-          ("xmobar" ++ show n)
-          ("xmobar -x " ++ show n ++ " ~/.config/xmonad/xmobar/xmobar" ++ show n ++ ".config")
-          $ pure (marshallPP (S n) (myXmobarPP n))
 
-myXmobarPP :: Int -> PP
-myXmobarPP s = def
-  { ppSep = "     "
+myXmobarPP :: ScreenId -> Handle -> PP
+myXmobarPP s handle = def
+  { ppOutput = hPutStrLn handle
+  , ppSep = "     "
   , ppCurrent = xmobarColor blue "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
   , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconFull)
@@ -260,26 +235,32 @@ myXmobarPP s = def
   , ppLayout = xmobarColor grey4 ""
   , ppTitle = xmobarColor grey3 ""
   , ppOrder = \(ws : _ : _ : extras) -> ws : extras
-  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen (S s)
-                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen (S s)
+  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen s
+                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen s
                 ]
   }
   where
     wsIconFull   = "  <fn=2>\xf111</fn>  "
-    wsIconHidden = "  <fn=2>\xf192</fn>  "
+    wsIconHidden = "  <fn=2>\xf111</fn>  "
     wsIconEmpty  = "  <fn=2>\xf10c</fn>  "
 
 
 ------------------------------------------------------------------------
 --
 
+myLogHook :: Handle -> Handle -> X ()
+myLogHook hLeft hRight = let log screen handle = dynamicLogWithPP . filterOutWsPP [scratchpadWorkspaceTag] . marshallPP screen . myXmobarPP screen $ handle
+                          in log 0 hLeft >> log 1 hRight
+
+
+------------------------------------------------------------------------
+--
+
 main :: IO ()
-main = xmonad
-     . ewmh
-     . ewmhFullscreen
-     . withSB (myStatusBarSpawner 0 <> myStatusBarSpawner 1)
-     . docks
-     $ def
+main = do
+      hLeft <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar0.config"
+      hRight <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar1.config"
+      xmonad $ ewmh $ ewmhFullscreen $ docks $ def
        { focusFollowsMouse  = True
        , clickJustFocuses   = False
        , borderWidth        = 3
@@ -287,12 +268,12 @@ main = xmonad
        , normalBorderColor  = grey2
        , focusedBorderColor = blue
        , terminal           = myTerminal
-       , keys               = myKeys 2
+       , keys               = myKeys
        , workspaces         = withScreens 2 myWorkspaces
        , mouseBindings      = myMouseBindings
+       , logHook            = myLogHook hLeft hRight
        , layoutHook         = myLayout
        , manageHook         = myManageHook
        , handleEventHook    = myHandleEventHook
-       , startupHook        = myStartupHook
        }
        `additionalKeysP` myAditionalKeys
