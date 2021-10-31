@@ -4,7 +4,7 @@ export PATH=$HOME/.local/bin:$HOME/.scripts:$PATH
 export PATH=$HOME/.cabal/bin:$PATH
 
 export TERMINAL=termite
-export BROWSER=brave
+export BROWSER=firefox
 export EDITOR=nvim
 export VISUAL=nvim
 

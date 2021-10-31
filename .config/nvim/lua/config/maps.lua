@@ -74,12 +74,6 @@ map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<cr>gv=gv' }
 map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<cr>gv=gv' }
 map { 'n', noremap = false, silent = true, 'J', ':m .+1<cr>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<cr>==' }
-map { 'n', noremap = false, silent = true, '`', ':lua require("harpoon.mark").add_file()<cr>' }
-map { 'n', noremap = false, silent = true, '<A-`>', ':lua require("harpoon.ui").toggle_quick_menu()<cr>' }
-map { 'n', noremap = false, silent = true, '<A-1>', ':lua require("harpoon.ui").nav_file(1)<cr>' }
-map { 'n', noremap = false, silent = true, '<A-2>', ':lua require("harpoon.ui").nav_file(2)<cr>' }
-map { 'n', noremap = false, silent = true, '<A-3>', ':lua require("harpoon.ui").nav_file(3)<cr>' }
-map { 'n', noremap = false, silent = true, '<A-4>', ':lua require("harpoon.ui").nav_file(4)<cr>' }
 map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
 map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
 map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<cr>' }

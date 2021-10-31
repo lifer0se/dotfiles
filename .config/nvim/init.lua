@@ -55,16 +55,12 @@ require('config.nvim-tree')
 require('config.toggleterm')
 require('config.session_manager')
 
+require('mkdir')
 require('colorizer').setup()
 require('alpha').setup(require'alpha.themes.startify'.opts)
 require('commented').setup{
 	keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
-
-vim.g.pear_tree_smart_openers = 1
-vim.g.pear_tree_smart_closers = 1
-vim.g.pear_tree_map_special_keys = 1
-vim.g.pear_tree_ft_disabled = { "TelescopePrompt" }
 
 vim.cmd[[
   colorscheme gruvbox
