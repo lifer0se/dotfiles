@@ -3,7 +3,7 @@ local cmp = require"cmp"
 cmp.setup({
   snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      require'luasnip'.lsp_expand(args.body)
     end,
   },
   mapping = {
@@ -11,15 +11,18 @@ cmp.setup({
     ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false }),
   },
   formatting = {
-    format = require("lspkind").cmp_format({with_text = true, menu = ({
-      buffer = "",
-      nvim_lsp = "曆",
-      luasnip = "",
-      nvim_lua = "",
-    })}),
+    format = require("lspkind").cmp_format({
+      with_text = true,
+      menu = ({
+        buffer = "",
+        nvim_lsp = "曆",
+        luasnip = "",
+        nvim_lua = "",
+      })
+    }),
   },
   documentation = {
     border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
@@ -30,9 +33,9 @@ cmp.setup({
   sources = cmp.config.sources{
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
-    { name = 'path' },
-    { name = 'vsnip' },
     { name = 'treesitter' },
-    { name = 'buffer' },
+    { name = 'luasnip' },
+    { name = 'path' },
+    { name = 'buffer', keyword_length = 4 },
   }
 })

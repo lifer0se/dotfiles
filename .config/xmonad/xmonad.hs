@@ -1,5 +1,8 @@
 import XMonad
 import System.Exit
+import System.IO (hPutStrLn)
+import Prelude hiding (log)
+import GHC.IO.Handle (Handle)
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
@@ -22,18 +25,15 @@ import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.IndependentScreens
 
-import XMonad.Util.SpawnOnce
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL)
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.Run (spawnPipe)
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
-import XMonad.Util.Run (spawnPipe)
-import System.IO (hPutStrLn)
-import Prelude hiding (log)
-import GHC.IO.Handle (Handle)
+import XMonad.Actions.UpdatePointer (updatePointer)
 
 
 
@@ -221,6 +221,9 @@ clickable :: [Char] -> [Char] -> [Char]
 clickable ic ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
+myLogHook :: Handle -> Handle -> X ()
+myLogHook hLeft hRight = let log screen handle = dynamicLogWithPP . filterOutWsPP [scratchpadWorkspaceTag] . marshallPP screen . myXmobarPP screen $ handle
+                          in log 0 hLeft >> log 1 hRight
 
 myXmobarPP :: ScreenId -> Handle -> PP
 myXmobarPP s handle = def
@@ -248,32 +251,24 @@ myXmobarPP s handle = def
 ------------------------------------------------------------------------
 --
 
-myLogHook :: Handle -> Handle -> X ()
-myLogHook hLeft hRight = let log screen handle = dynamicLogWithPP . filterOutWsPP [scratchpadWorkspaceTag] . marshallPP screen . myXmobarPP screen $ handle
-                          in log 0 hLeft >> log 1 hRight
-
-
-------------------------------------------------------------------------
---
-
 main :: IO ()
 main = do
       hLeft <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar0.config"
       hRight <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar1.config"
       xmonad $ ewmh $ ewmhFullscreen $ docks $ def
-       { focusFollowsMouse  = True
-       , clickJustFocuses   = False
-       , borderWidth        = 3
-       , modMask            = mod4Mask
-       , normalBorderColor  = grey2
-       , focusedBorderColor = blue
-       , terminal           = myTerminal
-       , keys               = myKeys
-       , workspaces         = withScreens 2 myWorkspaces
-       , mouseBindings      = myMouseBindings
-       , logHook            = myLogHook hLeft hRight
-       , layoutHook         = myLayout
-       , manageHook         = myManageHook
-       , handleEventHook    = myHandleEventHook
-       }
-       `additionalKeysP` myAditionalKeys
+        { focusFollowsMouse  = True
+        , clickJustFocuses   = False
+        , borderWidth        = 3
+        , modMask            = mod4Mask
+        , normalBorderColor  = grey2
+        , focusedBorderColor = blue
+        , terminal           = myTerminal
+        , keys               = myKeys
+        , workspaces         = withScreens 2 myWorkspaces
+        , mouseBindings      = myMouseBindings
+        , logHook            = myLogHook hLeft hRight >> updatePointer (0.75, 0.75) (0, 0)
+        , layoutHook         = myLayout
+        , manageHook         = myManageHook
+        , handleEventHook    = myHandleEventHook
+        }
+        `additionalKeysP` myAditionalKeys

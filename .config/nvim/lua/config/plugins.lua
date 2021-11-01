@@ -1,43 +1,43 @@
-local Plug = vim.fn['plug#']
+vim.cmd [[packadd packer.nvim]]
 
-vim.call('plug#begin', '~/.local/share/nvim/plugged')
+return require('packer').startup(function()
 
-Plug('goolord/alpha-nvim')
-Plug('mbbill/undotree')
-Plug('winston0410/commented.nvim')
-Plug('tpope/vim-surround')
-Plug('aserebryakov/vim-todo-lists')
-Plug('kyazdani42/nvim-tree.lua')
-Plug('akinsho/toggleterm.nvim')
-Plug('tpope/vim-fugitive')
-Plug('tpope/vim-rhubarb')
-Plug('kyazdani42/nvim-web-devicons')
-Plug('morhetz/gruvbox')
-Plug('norcalli/nvim-colorizer.lua')
-Plug('nvim-lua/popup.nvim')
-Plug('nvim-lua/plenary.nvim')
-Plug('neovim/nvim-lspconfig')
-Plug('williamboman/nvim-lsp-installer')
-Plug('Shatur/neovim-session-manager')
-Plug('hrsh7th/nvim-cmp')
-Plug('hrsh7th/cmp-nvim-lsp')
-Plug('hrsh7th/cmp-nvim-lua')
-Plug('hrsh7th/cmp-cmdline')
-Plug('hrsh7th/cmp-buffer')
-Plug('hrsh7th/cmp-path')
-Plug('hrsh7th/cmp-vsnip')
-Plug('hrsh7th/vim-vsnip')
-Plug('onsails/lspkind-nvim')
-Plug('ray-x/lsp_signature.nvim')
-Plug('ray-x/cmp-treesitter')
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = vim.fn[':TSUpdate']})
-Plug('nvim-treesitter/playground')
-Plug('nvim-treesitter/nvim-treesitter-textobjects')
-Plug('nvim-telescope/telescope.nvim')
-Plug('nvim-telescope/telescope-fzy-native.nvim')
-Plug('hoob3rt/lualine.nvim')
-Plug('akinsho/bufferline.nvim')
-Plug('jghauser/mkdir.nvim')
-Plug('lifer0se/ezbookmarks.nvim')
+  use { 'goolord/alpha-nvim' }
+  use { 'mbbill/undotree' }
+  use { 'winston0410/commented.nvim' }
+  use { 'tpope/vim-surround' }
+  use { 'aserebryakov/vim-todo-lists' }
+  use { 'kyazdani42/nvim-tree.lua' }
+  use { 'akinsho/toggleterm.nvim' }
+  use { 'tpope/vim-fugitive' }
+  use { 'tpope/vim-rhubarb' }
+  use { 'kyazdani42/nvim-web-devicons' }
+  use { 'morhetz/gruvbox' }
+  use { 'norcalli/nvim-colorizer.lua' }
+  use { 'nvim-lua/popup.nvim' }
+  use { 'nvim-lua/plenary.nvim' }
+  use { 'neovim/nvim-lspconfig' }
+  use { 'williamboman/nvim-lsp-installer' }
+  use { 'Shatur/neovim-session-manager' }
+  use { 'hrsh7th/nvim-cmp' }
+  use { 'hrsh7th/cmp-nvim-lsp' }
+  use { 'hrsh7th/cmp-nvim-lua' }
+  use { 'hrsh7th/cmp-cmdline' }
+  use { 'hrsh7th/cmp-buffer' }
+  use { 'hrsh7th/cmp-path' }
+  use { 'saadparwaiz1/cmp_luasnip' }
+  use { 'L3MON4D3/LuaSnip' }
+  use { 'onsails/lspkind-nvim' }
+  use { 'ray-x/lsp_signature.nvim' }
+  use { 'ray-x/cmp-treesitter' }
+  use { 'nvim-treesitter/nvim-treesitter' }
+  use { 'nvim-treesitter/playground' }
+  use { 'nvim-treesitter/nvim-treesitter-textobjects' }
+  use { 'nvim-telescope/telescope.nvim' }
+  use { 'nvim-telescope/telescope-fzy-native.nvim' }
+  use { 'hoob3rt/lualine.nvim' }
+  use { 'akinsho/bufferline.nvim' }
+  use { 'jghauser/mkdir.nvim' }
+  use { 'lifer0se/ezbookmarks.nvim' }
 
-vim.call('plug#end')
+end)

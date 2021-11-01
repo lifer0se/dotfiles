@@ -21,10 +21,13 @@ fi
 
 ICON=/usr/share/icons/Papirus-Dark/64x64/apps/mx-packageinstaller.svg
 NEWNUM=$(($NUM - $OLDNUM))
-if [[ $NEWNUM -gt 1 ]]
+if [[ $NEWNUM -gt 0 ]]
 then
-	notify-send -i $ICON "Repository Sync" "$NEWNUM new updates available."
-elif [[ $NEWNUM -gt 0 ]]
-then
-	notify-send -i $ICON "Repository Sync" "$NEWNUM new update available."
+  if [[ $NUM -gt 1 ]]
+  then
+    notify-send -i $ICON "Repository Sync" "$NUM new updates available."
+  elif [[ $NUM -gt 0 ]]
+  then
+    notify-send -i $ICON "Repository Sync" "$NUM new update available."
+  fi
 fi
