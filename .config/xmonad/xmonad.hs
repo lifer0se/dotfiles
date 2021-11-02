@@ -38,7 +38,7 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 
 
 myTerminal :: [Char]
-myTerminal = "termite"
+myTerminal = "kitty"
 
 grey1, grey2, grey3, grey4, blue, orange :: String
 grey1  = "#2B2E37"
@@ -71,7 +71,7 @@ myScratchPads =
   [ NS "gcolor" "gcolor2" (className =? "Gcolor2") (customFloating $ W.RationalRect 0.35 0.35 0.3 0.3)
   , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.4 0.25 0.2 0.5)
   , NS "htop" (myTerminal ++ " --class htop -e htop") (className =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
-  , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.04 0.13 0.19)
+  , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.04 0.13 0.21)
   , NS "brightness" "brightness-controller" (title =? "Brightness Controller") defaultFloating
   ]
 
@@ -198,7 +198,7 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
-  , className =? "Termite" --> insertPosition End Newer
+  , className =? "kitty" --> insertPosition End Newer
   , className =? "Godot" --> doShift ( myWorkspaces !! 6)
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads

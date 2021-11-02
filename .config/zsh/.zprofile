@@ -3,7 +3,7 @@
 export PATH=$HOME/.local/bin:$HOME/.scripts:$PATH
 export PATH=$HOME/.cabal/bin:$PATH
 
-export TERMINAL=termite
+export TERMINAL=kitty
 export BROWSER=firefox
 export EDITOR=nvim
 export VISUAL=nvim
@@ -12,8 +12,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.local/cache"
 export XINITRC="${XDG_CONFIG_HOME:-$HOME/.config}/X11/xinitrc"
-#export VIMRC='~/.config/vim/vimrc'
-#export VIMINIT='source $VIMRC'
 export LESSHISTFILE="-"
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"

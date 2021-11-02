@@ -1,6 +1,6 @@
 xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr &
-lxsession &
+#lxsession &
 numlockx &
 setxkbmap -option caps:escape &
 nitrogen --restore &
@@ -11,7 +11,7 @@ trayer --monitor 2 --edge top --align right --widthtype request --padding 10 --i
 nm-applet &
 blueman-applet &
 volumeicon &
-/usr/bin/greenclip daemon &
-/opt/urserver/urserver --daemon &
+#/usr/bin/greenclip daemon &
+#/opt/urserver/urserver --daemon &
 
 exec xmonad

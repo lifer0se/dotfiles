@@ -55,7 +55,7 @@ require('config.nvim-tree')
 require('config.toggleterm')
 require('config.session_manager')
 
--- require('mkdir')
+require('mkdir')
 require('colorizer').setup()
 require('alpha').setup(require'alpha.themes.startify'.opts)
 require('commented').setup{
