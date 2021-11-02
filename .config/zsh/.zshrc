@@ -22,6 +22,6 @@ alias vim="nvim"
 #alias cat="bat"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dfs='dotfiles status'
-alias dfc='dotfiles commit -a'
+alias dfc='dotfiles commit'
 alias dfp='dotfiles push'
 alias dfa='dotfiles add'
