@@ -1,7 +1,6 @@
 #!/bin/zsh
 
-export PATH=$HOME/.local/bin:$HOME/.scripts:$PATH
-export PATH=$HOME/.cabal/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/scripts:$PATH
 
 export TERMINAL=kitty
 export BROWSER=firefox
