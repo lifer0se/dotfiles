@@ -34,11 +34,12 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
+import XMonad.Actions.UpdateFocus
 
 
 
 myTerminal :: [Char]
-myTerminal = "kitty"
+myTerminal = "termite"
 
 grey1, grey2, grey3, grey4, blue, orange :: String
 grey1  = "#2B2E37"
@@ -91,8 +92,8 @@ myAditionalKeys =
   , ("M-f", spawn $ myTerminal ++ " --class Ranger -e ranger")
   , ("M-d", spawn "rofi -show combi")
   , ("M-p", spawn "passmenu -p pass")
-  , ("M-w", spawn "firefox")
-  , ("M-S-w", spawn "firefox --private-window")
+  , ("M-w", spawn "brave")
+  , ("M-S-w", spawn "brave --incognito")
   , ("M-S-f", spawn "pcmanfm")
   , ("M-s", spawn "spotify")
   , ("<Print>", spawn "flameshot gui")
@@ -198,7 +199,7 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
-  , className =? "kitty" --> insertPosition End Newer
+  , className =? "Termite" --> insertPosition End Newer
   , className =? "Godot" --> doShift ( myWorkspaces !! 6)
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
@@ -208,7 +209,7 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "9")
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (className =? "Spotify" --> doShift "8")
 
 
 ------------------------------------------------------------------------
@@ -269,6 +270,5 @@ main = do
         , logHook            = myLogHook hLeft hRight >> updatePointer (0.75, 0.75) (0, 0)
         , layoutHook         = myLayout
         , manageHook         = myManageHook
-        , handleEventHook    = myHandleEventHook
         }
         `additionalKeysP` myAditionalKeys

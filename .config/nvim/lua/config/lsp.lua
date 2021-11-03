@@ -1,3 +1,4 @@
+
 local border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 
 local nvim_lsp = require "lspconfig"
@@ -29,15 +30,14 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
-
--- require "lsp_signature".setup({
-  -- bind = true,
-  -- doc_lines = 0,
-  -- hint_enable = false,
-  -- handler_opts = {
-    -- border = "single"
-  -- },
--- })
+require "lsp_signature".setup({
+  bind = true,
+  doc_lines = 0,
+  hint_enable = false,
+  handler_opts = {
+    border = "single"
+  },
+})
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -46,15 +46,15 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
   -- capabilities = capabilities
 -- }
 
-nvim_lsp.graphql.setup{
-  on_attach = on_attach,
-  capabilities = capabilities
-}
+-- nvim_lsp.graphql.setup{
+  -- on_attach = on_attach,
+  -- capabilities = capabilities
+-- }
 
-nvim_lsp.jsonls.setup{
-  on_attach = on_attach,
-  capabilities = capabilities
-}
+-- nvim_lsp.jsonls.setup{
+  -- on_attach = on_attach,
+  -- capabilities = capabilities
+-- }
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
@@ -63,12 +63,22 @@ lsp_installer.on_server_ready(function(server)
     capabilities = capabilities
     }
 
-    if server.name == 'omnisharp' then
-      opts.cmd = { "/home/amnesia/.local/share/nvim/lsp_servers/omnisharp/omnisharp/run", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) };
-      opts.root_dir = nvim_lsp.util.root_pattern("*.csproj","*.sln");
-    elseif server.name == 'hls' then
-      opts.cmd =  { "haskell-language-server-wrapper", "--lsp" }
+    -- if server.name == 'omnisharp' then
+      -- opts.cmd = { "/home/amnesia/.local/share/nvim/lsp_servers/omnisharp/omnisharp/run", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) };
+      -- opts.root_dir = nvim_lsp.util.root_pattern("*.csproj","*.sln");
+    -- elseif server.name == 'hls' then
+      -- opts.cmd =  { "haskell-language-server-wrapper", "--lsp" }
+    -- end
+    if server.name == 'sumneko_lua' then
+      opts.settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
+          }
+        }
+      }
     end
+
   server:setup(opts)
   vim.cmd [[ do User LspAttachBuffers ]]
 end)

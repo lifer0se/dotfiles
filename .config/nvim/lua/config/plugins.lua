@@ -1,7 +1,8 @@
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function()
+return require('packer').startup(function(use)
 
+  use { 'wbthomason/packer.nvim' }
   use { 'goolord/alpha-nvim' }
   use { 'mbbill/undotree' }
   use { 'winston0410/commented.nvim' }
@@ -38,6 +39,6 @@ return require('packer').startup(function()
   use { 'hoob3rt/lualine.nvim' }
   use { 'akinsho/bufferline.nvim' }
   use { 'jghauser/mkdir.nvim' }
-  use { 'lifer0se/ezbookmarks.nvim' }
+  -- use { 'lifer0se/ezbookmarks.nvim' }
 
 end)

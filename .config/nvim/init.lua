@@ -1,8 +1,7 @@
-
-
 --""""""""""""""""""""""""""""""""""""""""""
 --"           NVIM Settings                "
 --""""""""""""""""""""""""""""""""""""""""""
+
 
 local set = vim.opt
 set.completeopt = { 'menuone', 'noinsert', 'noselect' }
@@ -37,7 +36,6 @@ set.termguicolors = true
 set.cursorline = true
 
 
-
 --""""""""""""""""""""""""""""""""""""""""""
 --"            Plugin Settings             "
 --""""""""""""""""""""""""""""""""""""""""""
@@ -60,6 +58,13 @@ require('colorizer').setup()
 require('alpha').setup(require'alpha.themes.startify'.opts)
 require('commented').setup{
  keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
+}
+
+vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
+require('ezbookmarks').setup{
+  cwd_on_open = 1,
+  use_bookmark_dir = 1,
+  open_new_tab = 0,
 }
 
 vim.cmd[[
@@ -90,7 +95,7 @@ vim.cmd[[
   highlight TelescopeBorder guifg=#358292
   highlight TelescopeMatching guifg=#EDA36D
 ]]
--- t
+
 
 --""""""""""""""""""""""""""""""""""""""""""
 --"              Functions                 "
@@ -105,8 +110,14 @@ autocmd.BufWritePre = function()
 end
 
 -- Disables automatic commenting on newline:
-autocmd.FileType = function()
+local function remove_autocomment()
 	vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
+end
+autocmd.BufNew = function()
+  remove_autocomment()
+end
+autocmd.BufRead = function()
+  remove_autocomment()
 end
 
 autocmd.TextYankPost = function ()

@@ -56,12 +56,12 @@ map { 'v', 's', '' }
 map { 'v', noremap = false, 's`', 'c`<C-R>"`<Esc>' }
 map { 'v', noremap = false, 's\'', 'c\'<C-R>"\'<Esc>' }
 map { 'v', noremap = false, 's"', 'c"<C-R>""<Esc>' }
-map { 'v', noremap = false, 's[', 'c[<C-R>"]<Esc>' }
-map { 'v', noremap = false, 's]', 'c[<C-R>"]<Esc>' }
-map { 'v', noremap = false, 's{', 'c{<C-R>"}<Esc>' }
-map { 'v', noremap = false, 's}', 'c{<C-R>"}<Esc>' }
-map { 'v', noremap = false, 's(', 'c(<C-R>")<Esc>' }
-map { 'v', noremap = false, 's)', 'c(<C-R>")<Esc>' }
+map { 'v', noremap = false, 's[', 'c[ <C-R>" ]<Esc>' }
+map { 'v', noremap = false, 's]', 'c[ <C-R>" ]<Esc>' }
+map { 'v', noremap = false, 's{', 'c{ <C-R>" }<Esc>' }
+map { 'v', noremap = false, 's}', 'c{ <C-R>" }<Esc>' }
+map { 'v', noremap = false, 's(', 'c( <C-R>" )<Esc>' }
+map { 'v', noremap = false, 's)', 'c( <C-R>" )<Esc>' }
 map { 'v', noremap = false, 's<', 'c<<C-R>"><Esc>' }
 map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<cr>' }
@@ -91,3 +91,6 @@ map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbo
 map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<cr>' }
 map { 'n', noremap = false, '<C-_', ':exe v:count1 . "ToggleTerm"<cr>' }
+map { 'i', noremap = true, silent = true, '<F2>', '<cmd>lua require("renamer").rename()<cr>' }
+map { 'n', noremap = true, silent = true, '<leader>rn', '<cmd>lua require("renamer").rename()<cr>' }
+map { 'v', noremap = true, silent = true, '<leader>rn', '<cmd>lua require("renamer").rename()<cr>' }

@@ -20,4 +20,4 @@ then
     TARGET=$1
 fi
 
-setxkbmap -layout $TARGET && sigdwmblocks 6
+setxkbmap -layout $TARGET
