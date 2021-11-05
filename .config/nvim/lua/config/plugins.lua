@@ -39,6 +39,8 @@ return require('packer').startup(function(use)
   use { 'hoob3rt/lualine.nvim' }
   use { 'akinsho/bufferline.nvim' }
   use { 'jghauser/mkdir.nvim' }
+  use { 'junegunn/fzf.vim' }
+
   -- use { 'lifer0se/ezbookmarks.nvim' }
 
 end)

@@ -7,9 +7,9 @@ local on_attach = function(client, bufnr)
   buf_map(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {})
   buf_map(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {})
   buf_map(bufnr, "n", "E", "<cmd>lua vim.lsp.buf.hover()<CR>", {})
-  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({border="..vim.inspect(border)..", focusable=true})<CR>", {})
-  buf_map(bufnr, "n", "gn", "<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = "..vim.inspect(border).." }})<CR>", {})
-  buf_map(bufnr, "n", "gp", "<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = "..vim.inspect(border).." }})<CR>", {})
+  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({border="..vim.inspect(border)..", focusable=true })<CR>", {})
+  buf_map(bufnr, "n", "gn", "<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = "..vim.inspect(border)..", focusable=true }})<CR>", {})
+  buf_map(bufnr, "n", "gp", "<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = "..vim.inspect(border)..", focusable=true }})<CR>", {})
   buf_map(bufnr, "n", "ga", "<cmd>lua vim.lsp.buf.code_action()<CR>", {})
 end
 
