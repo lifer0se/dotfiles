@@ -34,7 +34,6 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
-import XMonad.Actions.UpdateFocus
 
 
 
@@ -79,6 +78,15 @@ myScratchPads =
 
 ------------------------------------------------------------------------
 --
+
+isOnScreen :: ScreenId -> WindowSpace -> Bool
+isOnScreen s ws = s == unmarshallS (W.tag ws)
+
+currentScreen :: X ScreenId
+currentScreen = gets (W.screen . W.current . windowset)
+
+spacesOnCurrentScreen :: WSType
+spacesOnCurrentScreen = WSIs (isOnScreen <$> currentScreen)
 
 nonNSP :: WSType
 nonNSP = WSIs (return (\ws -> W.tag ws /= "NSP"))
@@ -141,8 +149,8 @@ myAditionalKeys =
   , ("M-m", spawn "xdotool key super+a && xdotool key super+b")
 
   -- workspace controls
-  , ("M-<Left>", moveTo Prev nonNSP)
-  , ("M-<Right>",  moveTo Next nonNSP)
+  , ("M-<Left>", spawn "cycleWS l")
+  , ("M-<Right>", spawn "cycleWS r")
 
   -- screen controll
   , ("M-o", nextScreen)
@@ -166,8 +174,8 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   , ((modm .|. shiftMask, button1), dragWindow)
   , ((modm, button2), const kill)
   , ((modm, button3), \w -> focus w >> Flex.mouseResizeWindow w)
-  , ((modm, button4), \_ -> moveTo Prev nonNSP)
-  , ((modm, button5), \_ -> moveTo Next nonNSP)
+  , ((modm, button4), \_ -> spawn "cycleWS l")
+  , ((modm, button5), \_ -> spawn "cycleWS r")
   ]
 
 
@@ -200,7 +208,7 @@ myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , className =? "Termite" --> insertPosition End Newer
-  , className =? "Godot" --> doShift ( myWorkspaces !! 6)
+  , className =? "Godot" --> doShift "0_6"
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
@@ -209,7 +217,7 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (className =? "Spotify" --> doShift "8")
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9")
 
 
 ------------------------------------------------------------------------
@@ -219,7 +227,7 @@ myWorkspaceIndices :: M.Map [Char] Integer
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..]
 
 clickable :: [Char] -> [Char] -> [Char]
-clickable ic ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] ic
+clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] icon
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
 myLogHook :: Handle -> Handle -> X ()
@@ -270,5 +278,6 @@ main = do
         , logHook            = myLogHook hLeft hRight >> updatePointer (0.75, 0.75) (0, 0)
         , layoutHook         = myLayout
         , manageHook         = myManageHook
+        , handleEventHook    = myHandleEventHook
         }
         `additionalKeysP` myAditionalKeys

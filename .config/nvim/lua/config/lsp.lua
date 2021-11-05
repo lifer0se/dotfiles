@@ -20,14 +20,14 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   -- spacing = 0,
   underline = false,
   virtual_text = {
-    prefix = '●'
+    prefix = ''
   }
 })
 
-local signs = { Error = "ﰲ ", Warn = "ﰲ ", Hint = "ﰲ ", Info = "ﰲ " }
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  vim.fn.sign_define(hl, {  texthl = hl, text = icon, numhl = hl })
 end
 
 require "lsp_signature".setup({
@@ -40,22 +40,6 @@ require "lsp_signature".setup({
 })
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
--- nvim_lsp.gdscript.setup {
- -- on_attach = on_attach,
-  -- capabilities = capabilities
--- }
-
--- nvim_lsp.graphql.setup{
-  -- on_attach = on_attach,
-  -- capabilities = capabilities
--- }
-
--- nvim_lsp.jsonls.setup{
-  -- on_attach = on_attach,
-  -- capabilities = capabilities
--- }
-
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
   local opts = {
@@ -63,12 +47,6 @@ lsp_installer.on_server_ready(function(server)
     capabilities = capabilities
     }
 
-    -- if server.name == 'omnisharp' then
-      -- opts.cmd = { "/home/amnesia/.local/share/nvim/lsp_servers/omnisharp/omnisharp/run", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) };
-      -- opts.root_dir = nvim_lsp.util.root_pattern("*.csproj","*.sln");
-    -- elseif server.name == 'hls' then
-      -- opts.cmd =  { "haskell-language-server-wrapper", "--lsp" }
-    -- end
     if server.name == 'sumneko_lua' then
       opts.settings = {
         Lua = {

@@ -1,6 +1,7 @@
 require'bufferline'.setup{
 	options = {
 		middle_mouse_command = 'bdelete! %d',
+    modified_icon = "",
 		show_tab_indicators = false,
 		show_close_icon = false,
 		show_buffer_close_icons = false,
