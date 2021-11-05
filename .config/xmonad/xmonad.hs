@@ -43,7 +43,7 @@ myTerminal = "termite"
 grey1, grey2, grey3, grey4, blue, orange :: String
 grey1  = "#2B2E37"
 grey2  = "#555E70"
-grey3  = "#747880"
+grey3  = "#697180"
 grey4  = "#8691A8"
 blue   = "#8BABF0"
 orange = "#C45500"
@@ -188,7 +188,7 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 myLayout = avoidStruts $ layoutTall ||| layoutTabbed
   where
     layoutTall = mkToggle (NBFULL ?? EOT) . named "[]=" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ t ]" $ smartBorders $ mySpacing 55 15 $ tabbed shrinkText myTabTheme
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ f ]" $ smartBorders $ mySpacing 55 15 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -244,11 +244,9 @@ myXmobarPP s handle = def
   , ppHidden = xmobarColor grey2 "" . clickable wsIconHidden
   , ppHiddenNoWindows = xmobarColor grey2 "" . clickable wsIconEmpty
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
-  , ppLayout = xmobarColor grey4 ""
-  , ppTitle = xmobarColor grey3 ""
   , ppOrder = \(ws : _ : _ : extras) -> ws : extras
-  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ logLayoutOnScreen s
-                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ shortenL 80 $ logTitleOnScreen s
+  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ logLayoutOnScreen s
+                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ wrapL ("<fc=" ++ grey3 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen s
                 ]
   }
   where

@@ -69,7 +69,6 @@ require('ezbookmarks').setup{
 
 
 vim.cmd[[
-
   colorscheme gruvbox
   highlight Normal guibg=NONE
   highlight SignColumn guibg=NONE
