@@ -12,6 +12,7 @@ plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history
 ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
+alias r="ranger"
 alias v="nvim"
 alias vim="nvim"
 #alias ls="/home/amnesia/.local/share/gem/ruby/3.0.0/gems/colorls-1.4.4/exe/colorls -A -1"

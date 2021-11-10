@@ -56,14 +56,25 @@ map { 'v', 's', '' }
 map { 'v', noremap = false, 's`', 'c`<C-R>"`<Esc>' }
 map { 'v', noremap = false, 's\'', 'c\'<C-R>"\'<Esc>' }
 map { 'v', noremap = false, 's"', 'c"<C-R>""<Esc>' }
-map { 'v', noremap = false, 's[', 'c[ <C-R>" ]<Esc>' }
-map { 'v', noremap = false, 's]', 'c[ <C-R>" ]<Esc>' }
-map { 'v', noremap = false, 's{', 'c{ <C-R>" }<Esc>' }
-map { 'v', noremap = false, 's}', 'c{ <C-R>" }<Esc>' }
-map { 'v', noremap = false, 's(', 'c( <C-R>" )<Esc>' }
-map { 'v', noremap = false, 's)', 'c( <C-R>" )<Esc>' }
+map { 'v', noremap = false, 's[', 'c[<C-R>"]<Esc>' }
+map { 'v', noremap = false, 's]', 'c[<C-R>"]<Esc>' }
+map { 'v', noremap = false, 's{', 'c{<C-R>"}<Esc>' }
+map { 'v', noremap = false, 's}', 'c{<C-R>"}<Esc>' }
+map { 'v', noremap = false, 's(', 'c(<C-R>")<Esc>' }
+map { 'v', noremap = false, 's)', 'c(<C-R>")<Esc>' }
 map { 'v', noremap = false, 's<', 'c<<C-R>"><Esc>' }
 map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
+map { 'v', noremap = false, 'a`', 'c` <C-R>" `<Esc>' }
+map { 'v', noremap = false, 'a\'', 'c \'<C-R>" \'<Esc>' }
+map { 'v', noremap = false, 'a"', 'c" <C-R>" "<Esc>' }
+map { 'v', noremap = false, 'a[', 'c[ <C-R>" ]<Esc>' }
+map { 'v', noremap = false, 'a]', 'c[ <C-R>" ]<Esc>' }
+map { 'v', noremap = false, 'a{', 'c{ <C-R>" }<Esc>' }
+map { 'v', noremap = false, 'a}', 'c{ <C-R>" }<Esc>' }
+map { 'v', noremap = false, 'a(', 'c( <C-R>" )<Esc>' }
+map { 'v', noremap = false, 'a)', 'c( <C-R>" )<Esc>' }
+map { 'v', noremap = false, 'a<', 'c< <C-R>" ><Esc>' }
+map { 'v', noremap = false, 'a>', 'c< <C-R>" ><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<cr>' }
 map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
 map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>' }
@@ -78,19 +89,14 @@ map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
 map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
 map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope current_buffer_fuzzy_find<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fs', ':Telescope sessions<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope command_history<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fh', ':Telescope help_tags<cr>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>ee', ':NvimTreeRefresh<cr>:NvimTreeToggle<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>ef', ':NvimTreeRefresh<cr>:NvimTreeFindFile<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<cr>:NvimTreeToggle<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fn', '<cmd>lua require("ezbookmarks").AddBookmark()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbookmarks").AddBookmarkDirectory()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<cr>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<cr>' }
 map { 'n', noremap = false, '<C-_', ':exe v:count1 . "ToggleTerm"<cr>' }
-map { 'i', noremap = true, silent = true, '<F2>', '<cmd>lua require("renamer").rename()<cr>' }
-map { 'n', noremap = true, silent = true, '<leader>rn', '<cmd>lua require("renamer").rename()<cr>' }
-map { 'v', noremap = true, silent = true, '<leader>rn', '<cmd>lua require("renamer").rename()<cr>' }

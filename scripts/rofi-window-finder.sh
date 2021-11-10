@@ -1,24 +1,62 @@
 #!/bin/bash
 
-list=$(wmctrl -l | cut -c 12-)
+list=$(wmctrl -x -l | cut -c 12-)
 windows=""
+
+ln=0
 while read -r line
 do
-  num=${line:0:1}
-  let num+=1
-  [[ $num -gt 9 ]] && continue
-
-  win=$(echo ${line} | awk '{$1=$2=$(NF-1)=$NF=""; print $0}')
-  if [[ ${#win} -gt 2 ]]
+  class=$(echo "$line" | awk '{print $2}' | cut -f2 -d".")
+  class=${#class}
+  if [[ $class -gt $ln ]]
   then
-    win="- "$win
+    ln=$class
   fi
-  title=$(echo ${line} | awk '{print $NF}')
-  win="$num     $title   ${win}"
-  windows+="$win\n"
 done <<< "$list"
 
+while read -r line
+do
+  workspace=$(echo "$line" | awk '{print $1}')
+  [[ $workspace -eq 18 ]] && continue
+  let workspace+=1
+  if [[ $workspace -lt 10 ]]; then
+    screen="1:"
+  else
+    screen="2:"
+    let workspace-=9
+  fi
+
+  class=$(echo "$line" | awk '{print $2}' | cut -f2 -d".")
+  class_sep=""
+  if [[ ${#class} -lt $ln ]]
+  then
+   diff=$((ln - ${#class}))
+   class_sep=$(printf "%-${diff}s" $MESSAGE)
+  fi
+
+  name=$(echo "$line" | awk '{$1=$2=$3=""; print $0}')
+
+  windows+="$screen $workspace      $class$class_sep   $name\n"
+done <<< "$list"
+
+i=0
+workspaces=$(wmctrl -d)
+while read -r line
+do
+  tmp=$(echo $line | awk '{print $2}')
+  [[ "$tmp" == "development" ]] && break
+  let i+=1
+done <<< "$workspaces"
+
 result=$(printf "$windows" | rofi -dmenu)
-result=${result:0:1}
-let result-=1
-wmctrl -s $result
+screen=${result:0:1}
+workspace=${result:3:1}
+if [[ $screen == "2" ]]
+then
+  let workspace+=8
+  [[ $i -lt 9 ]] && xdotool key super+o
+else
+  let workspace-=1
+  [[ $i -gt 8 ]] && xdotool key super+o
+fi
+wmctrl -s $workspace

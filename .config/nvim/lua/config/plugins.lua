@@ -19,18 +19,17 @@ return require('packer').startup(function(use)
   use { 'nvim-lua/plenary.nvim' }
   use { 'neovim/nvim-lspconfig' }
   use { 'williamboman/nvim-lsp-installer' }
-  use { 'Shatur/neovim-session-manager' }
   use { 'hrsh7th/nvim-cmp' }
   use { 'hrsh7th/cmp-nvim-lsp' }
   use { 'hrsh7th/cmp-nvim-lua' }
   use { 'hrsh7th/cmp-cmdline' }
   use { 'hrsh7th/cmp-buffer' }
   use { 'hrsh7th/cmp-path' }
+  use { 'ray-x/cmp-treesitter' }
   use { 'saadparwaiz1/cmp_luasnip' }
   use { 'L3MON4D3/LuaSnip' }
   use { 'onsails/lspkind-nvim' }
   use { 'ray-x/lsp_signature.nvim' }
-  use { 'ray-x/cmp-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter' }
   use { 'nvim-treesitter/playground' }
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
@@ -40,6 +39,8 @@ return require('packer').startup(function(use)
   use { 'akinsho/bufferline.nvim' }
   use { 'jghauser/mkdir.nvim' }
   use { 'junegunn/fzf.vim' }
+  use { 'cohama/lexima.vim' }
+  use { 'luukvbaal/stabilize.nvim' }
 
   -- use { 'lifer0se/ezbookmarks.nvim' }
 

@@ -1,8 +1,6 @@
 import XMonad
 import System.Exit
-import System.IO (hPutStrLn)
 import Prelude hiding (log)
-import GHC.IO.Handle (Handle)
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
@@ -13,6 +11,8 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position (Master, End))
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.WindowSwallowing
+import XMonad.Hooks.StatusBar
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
 import XMonad.Layout.NoBorders (smartBorders)
@@ -28,13 +28,10 @@ import XMonad.Layout.IndependentScreens
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL)
 import XMonad.Util.EZConfig (additionalKeysP)
-import XMonad.Util.Run (spawnPipe)
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
-import XMonad.Actions.UpdatePointer (updatePointer)
-
 
 
 myTerminal :: [Char]
@@ -85,11 +82,10 @@ isOnScreen s ws = s == unmarshallS (W.tag ws)
 currentScreen :: X ScreenId
 currentScreen = gets (W.screen . W.current . windowset)
 
-spacesOnCurrentScreen :: WSType
-spacesOnCurrentScreen = WSIs (isOnScreen <$> currentScreen)
-
-nonNSP :: WSType
-nonNSP = WSIs (return (\ws -> W.tag ws /= "NSP"))
+workspacesOnCurrentScreen :: WSType
+workspacesOnCurrentScreen = WSIs $ do
+  s <- currentScreen
+  return $ \x -> W.tag x /= "NSP" && isOnScreen s x
 
 myAditionalKeys :: [(String, X ())]
 myAditionalKeys =
@@ -149,8 +145,8 @@ myAditionalKeys =
   , ("M-m", spawn "xdotool key super+a && xdotool key super+b")
 
   -- workspace controls
-  , ("M-<Left>", spawn "cycleWS l")
-  , ("M-<Right>", spawn "cycleWS r")
+  , ("M-<Left>", moveTo Prev workspacesOnCurrentScreen)
+  , ("M-<Right>", moveTo Next workspacesOnCurrentScreen)
 
   -- screen controll
   , ("M-o", nextScreen)
@@ -162,11 +158,13 @@ myAditionalKeys =
 
   ]
 
+
 myKeys :: XConfig l -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
  [((m .|. modm, k), windows $ onCurrentScreen f i)
        | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
 
 myMouseBindings :: XConfig l -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
@@ -174,8 +172,8 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   , ((modm .|. shiftMask, button1), dragWindow)
   , ((modm, button2), const kill)
   , ((modm, button3), \w -> focus w >> Flex.mouseResizeWindow w)
-  , ((modm, button4), \_ -> spawn "cycleWS l")
-  , ((modm, button5), \_ -> spawn "cycleWS r")
+  , ((modm, button4), \_ -> moveTo Prev workspacesOnCurrentScreen)
+  , ((modm, button5), \_ -> moveTo Next workspacesOnCurrentScreen)
   ]
 
 
@@ -187,8 +185,8 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
 myLayout = avoidStruts $ layoutTall ||| layoutTabbed
   where
-    layoutTall = mkToggle (NBFULL ?? EOT) . named "[]=" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ f ]" $ smartBorders $ mySpacing 55 15 $ tabbed shrinkText myTabTheme
+    layoutTall = mkToggle (NBFULL ?? EOT) . named "[]= " $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ f ]" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -217,7 +215,8 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9")
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9") <+>
+                    swallowEventHook (className =? "Termite") (return True)
 
 
 ------------------------------------------------------------------------
@@ -230,14 +229,15 @@ clickable :: [Char] -> [Char] -> [Char]
 clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] icon
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
-myLogHook :: Handle -> Handle -> X ()
-myLogHook hLeft hRight = let log screen handle = dynamicLogWithPP . filterOutWsPP [scratchpadWorkspaceTag] . marshallPP screen . myXmobarPP screen $ handle
-                          in log 0 hLeft >> log 1 hRight
+myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
+myStatusBarSpawner (S s) = pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
+                          ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
+                          (pure $ myXmobarPP (S s))
 
-myXmobarPP :: ScreenId -> Handle -> PP
-myXmobarPP s handle = def
-  { ppOutput = hPutStrLn handle
-  , ppSep = "     "
+myXmobarPP :: ScreenId -> PP
+myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
+  { ppSep = ""
+  , ppWsSep = ""
   , ppCurrent = xmobarColor blue "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
   , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconFull)
@@ -245,24 +245,30 @@ myXmobarPP s handle = def
   , ppHiddenNoWindows = xmobarColor grey2 "" . clickable wsIconEmpty
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
   , ppOrder = \(ws : _ : _ : extras) -> ws : extras
-  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ logLayoutOnScreen s
-                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix $ wrapL ("<fc=" ++ grey3 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen s
+  , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
+                $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
+                $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
+                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
+                , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
+                $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen s
                 ]
   }
   where
-    wsIconFull   = "  <fn=2>\xf111</fn>  "
-    wsIconHidden = "  <fn=2>\xf111</fn>  "
-    wsIconEmpty  = "  <fn=2>\xf10c</fn>  "
+    wsIconFull   = "  <fn=2>\xf111</fn>   "
+    wsIconHidden = "  <fn=2>\xf111</fn>   "
+    wsIconEmpty  = "  <fn=2>\xf10c</fn>   "
 
 
 ------------------------------------------------------------------------
 --
 
 main :: IO ()
-main = do
-      hLeft <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar0.config"
-      hRight <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar1.config"
-      xmonad $ ewmh $ ewmhFullscreen $ docks $ def
+main = xmonad
+       . ewmh
+       . ewmhFullscreen
+       . dynamicSBs myStatusBarSpawner
+       . docks
+       $ def
         { focusFollowsMouse  = True
         , clickJustFocuses   = False
         , borderWidth        = 3
@@ -273,9 +279,7 @@ main = do
         , keys               = myKeys
         , workspaces         = withScreens 2 myWorkspaces
         , mouseBindings      = myMouseBindings
-        , logHook            = myLogHook hLeft hRight >> updatePointer (0.75, 0.75) (0, 0)
         , layoutHook         = myLayout
         , manageHook         = myManageHook
         , handleEventHook    = myHandleEventHook
-        }
-        `additionalKeysP` myAditionalKeys
+        } `additionalKeysP` myAditionalKeys

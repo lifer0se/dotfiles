@@ -4,7 +4,7 @@
 
 
 local set = vim.opt
-set.completeopt = { 'menuone', 'noinsert', 'noselect' }
+set.completeopt = { 'menu', 'menuone', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
 set.list = true
 set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
@@ -51,11 +51,11 @@ require('config.bufferline')
 require('config.telescope')
 require('config.nvim-tree')
 require('config.toggleterm')
-require('config.session_manager')
+require('config.alpha')
 
+require("stabilize").setup()
 require('mkdir')
 require('colorizer').setup()
-require('alpha').setup(require'alpha.themes.startify'.opts)
 require('commented').setup{
  keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
@@ -95,6 +95,7 @@ vim.cmd[[
   highlight FloatBorder guifg=#358292 guibg=None
   highlight TelescopeBorder guifg=#358292
   highlight TelescopeMatching guifg=#EDA36D
+  highlight clear StatusLine
 ]]
 
 
