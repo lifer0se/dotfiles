@@ -19,7 +19,7 @@ require'lualine'.setup {
       symbols = {added = '+', modified = '~', removed = '-'}
 	},
     lualine_c = {''},
-    lualine_x = {'filetype'},
+    lualine_x = {'diagnostics', sources={'nvim_lsp'}, 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },

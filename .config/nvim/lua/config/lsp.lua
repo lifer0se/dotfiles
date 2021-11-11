@@ -1,23 +1,35 @@
 
+function _G.put(...)
+  local objects = {}
+  for i = 1, select('#', ...) do
+    local v = select(i, ...)
+    table.insert(objects, vim.inspect(v))
+  end
+
+  print(table.concat(objects, '\n'))
+  return ...
+end
+
+
+
+
 local border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 
-local nvim_lsp = require "lspconfig"
 local on_attach = function(client, bufnr)
   local buf_map = vim.api.nvim_buf_set_keymap
   buf_map(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {})
   buf_map(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {})
   buf_map(bufnr, "n", "E", "<cmd>lua vim.lsp.buf.hover()<CR>", {})
-  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({border="..vim.inspect(border)..", focusable=true })<CR>", {})
-  buf_map(bufnr, "n", "gn", "<cmd>lua vim.lsp.diagnostic.goto_next({ popup_opts = { border = "..vim.inspect(border)..", focusable=true }})<CR>", {})
-  buf_map(bufnr, "n", "gp", "<cmd>lua vim.lsp.diagnostic.goto_prev({ popup_opts = { border = "..vim.inspect(border)..", focusable=true }})<CR>", {})
-  buf_map(bufnr, "n", "ga", "<cmd>lua vim.lsp.buf.code_action()<CR>", {})
+  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({border="..vim.inspect(border)..", show_header = false, focusable=false })<CR>", {})
+	buf_map(bufnr, "n", "gn", "<cmd>lua vim.lsp.diagnostic.goto_next({float = {border="..vim.inspect(border)..", show_header = false, focusable=false }})<CR>", {})
+	buf_map(bufnr, "n", "gp", "<cmd>lua vim.lsp.diagnostic.goto_prev({float = {border="..vim.inspect(border)..", show_header = false, focusable=false }})<CR>", {})
+  buf_map(bufnr, "n", "ga", "<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<CR>", {})
 end
 
 vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border})
 vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border})
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   update_in_insert = false,
-  -- spacing = 0,
   underline = false,
   virtual_text = {
     prefix = ''

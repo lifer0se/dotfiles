@@ -67,7 +67,6 @@ require('ezbookmarks').setup{
   open_new_tab = 0,
 }
 
-
 vim.cmd[[
   colorscheme gruvbox
   highlight Normal guibg=NONE

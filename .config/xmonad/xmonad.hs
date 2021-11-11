@@ -37,12 +37,12 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 myTerminal :: [Char]
 myTerminal = "termite"
 
-grey1, grey2, grey3, grey4, blue, orange :: String
+grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
 grey2  = "#555E70"
 grey3  = "#697180"
 grey4  = "#8691A8"
-blue   = "#8BABF0"
+cyan   = "#8BABF0"
 orange = "#C45500"
 
 myWorkspaces :: [[Char]]
@@ -76,14 +76,14 @@ myScratchPads =
 ------------------------------------------------------------------------
 --
 
-isOnScreen :: ScreenId -> WindowSpace -> Bool
-isOnScreen s ws = s == unmarshallS (W.tag ws)
-
 currentScreen :: X ScreenId
 currentScreen = gets (W.screen . W.current . windowset)
 
-workspacesOnCurrentScreen :: WSType
-workspacesOnCurrentScreen = WSIs $ do
+isOnScreen :: ScreenId -> WindowSpace -> Bool
+isOnScreen s ws = s == unmarshallS (W.tag ws)
+
+workspaceOnCurrentScreen :: WSType
+workspaceOnCurrentScreen = WSIs $ do
   s <- currentScreen
   return $ \x -> W.tag x /= "NSP" && isOnScreen s x
 
@@ -145,8 +145,8 @@ myAditionalKeys =
   , ("M-m", spawn "xdotool key super+a && xdotool key super+b")
 
   -- workspace controls
-  , ("M-<Left>", moveTo Prev workspacesOnCurrentScreen)
-  , ("M-<Right>", moveTo Next workspacesOnCurrentScreen)
+  , ("M-<Left>", moveTo Prev workspaceOnCurrentScreen)
+  , ("M-<Right>", moveTo Next workspaceOnCurrentScreen)
 
   -- screen controll
   , ("M-o", nextScreen)
@@ -172,8 +172,8 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   , ((modm .|. shiftMask, button1), dragWindow)
   , ((modm, button2), const kill)
   , ((modm, button3), \w -> focus w >> Flex.mouseResizeWindow w)
-  , ((modm, button4), \_ -> moveTo Prev workspacesOnCurrentScreen)
-  , ((modm, button5), \_ -> moveTo Next workspacesOnCurrentScreen)
+  , ((modm, button4), \_ -> moveTo Prev workspaceOnCurrentScreen)
+  , ((modm, button5), \_ -> moveTo Next workspaceOnCurrentScreen)
   ]
 
 
@@ -193,7 +193,7 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
       , inactiveColor       = grey1
       , activeBorderColor   = grey1
       , inactiveBorderColor = grey1
-      , activeTextColor     = blue
+      , activeTextColor     = cyan
       , inactiveTextColor   = grey3
       , decoHeight          = 25
       }
@@ -232,13 +232,13 @@ clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5
 myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
 myStatusBarSpawner (S s) = pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
                           ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
-                          (pure $ myXmobarPP (S s))
+                          (pure $ myXmobarPP s)
 
-myXmobarPP :: ScreenId -> PP
-myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
+myXmobarPP :: Int -> PP
+myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP (S s) $ def
   { ppSep = ""
   , ppWsSep = ""
-  , ppCurrent = xmobarColor blue "" . clickable wsIconFull
+  , ppCurrent = xmobarColor cyan "" . clickable wsIconFull
   , ppVisible = xmobarColor grey4 "" . clickable wsIconFull
   , ppVisibleNoWindows = Just (xmobarColor grey4 "" . clickable wsIconFull)
   , ppHidden = xmobarColor grey2 "" . clickable wsIconHidden
@@ -248,9 +248,9 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
+                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen (S s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen s
+                $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen (S s)
                 ]
   }
   where
@@ -274,7 +274,7 @@ main = xmonad
         , borderWidth        = 3
         , modMask            = mod4Mask
         , normalBorderColor  = grey2
-        , focusedBorderColor = blue
+        , focusedBorderColor = cyan
         , terminal           = myTerminal
         , keys               = myKeys
         , workspaces         = withScreens 2 myWorkspaces
