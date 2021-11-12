@@ -26,7 +26,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.IndependentScreens
 
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL)
+import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL, logWhenActive, xmobarColorL)
 import XMonad.Util.EZConfig (additionalKeysP)
 
 import XMonad.Actions.CycleWS
@@ -162,8 +162,8 @@ myAditionalKeys =
 myKeys :: XConfig l -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
  [((m .|. modm, k), windows $ onCurrentScreen f i)
-       | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
-       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+ | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
+ , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 myMouseBindings :: XConfig l -> M.Map (KeyMask, Button) (Window -> X ())
@@ -232,10 +232,10 @@ clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5
 myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
 myStatusBarSpawner (S s) = pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
                           ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
-                          (pure $ myXmobarPP s)
+                          (pure $ myXmobarPP (S s))
 
-myXmobarPP :: Int -> PP
-myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP (S s) $ def
+myXmobarPP :: ScreenId -> PP
+myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   { ppSep = ""
   , ppWsSep = ""
   , ppCurrent = xmobarColor cyan "" . clickable wsIconFull
@@ -248,15 +248,18 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP (S s) $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen (S s)
+                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $ wrapL ("<fc=" ++ grey4 ++ ">") "</fc>" $ shortenL 80 $ logTitleOnScreen (S s)
+                $  colorWhenActive s (shortenL 80 $ logTitleOnScreen s)
                 ]
   }
   where
     wsIconFull   = "  <fn=2>\xf111</fn>   "
     wsIconHidden = "  <fn=2>\xf111</fn>   "
     wsIconEmpty  = "  <fn=2>\xf10c</fn>   "
+    colorWhenActive n l = do
+      c <- withWindowSet $ return . W.screen . W.current
+      if n == c then xmobarColorL cyan "" l else xmobarColorL grey2 "" l
 
 
 ------------------------------------------------------------------------

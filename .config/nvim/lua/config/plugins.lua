@@ -41,6 +41,7 @@ return require('packer').startup(function(use)
   use { 'junegunn/fzf.vim' }
   use { 'cohama/lexima.vim' }
   use { 'luukvbaal/stabilize.nvim' }
+  use { 'lukas-reineke/indent-blankline.nvim' }
 
   -- use { 'lifer0se/ezbookmarks.nvim' }
 

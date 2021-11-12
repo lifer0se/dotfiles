@@ -60,6 +60,12 @@ require('commented').setup{
  keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
 
+require("indent_blankline").setup {
+  show_current_context = true,
+  buftype_exclude = {"terminal"},
+  filetype_exclude = {"alpha", "help", "haskell"}
+}
+
 vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
 require('ezbookmarks').setup{
   cwd_on_open = 1,
@@ -95,6 +101,8 @@ vim.cmd[[
   highlight TelescopeBorder guifg=#358292
   highlight TelescopeMatching guifg=#EDA36D
   highlight clear StatusLine
+  highlight IndentBlanklineChar guifg=#3C4050
+  highlight IndentBlanklineContextChar guifg=#51566B
 ]]
 
 
@@ -112,7 +120,7 @@ end
 
 -- Disables automatic commenting on newline:
 local function remove_autocomment()
-	vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
+  vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
 end
 autocmd.BufNew = function()
   remove_autocomment()

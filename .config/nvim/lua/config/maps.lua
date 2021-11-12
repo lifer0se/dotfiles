@@ -16,21 +16,21 @@ end
 
 vim.g.mapleader = " "
 map { 'n', noremap = false, 'Q', '@q' }
-map { 'n', noremap = false, '<C-s>', ':w<cr>' }
-map { 'v', noremap = false, '<C-s>', ':w<cr>' }
+map { 'n', noremap = false, '<C-s>', ':w<CR>' }
+map { 'v', noremap = false, '<C-s>', ':w<CR>' }
 map { 'i', noremap = false, '<C-s>', '<esc>' }
-map { 'n', noremap = false, silent = true, '<leader>gg', ':G<cr>' }
-map { 'n', noremap = false, '<leader>gc', ':Git commit<cr>' }
-map { 'n', noremap = false, '<leader>gp', ':Git push<cr>' }
-map { 'n', noremap = false, '<leader>u', ':UndotreeToggle<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>gg', ':G<CR>' }
+map { 'n', noremap = false, '<leader>gc', ':Git commit<CR>' }
+map { 'n', noremap = false, '<leader>gp', ':Git push<CR>' }
+map { 'n', noremap = false, '<leader>u', ':UndotreeToggle<CR>' }
 map { 'n', noremap = false, 'Y', 'y$' }
 map { 'n', noremap = false, '<leader>p', '"_dP' }
 map { 'n', noremap = false, '<leader>P', '"_dp' }
 map { 'v', noremap = false, '<leader>p', '"_dP' }
 map { 'v', noremap = false, '<leader>P', '"_dp' }
 map { 'i', noremap = false, '<C-p>', '<C-R>+' }
-map { 'n', noremap = false, '<leader>tn', ':tabnew<cr>' }
-map { 'n', noremap = false, silent = true, '<C-z>', ':bd!<cr>' }
+map { 'n', noremap = false, '<leader>tn', ':tabnew<CR>' }
+map { 'n', noremap = false, silent = true, '<C-z>', ':bd!<CR>' }
 map { 'n', noremap = false, '<C-c>', '<C-w>c' }
 map { 'n', noremap = false, '<C-h>', '<C-w>h' }
 map { 'n', noremap = false, '<C-j>', '<C-w>j' }
@@ -44,7 +44,7 @@ map { 'n', noremap = false, '<Tab>', '>>' }
 map { 'n', noremap = false, '<S-Tab>', '<<' }
 map { 'v', noremap = false, '<Tab>', '  >><Esc>gv' }
 map { 'v', noremap = false, '<S-Tab>', '<<<Esc>gv' }
-map { 'n', noremap = false, '<leader>hi', ':set hlsearch! hlsearch?<cr>' }
+map { 'n', noremap = false, '<leader>hi', ':set hlsearch! hlsearch?<CR>' }
 map { 'n', noremap = false, '<leader>sc', ':%s///gc<Left><Left><Left><Left>' }
 map { 'n', noremap = false, '<leader>ss', ':%s///g<Left><Left><Left>' }
 map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R>"' }
@@ -75,28 +75,29 @@ map { 'v', noremap = false, 'a(', 'c( <C-R>" )<Esc>' }
 map { 'v', noremap = false, 'a)', 'c( <C-R>" )<Esc>' }
 map { 'v', noremap = false, 'a<', 'c< <C-R>" ><Esc>' }
 map { 'v', noremap = false, 'a>', 'c< <C-R>" ><Esc>' }
-map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<cr>' }
-map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
-map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>hh', ':h <C-R>=escape(expand("<cWORD>"), "/")<cr><cr>' }
-map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<cr>' }
+map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<CR>' }
+map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
+map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>hh', ':h <C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
+map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>td', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }
-map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<cr>gv=gv' }
-map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<cr>gv=gv' }
-map { 'n', noremap = false, silent = true, 'J', ':m .+1<cr>==' }
-map { 'n', noremap = false, silent = true, 'K', ':m .-2<cr>==' }
-map { 'n', noremap = false, silent = true, 'H', '<cmd>BufferLineCyclePrev<cr>'}
-map { 'n', noremap = false, silent = true, 'L', '<cmd>BufferLineCycleNext<cr>'}
-map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope current_buffer_fuzzy_find<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope command_history<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fh', ':Telescope help_tags<cr>' }
-map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<cr>:NvimTreeToggle<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fn', '<cmd>lua require("ezbookmarks").AddBookmark()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbookmarks").AddBookmarkDirectory()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<cr>' }
-map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<cr>' }
-map { 'n', noremap = false, '<C-_>', ':exe v:count1 . "ToggleTerm"<cr>' }
+map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope current_buffer_fuzzy_find<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope command_history<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fh', ':Telescope help_tags<CR>' }
+map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<CR>:NvimTreeToggle<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fn', '<cmd>lua require("ezbookmarks").AddBookmark()<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbookmarks").AddBookmarkDirectory()<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<CR>' }
+map { 'n', noremap = false, '<C-_>', ':exe v:count1 . "ToggleTerm"<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>o', ':!cd %:h && termite &<CR>' }
+map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<CR>gv=gv' }
+map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<CR>gv=gv' }
+map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
+map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
+map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
+map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCycleNext<CR>'}
