@@ -63,7 +63,7 @@ require('commented').setup{
 require("indent_blankline").setup {
   show_current_context = true,
   buftype_exclude = {"terminal"},
-  filetype_exclude = {"alpha", "help", "haskell"}
+  filetype_exclude = {"alpha", "help", "haskell", ""}
 }
 
 vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")

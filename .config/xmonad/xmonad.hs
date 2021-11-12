@@ -26,12 +26,17 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.IndependentScreens
 
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL, logWhenActive, xmobarColorL)
+import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL, xmobarColorL)
 import XMonad.Util.EZConfig (additionalKeysP)
+import qualified XMonad.Util.ExtensibleState as XS
 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
+import XMonad.Actions.UpdatePointer (updatePointer)
+import Data.Bits (testBit)
+import Control.Monad (unless)
+import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat)
 
 
 myTerminal :: [Char]
@@ -163,7 +168,8 @@ myKeys :: XConfig l -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@XConfig {XMonad.modMask = modm} = M.fromList $
  [((m .|. modm, k), windows $ onCurrentScreen f i)
  | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_9]
- , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+ , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+ ]
 
 
 myMouseBindings :: XConfig l -> M.Map (KeyMask, Button) (Window -> X ())
@@ -203,12 +209,21 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
 --
 
 myManageHook :: ManageHook
-myManageHook = composeAll
+myManageHook =
+   composeAllFocusFloats
+  [ isDialog
+  , title =? "<interactive>"
+  , role  =? "Preferences"
+  ]
+  <+> composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , className =? "Termite" --> insertPosition End Newer
   , className =? "Godot" --> doShift "0_6"
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
+  where
+    role = stringProperty "WM_WINDOW_ROLE"
+    composeAllFocusFloats = composeAll . map (--> doCenterFloat)
 
 
 ------------------------------------------------------------------------
@@ -217,6 +232,26 @@ myManageHook = composeAll
 myHandleEventHook :: Event -> X All
 myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9") <+>
                     swallowEventHook (className =? "Termite") (return True)
+
+
+------------------------------------------------------------------------
+--
+
+newtype MyUpdatePointerActive = MyUpdatePointerActive Bool
+instance ExtensionClass MyUpdatePointerActive where
+  initialValue = MyUpdatePointerActive True
+
+myUpdatePointer :: (Rational, Rational) -> (Rational, Rational) -> X ()
+myUpdatePointer r1 r2 =
+  whenX isActive $ do
+    dpy <- asks display
+    root <- asks theRoot
+    (_,_,_,_,_,_,_,m) <- io $ queryPointer dpy root
+    unless (testBit m 9 || testBit m 8 || testBit m 10) $
+      updatePointer r1 r2
+
+  where
+    isActive = (\(MyUpdatePointerActive b) -> b) <$> XS.get
 
 
 ------------------------------------------------------------------------
@@ -284,5 +319,6 @@ main = xmonad
         , mouseBindings      = myMouseBindings
         , layoutHook         = myLayout
         , manageHook         = myManageHook
+        , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

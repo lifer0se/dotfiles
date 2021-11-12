@@ -87,7 +87,7 @@ map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<C
 map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope command_history<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fh', ':Telescope help_tags<CR>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>e', ':NvimTreeRefresh<CR>:NvimTreeToggle<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ee', ':NvimTreeRefresh<CR>:NvimTreeToggle<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fn', '<cmd>lua require("ezbookmarks").AddBookmark()<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbookmarks").AddBookmarkDirectory()<CR>' }
