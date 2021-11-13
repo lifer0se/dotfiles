@@ -1,18 +1,4 @@
 
-function _G.put(...)
-  local objects = {}
-  for i = 1, select('#', ...) do
-    local v = select(i, ...)
-    table.insert(objects, vim.inspect(v))
-  end
-
-  print(table.concat(objects, '\n'))
-  return ...
-end
-
-
-
-
 local border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 
 local on_attach = function(client, bufnr)
@@ -41,15 +27,6 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, {  texthl = hl, text = icon, numhl = hl })
 end
-
-require "lsp_signature".setup({
-  bind = true,
-  doc_lines = 0,
-  hint_enable = false,
-  handler_opts = {
-    border = "single",
-  },
-})
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local lsp_installer = require("nvim-lsp-installer")

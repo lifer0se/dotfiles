@@ -80,7 +80,6 @@ map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWOR
 map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>hh', ':h <C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
 map { 'v', noremap = false, silent = true, '<leader>hh', 'y:h <C-r>"<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>td', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>list.todo.md<CR><C-w>30<' }
 map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope current_buffer_fuzzy_find<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<CR>' }

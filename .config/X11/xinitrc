@@ -13,5 +13,6 @@ blueman-applet &
 volumeicon &
 #/usr/bin/greenclip daemon &
 /opt/urserver/urserver --daemon &
+#  xmobar_transparent_spawner.sh &
 
 exec xmonad

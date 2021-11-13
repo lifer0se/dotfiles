@@ -37,6 +37,8 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 import Data.Bits (testBit)
 import Control.Monad (unless)
 import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat)
+import XMonad.Hooks.RefocusLast (isFloat)
+import XMonad.Util.SpawnOnce (spawnOnce)
 
 
 myTerminal :: [Char]
@@ -209,21 +211,14 @@ myLayout = avoidStruts $ layoutTall ||| layoutTabbed
 --
 
 myManageHook :: ManageHook
-myManageHook =
-   composeAllFocusFloats
-  [ isDialog
-  , title =? "<interactive>"
-  , role  =? "Preferences"
-  ]
-  <+> composeAll
+myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , className =? "Termite" --> insertPosition End Newer
   , className =? "Godot" --> doShift "0_6"
+  , isFloat --> doCenterFloat
+  , isDialog --> doCenterFloat
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
-  where
-    role = stringProperty "WM_WINDOW_ROLE"
-    composeAllFocusFloats = composeAll . map (--> doCenterFloat)
 
 
 ------------------------------------------------------------------------
@@ -242,13 +237,13 @@ instance ExtensionClass MyUpdatePointerActive where
   initialValue = MyUpdatePointerActive True
 
 myUpdatePointer :: (Rational, Rational) -> (Rational, Rational) -> X ()
-myUpdatePointer r1 r2 =
+myUpdatePointer refPos ratio =
   whenX isActive $ do
     dpy <- asks display
     root <- asks theRoot
     (_,_,_,_,_,_,_,m) <- io $ queryPointer dpy root
-    unless (testBit m 9 || testBit m 8 || testBit m 10) $
-      updatePointer r1 r2
+    unless (testBit m 9 || testBit m 8 || testBit m 10) $ -- unless the mouse is clicking
+      updatePointer refPos ratio
 
   where
     isActive = (\(MyUpdatePointerActive b) -> b) <$> XS.get
@@ -319,6 +314,7 @@ main = xmonad
         , mouseBindings      = myMouseBindings
         , layoutHook         = myLayout
         , manageHook         = myManageHook
+        , startupHook        = spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
         , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

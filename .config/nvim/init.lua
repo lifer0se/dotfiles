@@ -31,47 +31,13 @@ set.swapfile = false
 set.backup = false
 set.undofile = true
 set.clipboard = 'unnamedplus'
-
 set.termguicolors = true
 set.cursorline = true
 
 
---""""""""""""""""""""""""""""""""""""""""""
---"            Plugin Settings             "
---""""""""""""""""""""""""""""""""""""""""""
-
 require('config.plugins')
 require('config.maps')
-require('config.lsp')
-require('config.lspkind')
-require('config.cmp')
-require('config.treesitter')
-require('config.lualine')
-require('config.bufferline')
-require('config.telescope')
-require('config.nvim-tree')
-require('config.toggleterm')
-require('config.alpha')
 
-require("stabilize").setup()
-require('mkdir')
-require('colorizer').setup()
-require('commented').setup{
- keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
-}
-
-require("indent_blankline").setup {
-  show_current_context = true,
-  buftype_exclude = {"terminal"},
-  filetype_exclude = {"alpha", "help", "haskell", ""}
-}
-
-vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
-require('ezbookmarks').setup{
-  cwd_on_open = 1,
-  use_bookmark_dir = 1,
-  open_new_tab = 0,
-}
 
 vim.cmd[[
   colorscheme gruvbox
@@ -105,10 +71,6 @@ vim.cmd[[
   highlight IndentBlanklineContextChar guifg=#51566B
 ]]
 
-
---""""""""""""""""""""""""""""""""""""""""""
---"              Functions                 "
---""""""""""""""""""""""""""""""""""""""""""
 
 local autocmd = require('utils.au')
 
