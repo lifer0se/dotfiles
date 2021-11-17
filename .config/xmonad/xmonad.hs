@@ -5,6 +5,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.Semigroup
+import Data.Bits (testBit)
+import Control.Monad (unless)
 
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.DynamicLog
@@ -13,6 +15,8 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.StatusBar
+import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat)
+import XMonad.Hooks.RefocusLast (isFloat)
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
 import XMonad.Layout.NoBorders (smartBorders)
@@ -34,11 +38,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
-import Data.Bits (testBit)
-import Control.Monad (unless)
-import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat)
-import XMonad.Hooks.RefocusLast (isFloat)
-import XMonad.Util.SpawnOnce (spawnOnce)
+
 
 
 myTerminal :: [Char]
@@ -101,7 +101,8 @@ myAditionalKeys =
   [ ("M-<Return>", spawn myTerminal)
   , ("M-v", spawn $ myTerminal ++ " --class Nvim -e nvim")
   , ("M-f", spawn $ myTerminal ++ " --class Ranger -e ranger")
-  , ("M-d", spawn "rofi -show combi")
+  , ("M-d", spawn "rofi -show drun")
+  , ("M-S-d", spawn "rofi -show run")
   , ("M-p", spawn "passmenu -p pass")
   , ("M-w", spawn "brave")
   , ("M-S-w", spawn "brave --incognito")
@@ -191,7 +192,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 mySpacing :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
-myLayout = avoidStruts $ layoutTall ||| layoutTabbed
+myLayoutHook = avoidStruts $ layoutTall ||| layoutTabbed
   where
     layoutTall = mkToggle (NBFULL ?? EOT) . named "[]= " $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
     layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ f ]" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
@@ -215,6 +216,8 @@ myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , className =? "Termite" --> insertPosition End Newer
   , className =? "Godot" --> doShift "0_6"
+  , appName =? "blueman-manager" --> doFloat
+  , appName =? "pavucontrol" --> doFloat
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
   , insertPosition Master Newer
@@ -227,6 +230,15 @@ myManageHook = composeAll
 myHandleEventHook :: Event -> X All
 myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9") <+>
                     swallowEventHook (className =? "Termite") (return True)
+
+
+------------------------------------------------------------------------
+--
+
+myStartupHook :: X ()
+myStartupHook = do
+    spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
+    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 10 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 26 --distance 5 &"
 
 
 ------------------------------------------------------------------------
@@ -289,7 +301,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
     wsIconEmpty  = "  <fn=2>\xf10c</fn>   "
     colorWhenActive n l = do
       c <- withWindowSet $ return . W.screen . W.current
-      if n == c then xmobarColorL cyan "" l else xmobarColorL grey2 "" l
+      if n == c then xmobarColorL cyan "" l else xmobarColorL grey3 "" l
 
 
 ------------------------------------------------------------------------
@@ -312,9 +324,9 @@ main = xmonad
         , keys               = myKeys
         , workspaces         = withScreens 2 myWorkspaces
         , mouseBindings      = myMouseBindings
-        , layoutHook         = myLayout
+        , layoutHook         = myLayoutHook
         , manageHook         = myManageHook
-        , startupHook        = spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
+        , startupHook        = myStartupHook
         , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

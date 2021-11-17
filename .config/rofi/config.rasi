@@ -4,7 +4,7 @@ configuration {
   combi-modi: "drun,run";
   combi-hide-mode-prefix: true;
   font: "Roboto 13";
-  show-icons: false;
+  show-icons: true;
   drun-display-format: "{name} [<span weight='light' size='small'>({generic})</span>]";
   matching: "fuzzy";
   me-select-entry: "";

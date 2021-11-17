@@ -64,17 +64,6 @@ map { 'v', noremap = false, 's(', 'c(<C-R>")<Esc>' }
 map { 'v', noremap = false, 's)', 'c(<C-R>")<Esc>' }
 map { 'v', noremap = false, 's<', 'c<<C-R>"><Esc>' }
 map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
-map { 'v', noremap = false, 'a`', 'c` <C-R>" `<Esc>' }
-map { 'v', noremap = false, 'a\'', 'c \'<C-R>" \'<Esc>' }
-map { 'v', noremap = false, 'a"', 'c" <C-R>" "<Esc>' }
-map { 'v', noremap = false, 'a[', 'c[ <C-R>" ]<Esc>' }
-map { 'v', noremap = false, 'a]', 'c[ <C-R>" ]<Esc>' }
-map { 'v', noremap = false, 'a{', 'c{ <C-R>" }<Esc>' }
-map { 'v', noremap = false, 'a}', 'c{ <C-R>" }<Esc>' }
-map { 'v', noremap = false, 'a(', 'c( <C-R>" )<Esc>' }
-map { 'v', noremap = false, 'a)', 'c( <C-R>" )<Esc>' }
-map { 'v', noremap = false, 'a<', 'c< <C-R>" ><Esc>' }
-map { 'v', noremap = false, 'a>', 'c< <C-R>" ><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<CR>' }
 map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
 map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }

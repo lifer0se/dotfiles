@@ -28,6 +28,15 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, {  texthl = hl, text = icon, numhl = hl })
 end
 
+require "lsp_signature".setup({
+  bind = true,
+  doc_lines = 0,
+  hint_enable = false,
+  handler_opts = {
+    border = "single",
+  },
+})
+
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
