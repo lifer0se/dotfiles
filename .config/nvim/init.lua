@@ -52,6 +52,7 @@ require('config.telescope')
 require('config.nvim-tree')
 require('config.toggleterm')
 require('config.alpha')
+require('config.autopairs')
 
 require("stabilize").setup()
 require('mkdir')

@@ -37,7 +37,7 @@ return require('packer').startup(function(use)
   use { 'hoob3rt/lualine.nvim' }
   use { 'akinsho/bufferline.nvim' }
   use { 'jghauser/mkdir.nvim' }
-  use { 'cohama/lexima.vim' }
+  use { 'windwp/nvim-autopairs' }
   use { 'luukvbaal/stabilize.nvim' }
   use { 'habamax/vim-godot' }
 
