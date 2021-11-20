@@ -197,7 +197,7 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 myLayoutHook = avoidStruts $ onWorkspace "0_9" layoutGrid $ layoutTall ||| layoutTabbed
   where
     layoutTall = mkToggle (NBFULL ?? EOT) . named "<icon=tall.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutGrid = mkToggle (NBFULL ?? EOT) . named "<icon=grid.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid True
+    layoutGrid = mkToggle (NBFULL ?? EOT) . named "<icon=grid.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
     layoutTabbed = mkToggle (NBFULL ?? EOT) . named "<icon=full.xpm/>" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"

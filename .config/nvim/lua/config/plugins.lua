@@ -24,8 +24,9 @@ return require('packer').startup(function(use)
   use { 'hrsh7th/cmp-cmdline' }
   use { 'hrsh7th/cmp-buffer' }
   use { 'hrsh7th/cmp-path' }
-  use { 'saadparwaiz1/cmp_luasnip' }
-  use { 'L3MON4D3/LuaSnip' }
+  use { 'hrsh7th/cmp-vsnip' }
+  use { 'hrsh7th/vim-vsnip' }
+  use { 'rafamadriz/friendly-snippets' }
   use { 'onsails/lspkind-nvim' }
   use { 'ray-x/lsp_signature.nvim' }
   use { 'ray-x/cmp-treesitter' }
