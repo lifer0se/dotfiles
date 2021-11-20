@@ -61,6 +61,16 @@ require('commented').setup{
    keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
 
+require("indent_blankline").setup {
+  buftype_exclude = {"terminal"},
+  filetype_exclude = {"alpha", "help", "haskell", "NvimTree", ""},
+  show_current_context = true,
+  context_patterns = {
+    "class", "return", "function", "method", "^foreach", "enum", "^if", "^while", "jsx_element", "^for", "^object", "^table", "block", "arguments", "if_statement",
+    "else_clause", "jsx_element", "jsx_self_closing_element", "try_statement", "catch_clause", "import_statement", "operation_type"
+  }
+}
+
 vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
 require('ezbookmarks').setup{
     cwd_on_open = 1,
@@ -95,7 +105,8 @@ vim.cmd[[
     highlight FloatBorder guifg=#358292 guibg=None
     highlight TelescopeBorder guifg=#358292
     highlight TelescopeMatching guifg=#EDA36D
-    highlight clear StatusLine
+    highlight StatusLine guifg=NONE guibg=NONE gui=NONE
+    highlight StatusLineNC guifg=NONE guibg=NONE gui=NONE
     highlight IndentBlanklineChar guifg=#3C4050
     highlight IndentBlanklineContextChar guifg=#51566B
 ]]

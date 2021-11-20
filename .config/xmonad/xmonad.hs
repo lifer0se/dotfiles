@@ -28,6 +28,8 @@ import XMonad.Layout.MultiToggle (EOT (EOT), Toggle (Toggle), mkToggle, (??))
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.IndependentScreens
+import XMonad.Layout.HintedGrid
+import XMonad.Layout.PerWorkspace
 
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Loggers (logLayoutOnScreen, logTitleOnScreen, shortenL, wrapL, xmobarColorL)
@@ -192,10 +194,11 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 mySpacing :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
-myLayoutHook = avoidStruts $ layoutTall ||| layoutTabbed
+myLayoutHook = avoidStruts $ onWorkspace "0_9" layoutGrid $ layoutTall ||| layoutTabbed
   where
-    layoutTall = mkToggle (NBFULL ?? EOT) . named "[]= " $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "[ f ]" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
+    layoutTall = mkToggle (NBFULL ?? EOT) . named "<icon=tall.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
+    layoutGrid = mkToggle (NBFULL ?? EOT) . named "<icon=grid.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid True
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "<icon=full.xpm/>" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -290,7 +293,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL ("    <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
+                $ wrapL ("      <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
                 $  colorWhenActive s (shortenL 80 $ logTitleOnScreen s)
                 ]

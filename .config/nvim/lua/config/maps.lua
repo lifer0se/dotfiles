@@ -88,4 +88,4 @@ map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<CR>gv=gv' }
 map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
-map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCycleNext<CR>'}
+map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}

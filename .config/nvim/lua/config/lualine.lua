@@ -11,7 +11,7 @@ require'lualine'.setup {
     theme = custom_onedark,
     component_separators = {'', ''},
     section_separators = {'', ''},
-    disabled_filetypes = { 'NvimTree', 'alpha', 'help' }
+    disabled_filetypes = { 'NvimTree', 'alpha' }
   },
   sections = {
     lualine_a = {'mode'},

@@ -3,7 +3,9 @@
 printf "Beginning upgrade.\\n"
 
 paru -Syu
-# pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"
+
+NUM=$(pacman -Qu | grep -Fcv "[ignored]")
+echo $NUM > ~/.local/share/.pacman_updates_count
 
 printf "\\nUpgrade complete.\\nPress <Enter> to exit window.\\n\\n"
 read -r _

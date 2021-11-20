@@ -24,14 +24,14 @@ return require('packer').startup(function(use)
   use { 'hrsh7th/cmp-cmdline' }
   use { 'hrsh7th/cmp-buffer' }
   use { 'hrsh7th/cmp-path' }
-  use { 'ray-x/cmp-treesitter' }
   use { 'saadparwaiz1/cmp_luasnip' }
   use { 'L3MON4D3/LuaSnip' }
   use { 'onsails/lspkind-nvim' }
   use { 'ray-x/lsp_signature.nvim' }
+  use { 'ray-x/cmp-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter' }
-  use { 'nvim-treesitter/playground' }
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
+  use { 'nvim-treesitter/playground' }
   use { 'nvim-telescope/telescope.nvim' }
   use { 'nvim-telescope/telescope-fzy-native.nvim' }
   use { 'hoob3rt/lualine.nvim' }
@@ -39,7 +39,7 @@ return require('packer').startup(function(use)
   use { 'jghauser/mkdir.nvim' }
   use { 'windwp/nvim-autopairs' }
   use { 'luukvbaal/stabilize.nvim' }
-  use { 'habamax/vim-godot' }
+  use { 'lukas-reineke/indent-blankline.nvim' }
 
   -- use { 'lifer0se/ezbookmarks.nvim' }
 
