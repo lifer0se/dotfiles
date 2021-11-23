@@ -89,3 +89,4 @@ map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
 map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}
+map { 'n', noremap = false, silent = true, '<F6>', '<cmd>lua require("run-godot").RunMainScene()<CR>' }

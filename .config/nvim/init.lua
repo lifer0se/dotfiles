@@ -53,6 +53,7 @@ require('config.nvim-tree')
 require('config.toggleterm')
 require('config.alpha')
 require('config.autopairs')
+require('config.indent_blankline')
 
 require("stabilize").setup()
 require('mkdir')
@@ -61,22 +62,14 @@ require('commented').setup{
    keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
 
-require("indent_blankline").setup {
-  buftype_exclude = {"terminal"},
-  filetype_exclude = {"alpha", "help", "haskell", "NvimTree", ""},
-  show_current_context = true,
-  context_patterns = {
-    "class", "return", "function", "method", "^foreach", "enum", "^if", "^while", "jsx_element", "^for", "^object", "^table", "block", "arguments", "if_statement",
-    "else_clause", "jsx_element", "jsx_self_closing_element", "try_statement", "catch_clause", "import_statement", "operation_type"
-  }
-}
-
+vim.opt.runtimepath:append("~/development/run-godot.nvim")
 vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
 require('ezbookmarks').setup{
     cwd_on_open = 1,
     use_bookmark_dir = 1,
     open_new_tab = 0,
 }
+
 
 vim.cmd[[
     colorscheme gruvbox

@@ -194,7 +194,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
 mySpacing :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
-myLayoutHook = avoidStruts $ onWorkspace "0_9" layoutGrid $ layoutTall ||| layoutTabbed
+myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed
   where
     layoutTall = mkToggle (NBFULL ?? EOT) . named "<icon=tall.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
     layoutGrid = mkToggle (NBFULL ?? EOT) . named "<icon=grid.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
@@ -217,12 +217,12 @@ myLayoutHook = avoidStruts $ onWorkspace "0_9" layoutGrid $ layoutTall ||| layou
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
-  , className =? "Termite" --> insertPosition End Newer
-  , className =? "Godot" --> doShift "0_6"
-  , appName =? "blueman-manager" --> doFloat
-  , appName =? "pavucontrol" --> doFloat
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
+  , className =? "Termite" --> insertPosition End Newer
+  , className =? "Godot" --> doCenterFloat
+  , appName =? "blueman-manager" --> doCenterFloat
+  , appName =? "pavucontrol" --> doCenterFloat
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
@@ -241,7 +241,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 myStartupHook :: X ()
 myStartupHook = do
     spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
-    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 10 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 26 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 26 --distance 5 &"
 
 
 ------------------------------------------------------------------------
@@ -275,7 +275,8 @@ clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
 myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
-myStatusBarSpawner (S s) = pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
+myStatusBarSpawner (S s) = do
+                    pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
                           ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
                           (pure $ myXmobarPP (S s))
 
@@ -293,16 +294,16 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL ("      <fc=" ++ grey4 ++ ">") "</fc>    " $ logLayoutOnScreen s
+                $ wrapL "      " "    " $ logLayoutOnScreen s
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  colorWhenActive s (shortenL 80 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 80 $ logTitleOnScreen s)
                 ]
   }
   where
     wsIconFull   = "  <fn=2>\xf111</fn>   "
     wsIconHidden = "  <fn=2>\xf111</fn>   "
     wsIconEmpty  = "  <fn=2>\xf10c</fn>   "
-    colorWhenActive n l = do
+    titleColorIsActive n l = do
       c <- withWindowSet $ return . W.screen . W.current
       if n == c then xmobarColorL cyan "" l else xmobarColorL grey3 "" l
 
