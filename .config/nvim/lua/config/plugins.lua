@@ -10,7 +10,6 @@ return require('packer').startup(function(use)
   use { 'kyazdani42/nvim-tree.lua' }
   use { 'akinsho/toggleterm.nvim' }
   use { 'tpope/vim-fugitive' }
-  use { 'tpope/vim-rhubarb' }
   use { 'kyazdani42/nvim-web-devicons' }
   use { 'morhetz/gruvbox' }
   use { 'norcalli/nvim-colorizer.lua' }
@@ -31,16 +30,13 @@ return require('packer').startup(function(use)
   use { 'ray-x/lsp_signature.nvim' }
   use { 'ray-x/cmp-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter' }
-  use { 'nvim-treesitter/nvim-treesitter-textobjects' }
+  -- use { 'nvim-treesitter/nvim-treesitter-textobjects' }
   use { 'nvim-treesitter/playground' }
   use { 'nvim-telescope/telescope.nvim' }
   use { 'nvim-telescope/telescope-fzy-native.nvim' }
   use { 'hoob3rt/lualine.nvim' }
   use { 'akinsho/bufferline.nvim' }
-  use { 'jghauser/mkdir.nvim' }
-  use { 'windwp/nvim-autopairs' }
-  use { 'luukvbaal/stabilize.nvim' }
-  use { 'lukas-reineke/indent-blankline.nvim' }
+  use { 'tmsvg/pear-tree' }
 
   -- use { 'lifer0se/ezbookmarks.nvim' }
 

@@ -44,7 +44,7 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 
 
 myTerminal :: [Char]
-myTerminal = "termite"
+myTerminal = "alacritty"
 
 grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
@@ -220,7 +220,7 @@ myManageHook = composeAll
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
   , className =? "Termite" --> insertPosition End Newer
-  , className =? "Godot" --> doCenterFloat
+  , className =? "Godot" --> doShift "0_6"
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
   , insertPosition Master Newer

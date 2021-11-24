@@ -52,11 +52,9 @@ require('config.telescope')
 require('config.nvim-tree')
 require('config.toggleterm')
 require('config.alpha')
-require('config.autopairs')
-require('config.indent_blankline')
+require('config.peartree')
+-- require('config.indent_blankline')
 
-require("stabilize").setup()
-require('mkdir')
 require('colorizer').setup()
 require('commented').setup{
    keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
