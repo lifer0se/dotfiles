@@ -1,11 +1,13 @@
 #!/bin/sh
 
-TERM="termite"
+TERM="alacritty"
 SERVER="/tmp/godot"
 
+FILE=$(echo $1 | sed 's! !\\ !g')
+LINE=$2
+let LINE+=1
 if [ ! -z `nvr --serverlist | grep $SERVER` ]; then
-    nvr --servername $SERVER +$2 "$1"
+  nvr --servername $SERVER +$LINE $FILE
 else
-    FILE=$(echo $1 | sed 's! !\\ !g')
-    $TERM -e "nvr --servername $SERVER +$2 $FILE"
+  $TERM -e nvr --servername $SERVER +$LINE $FILE
 fi

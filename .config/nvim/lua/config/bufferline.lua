@@ -16,7 +16,7 @@ require'bufferline'.setup{
 		show_close_icon = false,
 		show_buffer_close_icons = false,
     left_trunc_marker = 'ﰯ',
-    right_trunc_marker = '',
+    right_trunc_marker = 'ﰲ',
     offsets = {{filetype = "NvimTree"}}
 	},
 	highlights = {
