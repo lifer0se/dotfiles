@@ -43,8 +43,9 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 
 
 
-myTerminal :: [Char]
+myTerminal, myTerminalClass :: [Char]
 myTerminal = "alacritty"
+myTerminalClass = "Alacritty"
 
 grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
@@ -196,9 +197,9 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
 myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed
   where
-    layoutTall = mkToggle (NBFULL ?? EOT) . named "<icon=tall.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutGrid = mkToggle (NBFULL ?? EOT) . named "<icon=grid.xpm/>" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "<icon=full.xpm/>" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
+    layoutTall = mkToggle (NBFULL ?? EOT) . named "tall" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
+    layoutGrid = mkToggle (NBFULL ?? EOT) . named "grid" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "full" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -219,7 +220,7 @@ myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , className =? "Termite" --> insertPosition End Newer
+  , className =? myTerminalClass --> insertPosition End Newer
   , className =? "Godot" --> doShift "0_6"
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
@@ -231,8 +232,8 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_9") <+>
-                    swallowEventHook (className =? "Termite") (return True)
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8") <+>
+                    swallowEventHook (className =? myTerminalClass) (return True)
 
 
 ------------------------------------------------------------------------
@@ -241,7 +242,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 myStartupHook :: X ()
 myStartupHook = do
     spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
-    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 26 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
 
 
 ------------------------------------------------------------------------
@@ -294,7 +295,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL "      " "    " $ logLayoutOnScreen s
+                $ wrapL "      " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
                 $  titleColorIsActive s (shortenL 80 $ logTitleOnScreen s)
                 ]
@@ -306,6 +307,9 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
     titleColorIsActive n l = do
       c <- withWindowSet $ return . W.screen . W.current
       if n == c then xmobarColorL cyan "" l else xmobarColorL grey3 "" l
+    layoutColorIsActive n l = do
+      c <- withWindowSet $ return . W.screen . W.current
+      if n == c then wrapL "<icon=" "_selected.xpm/>" l else wrapL "<icon=" ".xpm/>" l
 
 
 ------------------------------------------------------------------------
@@ -331,6 +335,6 @@ main = xmonad
         , layoutHook         = myLayoutHook
         , manageHook         = myManageHook
         , startupHook        = myStartupHook
-        , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
+        --  , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

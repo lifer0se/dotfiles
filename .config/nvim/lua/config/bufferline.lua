@@ -39,15 +39,18 @@ require'bufferline'.setup{
 		},
 		modified = {
 			guibg = '#2B2E37',
-			guifg = '#716C5F'
+			guifg = '#716C5F',
+			gui = "bold"
 		},
 		modified_visible = {
 			guibg = '#2B2E37',
-			guifg = '#716C5F'
+			guifg = '#716C5F',
+			gui = "bold"
 		},
 		modified_selected = {
 			guibg = '#2B2E37',
 			guifg = '#AFD787',
+			gui = "bold"
 		},
 		duplicate_selected = {
 			guibg = '#2B2E37',
@@ -92,15 +95,18 @@ require'bufferline'.setup{
 		},
 		error_diagnostic = {
 			guibg = '#2B2E37',
-			guifg = '#cc241d'
+			guifg = '#cc241d',
+      gui = 'bold'
 		},
 		error_diagnostic_visible = {
 			guibg = '#2B2E37',
-			guifg = '#cc241d'
+			guifg = '#cc241d',
+      gui = 'bold'
 		},
     error_diagnostic_selected= {
 			guibg = '#2B2E37',
 			guifg = '#cc241d',
+      gui = 'bold'
 		},
 		error = {
 			guibg = '#2B2E37',
@@ -117,15 +123,18 @@ require'bufferline'.setup{
 		},
 		warning_diagnostic = {
 			guibg = '#2B2E37',
-			guifg = '#FABD2F'
+			guifg = '#FABD2F',
+      gui = 'bold'
 		},
 		warning_diagnostic_visible = {
 			guibg = '#2B2E37',
-			guifg = '#FABD2F'
+			guifg = '#FABD2F',
+      gui = 'bold'
 		},
     warning_diagnostic_selected= {
 			guibg = '#2B2E37',
 			guifg = '#FABD2F',
+      gui = 'bold'
 		},
 		warning = {
 			guibg = '#2B2E37',

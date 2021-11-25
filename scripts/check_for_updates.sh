@@ -23,8 +23,8 @@ if [[ $NEWNUM -gt 0 ]]
 then
   if [[ $NUM -gt 1 ]]
   then
-    notify-send -i $ICON "Repository Sync" "$NUM new updates available."
+    notify-send -i $ICON "Repository Sync" "$NUM updates available."
   else
-    notify-send -i $ICON "Repository Sync" "$NUM new update available."
+    notify-send -i $ICON "Repository Sync" "$NUM update available."
   fi
 fi

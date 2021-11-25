@@ -4,6 +4,7 @@
 
 
 local set = vim.opt
+set.guifont = "Source Code Pro:h13"
 set.completeopt = { 'menu', 'menuone', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
 set.list = true
