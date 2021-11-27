@@ -40,6 +40,8 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
+import XMonad.Hooks.Place (fixed, placeHook)
+import XMonad.Hooks.FloatNext (floatNextHook)
 
 
 
@@ -77,9 +79,10 @@ myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "gcolor" "gcolor2" (className =? "Gcolor2") (customFloating $ W.RationalRect 0.35 0.35 0.3 0.3)
   , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.4 0.25 0.2 0.5)
-  , NS "htop" (myTerminal ++ " --class htop -e htop") (className =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
+  , NS "htop" (myTerminal ++ " --title htop -e htop") (title =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
   , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.04 0.13 0.21)
   , NS "brightness" "brightness-controller" (title =? "Brightness Controller") defaultFloating
+  , NS "caprine" "caprine" (className =? "Caprine") defaultFloating
   ]
 
 
@@ -102,8 +105,8 @@ myAditionalKeys =
 
     -- apps
   [ ("M-<Return>", spawn myTerminal)
-  , ("M-v", spawn $ myTerminal ++ " --class Nvim -e nvim")
-  , ("M-f", spawn $ myTerminal ++ " --class Ranger -e ranger")
+  , ("M-v", spawn $ myTerminal ++ " --title Nvim -e nvim")
+  , ("M-f", spawn $ myTerminal ++ " --title Ranger -e ranger")
   , ("M-d", spawn "rofi -show drun")
   , ("M-S-d", spawn "rofi -show run")
   , ("M-p", spawn "passmenu -p pass")
@@ -112,6 +115,8 @@ myAditionalKeys =
   , ("M-S-f", spawn "pcmanfm")
   , ("M-s", spawn "spotify")
   , ("<Print>", spawn "flameshot gui")
+  , ("M-S-e", spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}'")
+  , ("M-z", spawn "xkb-switch -n")
   , ("M-q", kill)
 
   -- scratchpads
@@ -120,6 +125,7 @@ myAditionalKeys =
   , ("M-y", namedScratchpadAction myScratchPads "htop")
   , ("M-r", namedScratchpadAction myScratchPads "calendar")
   , ("M-b", namedScratchpadAction myScratchPads "brightness")
+  , ("M-S-c", namedScratchpadAction myScratchPads "caprine")
 
   -- spotify controls
   , ("M-<F9>", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
@@ -148,12 +154,12 @@ myAditionalKeys =
   , ("M-period", sendMessage $ IncMasterN (-1))
   , ("M-<Space>", withFocused $ windows . W.sink)
   , ("M-e", spawn "rofi-window-finder.sh")
-  , ("M-S-e", spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}'")
 
   -- layout controls
   , ("M-a", sendMessage $ Toggle NBFULL)
+  , ("M-S-a", sendMessage ToggleStruts)
   , ("M-n", sendMessage NextLayout)
-  , ("M-m", spawn "xdotool key super+a && xdotool key super+b")
+  , ("M-m", spawn "xdotool key super+a && xdotool key super+A")
 
   -- workspace controls
   , ("M-<Left>", moveTo Prev workspaceOnCurrentScreen)
@@ -218,12 +224,14 @@ myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
+  , placeHook (fixed (0.5, 0.5))
+  , floatNextHook
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , className =? myTerminalClass --> insertPosition End Newer
-  , className =? "Godot" --> doShift "0_6"
+  , className =? "Godot" --> doShift "0_6" <+> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
+  , title =? myTerminalClass --> insertPosition End Newer
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
@@ -335,6 +343,6 @@ main = xmonad
         , layoutHook         = myLayoutHook
         , manageHook         = myManageHook
         , startupHook        = myStartupHook
-        --  , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
+        , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

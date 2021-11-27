@@ -46,10 +46,10 @@ cmp.setup({
     ghost_text = true,
   },
   sources = cmp.config.sources{
+    { name = 'vsnip' },
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
     { name = 'treesitter' },
-    { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer'},
   }

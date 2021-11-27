@@ -54,7 +54,7 @@ require('config.nvim-tree')
 require('config.toggleterm')
 require('config.alpha')
 require('config.peartree')
--- require('config.indent_blankline')
+require('config.indent_blankline')
 
 require('colorizer').setup()
 require('commented').setup{
@@ -129,6 +129,10 @@ end
 
 autocmd.TextYankPost = function ()
     vim.highlight.on_yank{on_visual=false}
+end
+
+autocmd.VimEnter = function ()
+  vim.cmd[[silent exec "!kill -s SIGWINCH $PPID"]]
 end
 
 -- cd buffer directory on enter

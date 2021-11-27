@@ -3,6 +3,7 @@ xsetroot -cursor_name left_ptr &
 #lxsession &
 numlockx &
 setxkbmap -option caps:escape &
+setxkbmap us,gr &
 nitrogen --restore &
 check_from_updates.sh
 dunst &
