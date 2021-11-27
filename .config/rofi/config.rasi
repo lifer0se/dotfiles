@@ -1,5 +1,4 @@
 configuration {
-  theme: "~/.config/rofi/themes/custom.rasi";
   modi: "window,run,drun,combi";
   combi-modi: "drun,run";
   combi-hide-mode-prefix: true;
@@ -10,3 +9,4 @@ configuration {
   me-select-entry: "";
   me-accept-entry: "MousePrimary";
 }
+@theme "~/.config/rofi/themes/custom.rasi"

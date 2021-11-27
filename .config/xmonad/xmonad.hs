@@ -229,6 +229,7 @@ myManageHook = composeAll
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
   , className =? "Godot" --> doShift "0_6" <+> doCenterFloat
+  , className =? "Transmission" --> doShift "1_7" <+> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
   , title =? myTerminalClass --> insertPosition End Newer

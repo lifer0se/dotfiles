@@ -83,7 +83,7 @@ map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbo
 map { 'n', noremap = false, silent = true, '<leader>fe', '<cmd>lua require("ezbookmarks").OpenBookmark()<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fr', '<cmd>lua require("ezbookmarks").RemoveBookmark()<CR>' }
 map { 'n', noremap = false, '<C-_>', ':exe v:count1 . "ToggleTerm"<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>o', ':!cd %:h && termite &<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>o', ':!cd %:h && $TERMINAL &<CR>' }
 map { 'v', noremap = false, silent = true, 'J', ':m \'>+1<CR>gv=gv' }
 map { 'v', noremap = false, silent = true, 'K', ':m \'<-2<CR>gv=gv' }
 map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
