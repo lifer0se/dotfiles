@@ -15,6 +15,7 @@ local map = function(key)
 end
 
 vim.g.mapleader = " "
+map { 'n', noremap = false, '<2-LeftMouse>', 'viw' }
 map { 'n', noremap = false, 'Q', '@q' }
 map { 'n', noremap = false, '<C-s>', ':w<CR>' }
 map { 'v', noremap = false, '<C-s>', ':w<CR>' }

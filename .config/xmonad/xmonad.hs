@@ -77,7 +77,7 @@ addActions (x:xs) ws = addActions xs (actionPrefix ++ k ++ actionButton ++ show 
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
-  [ NS "gcolor" "gcolor2" (className =? "Gcolor2") (customFloating $ W.RationalRect 0.35 0.35 0.3 0.3)
+  [ NS "gcolor" "gcolor2" (className =? "Gcolor2") defaultFloating
   , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.4 0.25 0.2 0.5)
   , NS "htop" (myTerminal ++ " --title htop -e htop") (title =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
   , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.04 0.13 0.21)
@@ -228,7 +228,7 @@ myManageHook = composeAll
   , floatNextHook
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , className =? "Godot" --> doShift "0_6" <+> doCenterFloat
+  , className =? "Godot" --> doCenterFloat
   , className =? "Transmission" --> doShift "1_7" <+> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
@@ -304,9 +304,9 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
-                $ wrapL "      " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
+                $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  titleColorIsActive s (shortenL 80 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 90 $ logTitleOnScreen s)
                 ]
   }
   where
