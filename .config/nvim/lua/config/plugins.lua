@@ -39,6 +39,10 @@ return require('packer').startup(function(use)
   use { 'tmsvg/pear-tree' }
   use { 'lukas-reineke/indent-blankline.nvim' }
 
+
+  use { 'MunifTanjim/nui.nvim' }
+  use { 'VonHeikemen/searchbox.nvim' }
+
   -- use { 'lifer0se/ezbookmarks.nvim' }
 
 end)

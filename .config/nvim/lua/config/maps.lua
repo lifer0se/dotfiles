@@ -47,10 +47,6 @@ map { 'v', noremap = false, '<Tab>', '  >><Esc>gv' }
 map { 'v', noremap = false, '<S-Tab>', '<<<Esc>gv' }
 map { 'n', noremap = false, '<leader>hi', ':set hlsearch! hlsearch?<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>hh', ':noh<CR>' }
-map { 'n', noremap = false, '<leader>sc', ':%s///gc<Left><Left><Left><Left>' }
-map { 'n', noremap = false, '<leader>ss', ':%s///g<Left><Left><Left>' }
-map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R>"' }
-map { 'v', noremap = false, '<leader>ss', 'y:%s/<C-R>"//g<Left><Left><C-R>"' }
 map { 'n', noremap = false, 'n', 'nzzzv' }
 map { 'n', noremap = false, 'N', 'Nzzzv' }
 map { 'n', 's', '' }
@@ -67,8 +63,6 @@ map { 'v', noremap = false, 's)', 'c(<C-R>")<Esc>' }
 map { 'v', noremap = false, 's<', 'c<<C-R>"><Esc>' }
 map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<CR>' }
-map { 'n', noremap = false, silent = true, '<C-f>', '/<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
-map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>he', ':h <C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
 map { 'v', noremap = false, silent = true, '<leader>he', 'y:h <C-r>"<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<CR>' }
@@ -92,3 +86,10 @@ map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
 map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}
 map { 'n', noremap = false, silent = true, '<F6>', '<cmd>lua require("run-godot").RunMainScene()<CR>' }
+map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
+map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ss', '<cmd>lua require("searchbox").replace({confirm = \'menu\'})<CR>' }
+map { 'v', noremap = false, silent = true, '<leader>ss', '<Esc><cmd>lua require("searchbox").replace({confirm = \'menu\', visual_mode = true})<CR>' }
+map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }
+map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R>"' }
+map { 'v', noremap = false, '<leader>ss', 'y:%s/<C-R>"//g<Left><Left><C-R>"' }
