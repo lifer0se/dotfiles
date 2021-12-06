@@ -89,7 +89,5 @@ map { 'n', noremap = false, silent = true, '<F6>', '<cmd>lua require("run-godot"
 map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
 map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>ss', '<cmd>lua require("searchbox").replace({confirm = \'menu\'})<CR>' }
-map { 'v', noremap = false, silent = true, '<leader>ss', '<Esc><cmd>lua require("searchbox").replace({confirm = \'menu\', visual_mode = true})<CR>' }
-map { 'v', noremap = false, silent = true, '<C-f>', 'y0/<C-r>"<CR>' }
-map { 'v', noremap = false, '<leader>sc', 'y:%s/<C-R>"//gc<Left><Left><Left><C-R>"' }
-map { 'v', noremap = false, '<leader>ss', 'y:%s/<C-R>"//g<Left><Left><C-R>"' }
+map { 'v', noremap = false, silent = true, '<leader>ss', '"1y<cmd>lua require("searchbox").replace({confirm = \'menu\', default_value = vim.fn.getreg(\'1\')})<CR>' }
+map { 'v', noremap = false, silent = true, '<C-f>', '"1y0/<C-r>1<CR>' }

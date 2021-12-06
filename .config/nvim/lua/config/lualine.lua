@@ -15,11 +15,9 @@ require'lualine'.setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff',
-      symbols = {added = '+', modified = '~', removed = '-'}
-	},
+    lualine_b = {'branch', 'diff'},
     lualine_c = {''},
-    lualine_x = {'diagnostics', sources={'nvim_lsp'}, 'filetype'},
+    lualine_x = {{'diagnostics', sources={'nvim_lsp'}}, 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },

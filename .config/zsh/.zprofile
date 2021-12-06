@@ -2,7 +2,7 @@
 
 export PATH=$HOME/.local/bin:$HOME/scripts:$PATH
 
-export TERMINAL=alacritty
+export TERMINAL=termite
 export BROWSER=brave
 export EDITOR=nvim
 export VISUAL=nvim

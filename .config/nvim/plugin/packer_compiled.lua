@@ -44,8 +44,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/amnesia/.local/cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/amnesia/.local/cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/home/amnesia/.local/cache/nvim/packer_hererocks/2.0.5/share/lua/5.1/?.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.0.5/share/lua/5.1/?/init.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.0.5/lib/luarocks/rocks-5.1/?.lua;/home/amnesia/.local/cache/nvim/packer_hererocks/2.0.5/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/amnesia/.local/cache/nvim/packer_hererocks/2.0.5/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -57,7 +57,7 @@ end
 time([[Luarocks path setup]], false)
 time([[try_loadstring definition]], true)
 local function try_loadstring(s, component, name)
-  local success, result = pcall(loadstring(s))
+  local success, result = pcall(loadstring(s), name, _G.packer_plugins[name])
   if not success then
     vim.schedule(function()
       vim.api.nvim_notify('packer.nvim: Error running ' .. component .. ' for ' .. name .. ': ' .. result, vim.log.levels.ERROR, {})
@@ -69,157 +69,49 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  LuaSnip = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/LuaSnip"
-  },
-  ["alpha-nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/alpha-nvim"
-  },
-  ["bufferline.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/bufferline.nvim"
-  },
-  ["cmp-buffer"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-buffer"
-  },
-  ["cmp-cmdline"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-cmdline"
-  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
+    url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
-  ["cmp-nvim-lua"] = {
+  ["cmp-vsnip"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua"
-  },
-  ["cmp-path"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-path"
-  },
-  ["cmp-treesitter"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-treesitter"
-  },
-  cmp_luasnip = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp_luasnip"
-  },
-  ["commented.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/commented.nvim"
-  },
-  ["ezbookmarks.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/ezbookmarks.nvim"
-  },
-  gruvbox = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/gruvbox"
-  },
-  ["lsp_signature.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim"
-  },
-  ["lspkind-nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/lspkind-nvim"
-  },
-  ["lualine.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/lualine.nvim"
-  },
-  ["mkdir.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/mkdir.nvim"
-  },
-  ["neovim-session-manager"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/neovim-session-manager"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
+    url = "https://github.com/hrsh7th/cmp-vsnip"
   },
   ["nvim-cmp"] = {
+    config = { "\27LJ\1\2;\0\1\3\0\4\0\0064\1\0\0007\1\1\0017\1\2\0017\2\3\0>\1\2\1G\0\1\0\tbody\20vsnip#anonymous\afn\bvim¹\1\1\0\5\0\f\0\0234\0\0\0%\1\1\0>\0\2\0027\0\2\0003\1\6\0003\2\4\0001\3\3\0:\3\5\2:\2\a\0014\2\0\0%\3\1\0>\2\2\0027\2\b\0027\2\t\0022\3\3\0003\4\n\0;\4\1\0033\4\v\0;\4\2\3>\2\2\2:\2\t\1>\0\2\1G\0\1\0\1\0\1\tname\nvsnip\1\0\1\tname\rnvim_lsp\fsources\vconfig\fsnippet\1\0\0\vexpand\1\0\0\0\nsetup\bcmp\frequire\0" },
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-cmp"
-  },
-  ["nvim-colorizer.lua"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-cmp",
+    url = "https://github.com/hrsh7th/nvim-cmp"
   },
   ["nvim-lsp-installer"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-lsp-installer"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-lsp-installer",
+    url = "https://github.com/williamboman/nvim-lsp-installer"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
+    url = "https://github.com/neovim/nvim-lspconfig"
   },
-  ["nvim-tree.lua"] = {
+  ["packer.nvim"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-tree.lua"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    url = "https://github.com/wbthomason/packer.nvim"
   },
-  ["nvim-treesitter"] = {
+  ["vim-vsnip"] = {
     loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-treesitter"
-  },
-  ["nvim-treesitter-textobjects"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-treesitter-textobjects"
-  },
-  ["nvim-web-devicons"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/nvim-web-devicons"
-  },
-  playground = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/playground"
-  },
-  ["plenary.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/plenary.nvim"
-  },
-  ["popup.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/popup.nvim"
-  },
-  ["telescope-fzy-native.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/telescope-fzy-native.nvim"
-  },
-  ["telescope.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/telescope.nvim"
-  },
-  ["toggleterm.nvim"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/toggleterm.nvim"
-  },
-  undotree = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/undotree"
-  },
-  ["vim-fugitive"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/vim-fugitive"
-  },
-  ["vim-rhubarb"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/vim-rhubarb"
-  },
-  ["vim-surround"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/vim-surround"
-  },
-  ["vim-todo-lists"] = {
-    loaded = true,
-    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/vim-todo-lists"
+    path = "/home/amnesia/.local/share/nvim/site/pack/packer/start/vim-vsnip",
+    url = "https://github.com/hrsh7th/vim-vsnip"
   }
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: nvim-cmp
+time([[Config for nvim-cmp]], true)
+try_loadstring("\27LJ\1\2;\0\1\3\0\4\0\0064\1\0\0007\1\1\0017\1\2\0017\2\3\0>\1\2\1G\0\1\0\tbody\20vsnip#anonymous\afn\bvim¹\1\1\0\5\0\f\0\0234\0\0\0%\1\1\0>\0\2\0027\0\2\0003\1\6\0003\2\4\0001\3\3\0:\3\5\2:\2\a\0014\2\0\0%\3\1\0>\2\2\0027\2\b\0027\2\t\0022\3\3\0003\4\n\0;\4\1\0033\4\v\0;\4\2\3>\2\2\2:\2\t\1>\0\2\1G\0\1\0\1\0\1\tname\nvsnip\1\0\1\tname\rnvim_lsp\fsources\vconfig\fsnippet\1\0\0\vexpand\1\0\0\0\nsetup\bcmp\frequire\0", "config", "nvim-cmp")
+time([[Config for nvim-cmp]], false)
 if should_profile then save_profiles() end
 
 end)

@@ -71,36 +71,36 @@ require('ezbookmarks').setup{
 
 
 vim.cmd[[
-    colorscheme gruvbox
-    highlight Normal guibg=NONE
-    highlight SignColumn guibg=NONE
-    highlight CursorLine guibg=NONE
-    highlight CursorLineNr guibg=NONE guifg=#FABD2F
-    highlight Search guibg=#515873 guifg=#EDA36D gui=NONE
-    highlight VertSplit guibg=NONE guifg=#2B2E37
-    highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
-    highlight ErrorMsg guibg=NONE guifg=#cc241d gui=bold
-    highlight DiagnosticError guifg=#cc241d guibg=NONE
-    highlight DiagnosticWarning guifg=#FABD2F guibg=NONE
-    highlight DiagnosticHint guifg=#688D6A guibg=NONE
-    highlight NvimTreeCursorLine guibg=#515873 guifg=#91AFEB
-    highlight Pmenu guibg=#2B2E37
-    highlight PmenuSel guibg=#91AFEB
-    highlight PmenuSbar guibg=#2B2E37
-    highlight PmenuThumb guibg=#515873
-    highlight CmpItemAbbrDefault guifg=#AFA58A
-    highlight CmpItemAbbrMatch guifg=#91AFEB
-    highlight CmpItemAbbrMatchFuzzy guifg=#91AFEB
-    highlight CmpItemKind guifg=#AFAFAF
-    highlight CmpItemMenuDefault guifg=#AFAFAF
-    highlight NormalFloat guifg=#358292 guibg=None
-    highlight FloatBorder guifg=#358292 guibg=None
-    highlight TelescopeBorder guifg=#358292
-    highlight TelescopeMatching guifg=#EDA36D
-    highlight StatusLine guifg=NONE guibg=NONE gui=NONE
-    highlight StatusLineNC guifg=NONE guibg=NONE gui=NONE
-    highlight IndentBlanklineChar guifg=#3C4050
-    highlight IndentBlanklineContextChar guifg=#51566B
+  colorscheme gruvbox
+  highlight Normal guibg=NONE
+  highlight SignColumn guibg=NONE
+  highlight CursorLine guibg=NONE
+  highlight CursorLineNr guibg=NONE guifg=#FABD2F
+  highlight Search guibg=#515873 guifg=#EDA36D gui=NONE
+  highlight VertSplit guibg=NONE guifg=#2B2E37
+  highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
+  highlight ErrorMsg guibg=NONE guifg=#cc241d gui=bold
+  highlight DiagnosticError guifg=#cc241d guibg=NONE
+  highlight DiagnosticWarning guifg=#FABD2F guibg=NONE
+  highlight DiagnosticHint guifg=#688D6A guibg=NONE
+  highlight NvimTreeCursorLine guibg=#515873 guifg=#91AFEB
+  highlight Pmenu guibg=#2B2E37
+  highlight PmenuSel guibg=#91AFEB
+  highlight PmenuSbar guibg=#2B2E37
+  highlight PmenuThumb guibg=#515873
+  highlight CmpItemAbbrDefault guifg=#AFA58A
+  highlight CmpItemAbbrMatch guifg=#91AFEB
+  highlight CmpItemAbbrMatchFuzzy guifg=#91AFEB
+  highlight CmpItemKindDefault guifg=#AFAFAF
+  highlight CmpItemMenuDefault guifg=#AFAFAF
+  highlight NormalFloat guifg=#358292 guibg=None
+  highlight FloatBorder guifg=#358292 guibg=None
+  highlight TelescopeBorder guifg=#358292
+  highlight TelescopeMatching guifg=#EDA36D
+  highlight StatusLine guifg=NONE guibg=NONE gui=NONE
+  highlight StatusLineNC guifg=NONE guibg=NONE gui=NONE
+  highlight IndentBlanklineChar guifg=#3C4050
+  highlight IndentBlanklineContextChar guifg=#51566B
 ]]
 
 

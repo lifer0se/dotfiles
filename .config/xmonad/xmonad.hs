@@ -46,8 +46,8 @@ import XMonad.Hooks.FloatNext (floatNextHook)
 
 
 myTerminal, myTerminalClass :: [Char]
-myTerminal = "alacritty"
-myTerminalClass = "Alacritty"
+myTerminal = "termite"
+myTerminalClass = "Termite"
 
 grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
@@ -78,9 +78,9 @@ addActions (x:xs) ws = addActions xs (actionPrefix ++ k ++ actionButton ++ show 
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "gcolor" "gcolor2" (className =? "Gcolor2") defaultFloating
-  , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.4 0.25 0.2 0.5)
+  , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.58 0.48 0.2 0.4)
   , NS "htop" (myTerminal ++ " --title htop -e htop") (title =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
-  , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.04 0.13 0.21)
+  , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.05 0.13 0.21)
   , NS "brightness" "brightness-controller" (title =? "Brightness Controller") defaultFloating
   , NS "caprine" "caprine" (className =? "Caprine") defaultFloating
   ]
@@ -224,12 +224,9 @@ myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
-  , placeHook (fixed (0.5, 0.5))
-  , floatNextHook
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
   , className =? "Godot" --> doCenterFloat
-  , className =? "Transmission" --> doShift "1_7" <+> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
   , appName =? "pavucontrol" --> doCenterFloat
   , title =? myTerminalClass --> insertPosition End Newer

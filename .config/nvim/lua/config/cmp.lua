@@ -1,9 +1,4 @@
-local cmp = require"cmp"
-
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
+local cmp = require("cmp")
 
 vim.cmd[["let g:vsnip_filetypes.cs = ['c#']"]]
 vim.cmd([[imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']])
@@ -12,7 +7,6 @@ vim.cmd([[imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'   
 vim.cmd([[smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>']])
 vim.cmd([[imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']])
 vim.cmd([[smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>']])
-
 
 cmp.setup({
   snippet = {
@@ -28,7 +22,27 @@ cmp.setup({
     ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
     ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-    },
+    ['('] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    ['.'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    ['<'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    ['['] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    ['{'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+  },
 
   formatting = {
     format = require("lspkind").cmp_format({
@@ -47,11 +61,12 @@ cmp.setup({
   },
 
   experimental = {
+    native_menu = true,
     ghost_text = true,
   },
 
   sources = cmp.config.sources{
-    { name = 'vsnip' },
+    { name = 'vsnip', keyword_length = 2 },
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
     { name = 'path' },
