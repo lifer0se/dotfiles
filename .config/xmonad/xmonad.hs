@@ -46,8 +46,8 @@ import XMonad.Hooks.FloatNext (floatNextHook)
 
 
 myTerminal, myTerminalClass :: [Char]
-myTerminal = "termite"
-myTerminalClass = "Termite"
+myTerminal = "alacritty"
+myTerminalClass = "Alacritty"
 
 grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
