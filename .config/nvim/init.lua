@@ -7,6 +7,8 @@ local set = vim.opt
 set.guifont = "Source Code Pro:h13"
 set.completeopt = { 'menu', 'menuone', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
+set.fillchars:append { eob = " " }
+set.fillchars:append('vert:▕')
 set.list = true
 set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
 set.shiftwidth = 2
@@ -93,12 +95,13 @@ vim.cmd[[
   highlight CmpItemAbbrMatchFuzzy guifg=#91AFEB
   highlight CmpItemKindDefault guifg=#AFAFAF
   highlight CmpItemMenuDefault guifg=#AFAFAF
-  highlight NormalFloat guifg=#358292 guibg=None
-  highlight FloatBorder guifg=#358292 guibg=None
-  highlight TelescopeBorder guifg=#358292
-  highlight TelescopeMatching guifg=#EDA36D
-  highlight StatusLine guifg=NONE guibg=NONE gui=NONE
-  highlight StatusLineNC guifg=NONE guibg=NONE gui=NONE
+  highlight NormalFloat guifg=#91AFEB guibg=None
+  highlight FloatBorder guifg=#91AFEB guibg=None
+  highlight TelescopeBorder guifg=#91AFEB
+  highlight TelescopeMatching guifg=#EDA36D guibg=none
+  highlight TelescopeSelection guifg=#91AFEB guibg=none
+  highlight StatusLine guifg=NONE guibg=#2B2E37 gui=NONE
+  highlight StatusLineNC guifg=NONE guibg=#2B2E37 gui=NONE
   highlight IndentBlanklineChar guifg=#3C4050
   highlight IndentBlanklineContextChar guifg=#51566B
 ]]
@@ -118,17 +121,17 @@ end
 
 -- Disables automatic commenting on newline:
 local function remove_autocomment()
-    vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
+  vim.cmd('setlocal formatoptions-=c formatoptions-=r formatoptions-=o')
 end
 autocmd.BufNew = function()
-    remove_autocomment()
+  remove_autocomment()
 end
 autocmd.BufRead = function()
-    remove_autocomment()
+  remove_autocomment()
 end
 
 autocmd.TextYankPost = function ()
-    vim.highlight.on_yank{on_visual=false}
+  vim.highlight.on_yank{on_visual=false}
 end
 
 autocmd.VimEnter = function ()
