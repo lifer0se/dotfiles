@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 import XMonad
 import System.Exit
 import Prelude hiding (log)
@@ -6,7 +7,9 @@ import qualified Data.Map as M
 import Data.Maybe (fromJust)
 import Data.Semigroup
 import Data.Bits (testBit)
-import Control.Monad (unless)
+import Control.Monad (unless, when)
+import Foreign.C (CInt)
+import Data.Foldable (find)
 
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.DynamicLog
@@ -40,9 +43,6 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
-import XMonad.Hooks.Place (fixed, placeHook)
-import XMonad.Hooks.FloatNext (floatNextHook)
-
 
 
 myTerminal, myTerminalClass :: [Char]
@@ -238,8 +238,9 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8") <+>
-                    swallowEventHook (className =? myTerminalClass) (return True)
+myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
+                <+> swallowEventHook (className =? myTerminalClass) (return True)
+                <+> multiScreenFocusHook
 
 
 ------------------------------------------------------------------------
@@ -247,7 +248,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
+    --  spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
     spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
 
 
@@ -269,6 +270,37 @@ myUpdatePointer refPos ratio =
 
   where
     isActive = (\(MyUpdatePointerActive b) -> b) <$> XS.get
+
+
+------------------------------------------------------------------------
+--
+
+multiScreenFocusHook :: Event -> X All
+multiScreenFocusHook MotionEvent { ev_x = x, ev_y = y } = do
+  ms <- getScreenForPos x y
+  case ms of
+    Just cursorScreen -> do
+      let cursorScreenID = W.screen cursorScreen
+      focussedScreenID <- gets (W.screen . W.current . windowset)
+      when (cursorScreenID /= focussedScreenID) (focusWS $ W.tag $ W.workspace cursorScreen)
+      return (All True)
+    _ -> return (All True)
+  where getScreenForPos :: CInt -> CInt
+            -> X (Maybe (W.Screen WorkspaceId (Layout Window) Window ScreenId ScreenDetail))
+        getScreenForPos x y = do
+          ws <- windowset <$> get
+          let screens = W.current ws : W.visible ws
+              inRects = map (inRect x y . screenRect . W.screenDetail) screens
+          return $ fst <$> find snd (zip screens inRects)
+        inRect :: CInt -> CInt -> Rectangle -> Bool
+        inRect x y rect = let l = fromIntegral (rect_x rect)
+                              r = l + fromIntegral (rect_width rect)
+                              t = fromIntegral (rect_y rect)
+                              b = t + fromIntegral (rect_height rect)
+                           in x >= l && x < r && y >= t && y < b
+        focusWS :: WorkspaceId -> X ()
+        focusWS ids = windows (W.view ids)
+multiScreenFocusHook _ = return (All True)
 
 
 ------------------------------------------------------------------------
@@ -341,6 +373,8 @@ main = xmonad
         , layoutHook         = myLayoutHook
         , manageHook         = myManageHook
         , startupHook        = myStartupHook
-        , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
+
+        , rootMask = rootMask def .|. pointerMotionMask
+        --  , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys

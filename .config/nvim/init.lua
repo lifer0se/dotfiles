@@ -85,7 +85,8 @@ vim.cmd[[
   highlight DiagnosticError guifg=#cc241d guibg=NONE
   highlight DiagnosticWarning guifg=#FABD2F guibg=NONE
   highlight DiagnosticHint guifg=#688D6A guibg=NONE
-  highlight NvimTreeCursorLine guibg=#515873 guifg=#91AFEB
+  highlight NvimTreeCursorLine guibg=NONE guifg=#91AFEB
+  highlight NvimTreeWindowPicker guibg=NONE guifg=#91AFEB
   highlight Pmenu guibg=#2B2E37
   highlight PmenuSel guibg=#91AFEB
   highlight PmenuSbar guibg=#2B2E37
