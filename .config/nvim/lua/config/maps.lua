@@ -85,7 +85,6 @@ map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
 map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}
-map { 'n', noremap = false, silent = true, '<F6>', '<cmd>lua require("run-godot").RunMainScene()<CR>' }
 map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
 map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>ss', '<cmd>lua require("searchbox").replace({confirm = \'menu\'})<CR>' }

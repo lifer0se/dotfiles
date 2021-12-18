@@ -12,23 +12,24 @@ require'lualine'.setup {
     theme = custom_onedark,
     component_separators = {'', ''},
     section_separators = {'', ''},
-    disabled_filetypes = { 'NvimTree', 'alpha' }
+    disabled_filetypes = { 'NvimTree', 'alpha' },
+    symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '}
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff'},
-    lualine_c = {''},
+    lualine_b = {'branch', 'diff' },
+    lualine_c = {'filename'},
     lualine_x = {{'diagnostics', sources={'nvim_lsp'}}, 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
   inactive_sections = {
     lualine_a = {},
-    lualine_b = {'branch'},
+    lualine_b = {'branch', 'diff' },
     lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
+    lualine_x = {{'diagnostics', sources={'nvim_lsp'}}, 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
   },
   tabline = {},
   extensions = {}

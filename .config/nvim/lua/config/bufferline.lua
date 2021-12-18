@@ -22,35 +22,13 @@ require'bufferline'.setup{
     end,
 		middle_mouse_command = 'bdelete! %d',
     modified_icon = "",
-		show_tab_indicators = false,
+		show_tab_indicators = true,
 		show_close_icon = false,
 		show_buffer_close_icons = false,
     left_trunc_marker = 'ﰯ',
     right_trunc_marker = 'ﰲ',
+    separator_style = "slant",
     offsets = offsets,
-        -- custom_areas = {
-            -- left = function()
-                -- local result = {}
-                -- local cfg = { options = { offsets = offsets } }
-                -- local offset_size, _, _ = require("bufferline.offset").get(cfg)
-                -- local nr = 1
-                -- if offset_size > 0 then
-                    -- table.insert(result, { text = " ", guibg = grey })
-                    -- nr = 2
-                -- end
-                -- local bufnr = vim.fn.winbufnr(nr)
-                -- if not bufnr then
-                    -- return result
-                -- end
-                -- local linecount = vim.api.nvim_buf_line_count(bufnr)
-                -- if not linecount then
-                    -- return result
-                -- end
-                -- local column = string.format(" %3d  ", linecount)
-                -- table.insert(result, { text = column, guibg = grey2, guifg = grey2 })
-                -- return result
-            -- end,
-        -- },
 	},
 	highlights = {
 		fill = {
