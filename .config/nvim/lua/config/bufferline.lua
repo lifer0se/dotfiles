@@ -7,7 +7,6 @@ local offsets = {
     },
 }
 
-
 require'bufferline'.setup{
 	options = {
     diagnostics = "nvim_lsp",
@@ -29,6 +28,19 @@ require'bufferline'.setup{
     right_trunc_marker = 'ﰲ',
     separator_style = "slant",
     offsets = offsets,
+    custom_filter = function(buf)
+      if (vim.bo[buf].filetype == "help") then
+        return false
+      end
+
+      local tab_num = 0
+      for _ in pairs(vim.api.nvim_list_tabpages()) do tab_num = tab_num + 1 end
+      if tab_num > 1 then
+          return false
+      else
+          return true
+      end
+    end,
 	},
 	highlights = {
 		fill = {
@@ -176,5 +188,13 @@ require'bufferline'.setup{
 			guibg = '#2B2E37',
 			guifg = '#688D6A',
 		},
+    tab = {
+			guibg = '#2B2E37',
+			guifg = '#AFA58A',
+    },
+    tab_selected = {
+			guibg = '#20222E',
+			guifg = '#AFD787',
+    },
 	};
 }
