@@ -313,8 +313,8 @@ clickable :: [Char] -> [Char] -> [Char]
 clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] icon
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
-myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
-myStatusBarSpawner (S s) = do
+myStatusBarSpawner :: Applicative f => Int -> f StatusBarConfig
+myStatusBarSpawner s = do
                     pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
                           ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
                           (pure $ myXmobarPP (S s))
