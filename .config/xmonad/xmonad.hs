@@ -44,6 +44,7 @@ import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Actions.OnScreen (onlyOnScreen)
+import XMonad.Actions.Warp (warpToScreen)
 
 
 myTerminal, myTerminalClass :: [Char]
@@ -167,7 +168,7 @@ myAditionalKeys =
   , ("M-<Right>", moveTo Next workspaceOnCurrentScreen)
 
   -- screen controll
-  , ("M-o", nextScreen)
+  , ("M-o", switchScreen 1)
   , ("M-S-o", shiftNextScreen)
 
   -- kill / restart xmonad
@@ -194,6 +195,18 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   , ((modm, button4), \_ -> moveTo Prev workspaceOnCurrentScreen)
   , ((modm, button5), \_ -> moveTo Next workspaceOnCurrentScreen)
   ]
+
+
+------------------------------------------------------------------------
+--
+
+switchScreen :: Int -> X ()
+switchScreen d = do s <- screenBy d
+                    mws <- screenWorkspace s
+                    warpToScreen s 0.618 0.618
+                    case mws of
+                         Nothing -> return ()
+                         Just ws -> windows (W.view ws)
 
 
 ------------------------------------------------------------------------
