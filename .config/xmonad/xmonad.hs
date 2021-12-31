@@ -43,6 +43,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.TiledWindowDragging
 import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
+import XMonad.Actions.OnScreen (onlyOnScreen)
 
 
 myTerminal, myTerminalClass :: [Char]
@@ -250,6 +251,7 @@ myStartupHook :: X ()
 myStartupHook = do
     --  spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
     spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 
 ------------------------------------------------------------------------
@@ -313,11 +315,12 @@ clickable :: [Char] -> [Char] -> [Char]
 clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5) ] icon
                     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
-myStatusBarSpawner :: Applicative f => Int -> f StatusBarConfig
-myStatusBarSpawner s = do
+myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
+myStatusBarSpawner (S s) = do
                     pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
                           ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
                           (pure $ myXmobarPP (S s))
+
 
 myXmobarPP :: ScreenId -> PP
 myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
