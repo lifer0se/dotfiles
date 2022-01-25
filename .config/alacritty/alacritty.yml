@@ -45,6 +45,9 @@ window:
   #
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
+
+  opacity: 0.3
+
   padding:
     x: 25
     y: 25
@@ -67,7 +70,7 @@ decorations: full
   #
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.3
+#  background_opacity: 0.3
 
   # Startup Mode (changes require restart)
   #

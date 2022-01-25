@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export PATH=$HOME/.local/bin:$HOME/scripts:$PATH
+export PATH=$HOME/.local/bin:$HOME/scripts:$HOME/.local/share/cargo/bin:$PATH
 
 export TERMINAL=alacritty
 export BROWSER=brave

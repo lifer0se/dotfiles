@@ -2,7 +2,7 @@
 
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-ICON=/usr/share/icons/Papirus-Dark/64x64/apps/mx-packageinstaller.svg
+ICON="$HOME/downloads/package.svg"
 
 ping -q -c 1 example.org > /dev/null || exit
 sudo pacman -Syyuw --noconfirm || notify-send -i $ICON "Error downloading updates." "Check your internet connection, if pacman is already running, or run update manually to see errors."

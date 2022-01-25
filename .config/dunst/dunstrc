@@ -3,7 +3,7 @@
     monitor = 1
     notification_limit = 0
     follow = none
-    width = 400
+    width = 350
     height = 350
     origin = top-right
     offset = 15x55
@@ -16,8 +16,8 @@
     indicate_hidden = yes
     transparency = 0
     separator_height = 3
-    padding = 10
-    horizontal_padding = 10
+    padding = 20
+    horizontal_padding = 20
     text_icon_padding = 0
     frame_width = 3
     frame_color = "#8BABF0"

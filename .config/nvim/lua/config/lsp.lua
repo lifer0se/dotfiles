@@ -1,19 +1,18 @@
 
-local border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-
 local on_attach = function(client, bufnr)
   local buf_map = vim.api.nvim_buf_set_keymap
   buf_map(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {})
   buf_map(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {})
   buf_map(bufnr, "n", "E", "<cmd>lua vim.lsp.buf.hover()<CR>", {})
-  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({border="..vim.inspect(border)..", show_header = false, focusable=false })<CR>", {})
-	buf_map(bufnr, "n", "gn", "<cmd>lua vim.lsp.diagnostic.goto_next({float = {border="..vim.inspect(border)..", show_header = false, focusable=false }})<CR>", {})
-	buf_map(bufnr, "n", "gp", "<cmd>lua vim.lsp.diagnostic.goto_prev({float = {border="..vim.inspect(border)..", show_header = false, focusable=false }})<CR>", {})
+  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.diagnostic.open_float(0, { show_header = false, border = 'rounded', focusable = false })<CR>", {})
+	buf_map(bufnr, "n", "gn", "<cmd>lua vim.diagnostic.goto_next({float = { border = 'rounded', show_header = false, focusable=false }})<CR>", {})
+	buf_map(bufnr, "n", "gp", "<cmd>lua vim.diagnostic.goto_prev({float = { border = 'rounded', show_header = false, focusable=false }})<CR>", {})
   buf_map(bufnr, "n", "ga", "<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<CR>", {})
 end
 
-vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border})
-vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border})
+
+vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
+vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded"})
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   update_in_insert = false,
   underline = false,

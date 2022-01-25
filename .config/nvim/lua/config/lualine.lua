@@ -19,7 +19,7 @@ require'lualine'.setup {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff' },
     lualine_c = {'filename'},
-    lualine_x = {{'diagnostics', sources={'nvim_lsp'}}, 'filetype'},
+    lualine_x = {{'diagnostics', sources={'nvim_diagnostic'}}, 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -27,7 +27,7 @@ require'lualine'.setup {
     lualine_a = {},
     lualine_b = {'branch', 'diff' },
     lualine_c = {'filename'},
-    lualine_x = {{'diagnostics', sources={'nvim_lsp'}}, 'filetype'},
+    lualine_x = {{'diagnostics', sources={'nvim_diagnostic'}}, 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },

@@ -38,8 +38,6 @@ return require('packer').startup(function(use)
   use { 'akinsho/bufferline.nvim' }
   use { 'tmsvg/pear-tree' }
   use { 'lukas-reineke/indent-blankline.nvim' }
-
-
   use { 'MunifTanjim/nui.nvim' }
   use { 'VonHeikemen/searchbox.nvim' }
 

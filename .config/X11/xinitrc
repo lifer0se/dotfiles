@@ -9,7 +9,6 @@ dunst &
 picom &
 nm-applet &
 blueman-applet &
-volumeicon &
 #/usr/bin/greenclip daemon &
 /opt/urserver/urserver --daemon &
 

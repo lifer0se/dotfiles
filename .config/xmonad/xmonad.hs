@@ -242,6 +242,8 @@ myManageHook = composeAll
   , isDialog --> doCenterFloat
   , className =? "Godot" --> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
+  , className =? "awakened-poe-trade" --> doFloat
+  , className =? "steam_app_238960" --> doFloat
   , appName =? "pavucontrol" --> doCenterFloat
   , title =? myTerminalClass --> insertPosition End Newer
   , insertPosition Master Newer
@@ -263,7 +265,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 myStartupHook :: X ()
 myStartupHook = do
     --  spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
-    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 
@@ -351,7 +353,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
                 $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  titleColorIsActive s (shortenL 90 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 85 $ logTitleOnScreen s)
                 ]
   }
   where
