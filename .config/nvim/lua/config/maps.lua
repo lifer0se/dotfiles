@@ -17,8 +17,8 @@ end
 vim.g.mapleader = " "
 map { 'n', noremap = false, '<2-LeftMouse>', 'viw' }
 map { 'n', noremap = false, 'Q', '@q' }
-map { 'n', noremap = false, '<C-s>', ':w<CR>' }
-map { 'v', noremap = false, '<C-s>', ':w<CR>' }
+map { 'n', noremap = false, '<C-s>', ':w!<CR>' }
+map { 'v', noremap = false, '<C-s>', ':w!<CR>' }
 map { 'i', noremap = false, '<C-s>', '<esc>' }
 map { 'n', noremap = false, silent = true, '<leader>gg', ':G<CR>' }
 map { 'n', noremap = false, '<leader>gc', ':Git commit<CR>' }
@@ -85,8 +85,8 @@ map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
 map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}
-map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
-map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>ss', '<cmd>lua require("searchbox").replace({confirm = \'menu\'})<CR>' }
-map { 'v', noremap = false, silent = true, '<leader>ss', '"1y<cmd>lua require("searchbox").replace({confirm = \'menu\', default_value = vim.fn.getreg(\'1\')})<CR>' }
+-- map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
+-- map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
+map { 'n', noremap = false, silent = false, '<leader>ss', ':%s///gc<Left><Left><Left>' }
+map { 'v', noremap = false, silent = false, '<leader>ss', 'y:%s/<C-R>"/<C-R>"/gc<Left><Left><Left>' }
 map { 'v', noremap = false, silent = true, '<C-f>', '"1y0/<C-r>1<CR>' }

@@ -81,7 +81,7 @@ myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "gcolor" "gcolor2" (className =? "Gcolor2") defaultFloating
   , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.58 0.48 0.2 0.4)
-  , NS "htop" (myTerminal ++ " --title htop -e htop") (title =? "htop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
+  , NS "bashtop" (myTerminal ++ " --title bashtop -e bashtop") (title =? "bashtop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
   , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.05 0.13 0.21)
   , NS "brightness" "brightness-controller" (title =? "Brightness Controller") defaultFloating
   , NS "caprine" "caprine" (className =? "Caprine") defaultFloating
@@ -124,7 +124,7 @@ myAditionalKeys =
   -- scratchpads
   , ("M-g", namedScratchpadAction myScratchPads "gcolor")
   , ("M-c", namedScratchpadAction myScratchPads "galculator")
-  , ("M-y", namedScratchpadAction myScratchPads "htop")
+  , ("M-y", namedScratchpadAction myScratchPads "bashtop")
   , ("M-r", namedScratchpadAction myScratchPads "calendar")
   , ("M-b", namedScratchpadAction myScratchPads "brightness")
   , ("M-S-c", namedScratchpadAction myScratchPads "caprine")
@@ -264,8 +264,7 @@ myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doSh
 
 myStartupHook :: X ()
 myStartupHook = do
-    --  spawn "~/.config/xmonad/xmobar/xmobar_transparent_spawner.sh &"
-    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 15 --iconspacing 5 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 

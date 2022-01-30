@@ -11,8 +11,8 @@ set.fillchars:append { eob = " " }
 set.fillchars:append('vert:▕')
 set.list = true
 set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
-set.shiftwidth = 2
-set.tabstop = 2
+set.shiftwidth = 4
+set.tabstop = 4
 set.expandtab = true
 set.smartindent = true
 set.ignorecase = true
@@ -59,6 +59,13 @@ require('config.peartree')
 require('config.indent_blankline')
 
 require('colorizer').setup()
+
+require("fidget").setup{
+    text = {
+        spinner = "arc"
+    }
+}
+
 require('commented').setup{
    keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }

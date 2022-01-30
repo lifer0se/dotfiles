@@ -7,8 +7,9 @@ nitrogen --restore &
 check_from_updates.sh
 dunst &
 picom &
-nm-applet &
-blueman-applet &
+#  nm-applet &
+#  blueman-applet &
+#  volumeicon &
 #/usr/bin/greenclip daemon &
 /opt/urserver/urserver --daemon &
 
