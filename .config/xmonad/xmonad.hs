@@ -332,7 +332,7 @@ clickable icon ws = addActions [ (show i, 1), ("q", 2), ("Left", 4), ("Right", 5
 myStatusBarSpawner :: Applicative f => ScreenId -> f StatusBarConfig
 myStatusBarSpawner (S s) = do
                     pure $ statusBarPropTo ("_XMONAD_LOG_" ++ show s)
-                          ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".config")
+                          ("xmobar -x " ++ show s ++ " ~/.config/xmonad/xmobar/xmobar" ++ show s ++ ".hs")
                           (pure $ myXmobarPP (S s))
 
 
@@ -352,7 +352,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
                 $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  titleColorIsActive s (shortenL 85 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 81 $ logTitleOnScreen s)
                 ]
   }
   where
