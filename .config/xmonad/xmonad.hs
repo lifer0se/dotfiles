@@ -348,6 +348,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
   , ppUrgent = xmobarColor orange "" . clickable wsIconFull
   , ppOrder = \(ws : _ : _ : extras) -> ws : extras
   , ppExtras  = [ wrapL (actionPrefix ++ "n" ++ actionButton ++ "1>") actionSuffix
+                $ wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
                 $ wrapL (actionPrefix ++ "Left" ++ actionButton ++ "4>") actionSuffix
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
                 $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)

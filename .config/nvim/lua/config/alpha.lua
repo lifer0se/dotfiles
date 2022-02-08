@@ -3,8 +3,7 @@ local startify = require'alpha.themes.startify'
 
 local function button(sc, txt, keybind, keybind_opts, hl)
   local b = startify.button(sc, txt, keybind, keybind_opts)
-  -- local hl = "Keyword"
-  b.opts.hl_shortcut = { {"Identifier", 0, 1}, {"Number", 2, 3}, {"Identifier", 4, 5}, {hl, 8, 9} }
+  b.opts.hl_shortcut = { {"Number", 1, 2}, {hl, 6, 7} }
   return b
 end
 

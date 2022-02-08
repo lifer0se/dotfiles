@@ -31,15 +31,13 @@ return require('packer').startup(function(use)
   use { 'ray-x/cmp-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
-  -- use { 'nvim-treesitter/playground' }
+  use { 'nvim-treesitter/playground' }
   use { 'nvim-telescope/telescope.nvim' }
   use { 'nvim-telescope/telescope-fzy-native.nvim' }
   use { 'hoob3rt/lualine.nvim' }
   use { 'akinsho/bufferline.nvim' }
   use { 'tmsvg/pear-tree' }
   use { 'lukas-reineke/indent-blankline.nvim' }
-  -- use { 'MunifTanjim/nui.nvim' }
-  -- use { 'VonHeikemen/searchbox.nvim' }
   use { 'j-hui/fidget.nvim' }
 
   -- use { 'lifer0se/ezbookmarks.nvim' }
