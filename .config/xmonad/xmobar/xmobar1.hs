@@ -1,8 +1,8 @@
 Config { font = "xft:Roboto:size=12:bold"
        , additionalFonts =
-          [ "xft:FontAwesome 5 Free Solid:pixelsize=14"
+          [ "xft:FontAwesome 6 Free Solid:pixelsize=14"
           , "xft:FontAwesome:pixelsize=10:bold"
-          , "xft:FontAwesome 5 Free Solid:pixelsize=16"
+          , "xft:FontAwesome 6 Free Solid:pixelsize=16"
           , "xft:Hack Nerd Font Mono:pixelsize=21"
           , "xft:Hack Nerd Font Mono:pixelsize=25"
           ]

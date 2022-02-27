@@ -31,7 +31,7 @@ cmp.setup({
       cmp.mapping.confirm()
       fallback()
     end,
-    ['.'] = function(fallback)
+    [')'] = function(fallback)
       cmp.mapping.confirm()
       fallback()
     end,
@@ -39,7 +39,15 @@ cmp.setup({
       cmp.mapping.confirm()
       fallback()
     end,
+    ['>'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
     ['['] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    [']'] = function(fallback)
       cmp.mapping.confirm()
       fallback()
     end,
@@ -47,6 +55,14 @@ cmp.setup({
       cmp.mapping.confirm()
       fallback()
     end,
+    ['}'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
+    ['.'] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end
   },
 
   formatting = {

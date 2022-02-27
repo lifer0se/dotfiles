@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
 import XMonad
 import System.Exit
 import Prelude hiding (log)
@@ -18,7 +19,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.StatusBar
-import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat)
+import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat, doSink)
 import XMonad.Hooks.RefocusLast (isFloat)
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
@@ -45,6 +46,8 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Actions.OnScreen (onlyOnScreen)
 import XMonad.Actions.Warp (warpToScreen)
+import Data.List
+import qualified Data.List as L
 
 
 myTerminal, myTerminalClass :: [Char]
@@ -235,16 +238,19 @@ myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall
 ------------------------------------------------------------------------
 --
 
+(~?) :: Eq a => Query [a] -> [a] -> Query Bool
+q ~? x = fmap (x `L.isInfixOf`) q
+
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , className =? "Godot" --> doCenterFloat
-  , appName =? "blueman-manager" --> doCenterFloat
+  , title ~? "(DEBUG)" --> doFloat
+  , appName =? "blueman-manager" --> doFloat
   , className =? "awakened-poe-trade" --> doFloat
   , className =? "steam_app_238960" --> doFloat
-  , appName =? "pavucontrol" --> doCenterFloat
+  , appName =? "pavucontrol" -->doFloat
   , title =? myTerminalClass --> insertPosition End Newer
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
