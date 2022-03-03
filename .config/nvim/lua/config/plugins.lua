@@ -28,10 +28,9 @@ return require('packer').startup(function(use)
   use { 'rafamadriz/friendly-snippets' }
   use { 'onsails/lspkind-nvim' }
   use { 'ray-x/lsp_signature.nvim' }
-  use { 'ray-x/cmp-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter' }
   use { 'nvim-treesitter/nvim-treesitter-textobjects' }
-  use { 'nvim-treesitter/playground' }
+  -- use { 'nvim-treesitter/playground' }
   use { 'nvim-telescope/telescope.nvim' }
   use { 'nvim-telescope/telescope-fzy-native.nvim' }
   use { 'hoob3rt/lualine.nvim' }

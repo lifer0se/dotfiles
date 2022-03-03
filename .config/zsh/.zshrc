@@ -1,6 +1,7 @@
 export ZSH="/home/amnesia/.config/zsh/.oh-my-zsh"
 
 source $ZDOTDIR"/ex.sh"
+source $ZDOTDIR"/lsd.sh"
 
 autoload -U compinit && compinit
 autoload -Uz promptinit && promptinit
@@ -8,7 +9,7 @@ autoload -Uz promptinit && promptinit
 #prompt_themes+=( rubbyshell )
 #prompt mytheme
 
-plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history-substring-search)
+plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history-substring-search vi-mode)
 
 ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
@@ -16,7 +17,6 @@ source $ZSH/oh-my-zsh.sh
 alias r="ranger"
 alias v="nvim"
 alias vim="nvim"
-#alias ls="/home/amnesia/.local/share/gem/ruby/3.0.0/gems/colorls-1.4.4/exe/colorls -A -1"
 alias cat="bat"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dfs='dotfiles status'
