@@ -1,5 +1,6 @@
 export ZSH="/home/amnesia/.config/zsh/.oh-my-zsh"
 
+source $ZDOTDIR"/ex.sh"
 
 autoload -U compinit && compinit
 autoload -Uz promptinit && promptinit
