@@ -110,6 +110,7 @@ myAditionalKeys =
 
     -- apps
   [ ("M-<Return>", spawn myTerminal)
+  , ("M-S-<Return>", spawn "open_term_at_dir.sh")
   , ("M-v", spawn $ myTerminal ++ " --title Nvim -e nvim")
   , ("M-f", spawn $ myTerminal ++ " --title Ranger -e ranger")
   , ("M-d", spawn "rofi -show drun")
@@ -121,6 +122,7 @@ myAditionalKeys =
   , ("M-s", spawn "spotify")
   , ("<Print>", spawn "flameshot gui")
   , ("M-S-e", spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}'")
+  , ("M-C-d", spawn "def-lookup.sh")
   , ("M-z", spawn "xkb-switch -n")
   , ("M-q", kill)
 
@@ -241,14 +243,19 @@ myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall
 (~?) :: Eq a => Query [a] -> [a] -> Query Bool
 q ~? x = fmap (x `L.isInfixOf`) q
 
+(/=?) :: Eq a => Query a -> a -> Query Bool
+q /=? x = fmap (/= x) q
+
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
   , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , title ~? "(DEBUG)" --> doFloat
+  , title =? "Godot Engine" --> doFloat
+  , className ~? "(DEBUG)" --> doFloat
   , appName =? "blueman-manager" --> doFloat
   , className =? "awakened-poe-trade" --> doFloat
+  , className =? "poe-overlay" --> doFloat
   , className =? "steam_app_238960" --> doFloat
   , appName =? "pavucontrol" -->doFloat
   , title =? myTerminalClass --> insertPosition End Newer
@@ -261,7 +268,7 @@ myManageHook = composeAll
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
-                <+> swallowEventHook (className =? myTerminalClass) (return True)
+                --  <+> swallowEventHook (className =? myTerminalClass) (return True)
                 <+> multiScreenFocusHook
 
 
@@ -371,7 +378,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
       if n == c then xmobarColorL cyan "" l else xmobarColorL grey3 "" l
     layoutColorIsActive n l = do
       c <- withWindowSet $ return . W.screen . W.current
-      if n == c then wrapL "<icon=" "_selected.xpm/>" l else wrapL "<icon=" ".xpm/>" l
+      if n == c then wrapL "<icon=/home/amnesia/.config/xmonad/xmobar/icons/" "_selected.xpm/>" l else wrapL "<icon=/home/amnesia/.config/xmonad/xmobar/icons/" ".xpm/>" l
 
 
 ------------------------------------------------------------------------

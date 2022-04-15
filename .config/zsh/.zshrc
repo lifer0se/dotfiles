@@ -1,7 +1,6 @@
 export ZSH="/home/amnesia/.config/zsh/.oh-my-zsh"
 
 source $ZDOTDIR"/ex.sh"
-source $ZDOTDIR"/lsd.sh"
 
 autoload -U compinit && compinit
 autoload -Uz promptinit && promptinit
@@ -25,3 +24,4 @@ alias dfp='dotfiles push'
 alias dfa='dotfiles add'
 alias dfr='dotfiles rm'
 alias neo='neo-matrix -D -s -c cyan'
+alias ls="exa -l"

@@ -57,6 +57,8 @@ require('config.toggleterm')
 require('config.alpha')
 require('config.peartree')
 require('config.indent_blankline')
+require('config.symbols')
+require('fFHighlight').setup()
 
 require('colorizer').setup()
 
@@ -117,6 +119,7 @@ vim.cmd[[
   highlight StatusLineNC guifg=NONE guibg=#2B2E37 gui=NONE
   highlight IndentBlanklineChar guifg=#3C4050
   highlight IndentBlanklineContextChar guifg=#51566B
+  highlight FocusedSymbol guibg=NONE guifg=#91AFEB gui=bold
 ]]
 
 
@@ -159,3 +162,18 @@ end
 -- autocmd.CursorHold = function()
   -- vim.cmd("let @/ = '\\V\\<'.escape(expand('<cword>'), '\\').'\\>'")
 -- end
+vim.cmd[[
+  augroup terminal_settings
+    autocmd!
+
+    autocmd BufWinEnter,WinEnter term://* startinsert
+    autocmd BufLeave term://* stopinsert
+
+    " Ignore various filetypes as those will close terminal automatically
+    " Ignore fzf, ranger, coc
+    autocmd TermClose term://*
+          \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "ranger") && (expand('<afile>') !~ "coc") |
+          \   call nvim_input('<CR>')  |
+          \ endif
+  augroup END
+  ]]

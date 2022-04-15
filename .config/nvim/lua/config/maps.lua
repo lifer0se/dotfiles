@@ -90,3 +90,6 @@ map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR
 map { 'n', noremap = false, silent = false, '<leader>ss', ':%s///gc<Left><Left><Left>' }
 map { 'v', noremap = false, silent = false, '<leader>ss', 'y:%s/<C-R>"/<C-R>"/gc<Left><Left><Left>' }
 map { 'v', noremap = false, silent = true, '<C-f>', '"1y0/<C-r>1<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ww', ':SymbolsOutline<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>sa', 'ggVG' }
+map { 'n', noremap = false, silent = true, '<F4>', ':cd %:p:h<CR>:vs<CR>:terminal<CR>apython main.py && exit 1<CR>' }

@@ -17,7 +17,7 @@ Config { font = "xft:Roboto:size=12:bold"
        , allDesktops = True
        , persistent = False
        , hideOnStart = False
-       , iconRoot = ".config/xmonad/xmobar/icons/"
+       , iconRoot = "/home/amnesia/.config/xmonad/xmobar/icons/"
        , commands =
          [ Run UnsafeXPropertyLog "_XMONAD_LOG_0"
          , Run Date "%a, %d %b   <fn=1></fn>   %H:%M:%S" "date" 10
@@ -32,11 +32,7 @@ Config { font = "xft:Roboto:size=12:bold"
        , sepChar = "%"
        , alignSep = "}{"
        , template = "\
-            \<action=`xdotool key super+Right` button=5><action=`xdotool key super+Left` button=4><action=xdotool key super+d>\
-            \      \
-            \<icon=menu.xpm/>\
-            \      \
-            \</action></action></action>\
+            \    \
             \%_XMONAD_LOG_0%\
             \}\
             \<action=xdotool key super+r>%date%</action>\
@@ -52,18 +48,7 @@ Config { font = "xft:Roboto:size=12:bold"
             \     \
             \|\
             \     \
-            \%gpu%</action>\
-            \        \
-            \<action=`exec blueman-manager` button=1>\
-            \   \
-            \%bluetooth%\
-            \   \
-            \</action>\
-            \ \
-            \%network%\
-            \<action=`volume.sh up` button=4><action=`volume.sh down` button=5><action=`volume.sh mute` button=1><action=`exec pavucontrol` button=3>\
-            \    \
-            \%volume%\
-            \   \
-            \</action></action></action></action>"
+            \%gpu%\
+            \       \
+            \</action>"
        }
