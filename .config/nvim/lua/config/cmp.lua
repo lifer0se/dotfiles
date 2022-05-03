@@ -17,11 +17,11 @@ cmp.setup({
   preselect = cmp.PreselectMode.None,
 
   mapping = {
-    ['<C-Space>'] = cmp.mapping.complete({ select = true }),
     ['<C-e>'] = cmp.mapping.close(),
     ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
     ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
+    ['<S-Space>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false }),
 
     ['<Space>'] = function(fallback)
       cmp.mapping.confirm()
@@ -62,7 +62,11 @@ cmp.setup({
     ['.'] = function(fallback)
       cmp.mapping.confirm()
       fallback()
-    end
+    end,
+    [','] = function(fallback)
+      cmp.mapping.confirm()
+      fallback()
+    end,
   },
 
   formatting = {
@@ -77,9 +81,9 @@ cmp.setup({
     }),
   },
 
-  documentation = {
-    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-  },
+  -- documentation = {
+    -- border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+  -- },
 
   experimental = {
     ghost_text = true,

@@ -58,9 +58,10 @@ require('config.alpha')
 require('config.peartree')
 require('config.indent_blankline')
 require('config.symbols')
-require('fFHighlight').setup()
+-- require('fFHighlight').setup()
 
 require('colorizer').setup()
+require('trld').setup()
 
 require("fidget").setup{
     text = {

@@ -1,8 +1,7 @@
 xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr &
-#lxsession &
 numlockx &
-setxkbmap -option caps:escape us,gr &
+setxkbmap -option caps:escape us,gr
 nitrogen --restore &
 check_from_updates.sh
 dunst &
@@ -10,6 +9,6 @@ picom &
 nm-applet &
 blueman-applet &
 volumeicon &
-/opt/urserver/urserver --daemon &
+emacs --daemon &
 
 exec xmonad

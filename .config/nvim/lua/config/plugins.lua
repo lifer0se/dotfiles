@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
     use { 'j-hui/fidget.nvim' }
     use { 'simrat39/symbols-outline.nvim'}
     use {'kevinhwang91/nvim-fFHighlight'}
+    use {'Mofiqul/trld.nvim'}
   -- use { 'lifer0se/ezbookmarks.nvim' }
 
 end)

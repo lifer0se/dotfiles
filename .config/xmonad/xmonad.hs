@@ -121,7 +121,7 @@ myAditionalKeys =
   , ("M-S-f", spawn "pcmanfm")
   , ("M-s", spawn "spotify")
   , ("<Print>", spawn "flameshot gui")
-  , ("M-S-e", spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}'")
+  , ("M-e", spawn "emacsclient -c -a 'emacs'")
   , ("M-C-d", spawn "def-lookup.sh")
   , ("M-z", spawn "xkb-switch -n")
   , ("M-q", kill)
@@ -160,7 +160,6 @@ myAditionalKeys =
   , ("M-comma", sendMessage $ IncMasterN 1)
   , ("M-period", sendMessage $ IncMasterN (-1))
   , ("M-<Space>", withFocused $ windows . W.sink)
-  , ("M-e", spawn "rofi-window-finder.sh")
 
   -- layout controls
   , ("M-a", sendMessage $ Toggle NBFULL)

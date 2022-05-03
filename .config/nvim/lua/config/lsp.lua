@@ -13,13 +13,13 @@ end
 
 vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded"})
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  update_in_insert = false,
-  underline = false,
-  virtual_text = {
-    prefix = ''
-  }
-})
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  -- update_in_insert = false,
+  -- underline = true,
+  -- virtual_text = {
+    -- prefix = ''
+  -- }
+-- })
 
 local signs = { Error = "ﰲ", Warn = "ﰲ", Hint = "ﰲ", Info = "ﰲ" }
 for type, icon in pairs(signs) do

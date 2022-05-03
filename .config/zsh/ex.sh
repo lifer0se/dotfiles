@@ -2,7 +2,13 @@
 # usage: ex <file>
 ex ()
 {
-    echo "Extracting: $1"
+    if [ -f "$2" ]; then
+        CWD=$2
+    else
+        CWD=$(pwd)
+    fi
+
+    echo "Extracting: $1 to $2"
     if [ -f "$1" ] ; then
         case $1 in
             *.tar.bz2)   echo $(tar xjf $1)   ;;
