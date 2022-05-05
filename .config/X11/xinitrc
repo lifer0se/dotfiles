@@ -1,7 +1,7 @@
 xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr &
 numlockx &
-setxkbmap -option caps:escape us,gr
+setxkbmap -option ctrl:caps us,gr
 nitrogen --restore &
 check_from_updates.sh
 dunst &

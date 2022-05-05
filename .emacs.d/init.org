@@ -1,0 +1,427 @@
+#+Title Emacs Init Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+
+* Setup use-package
+
+#+begin_src emacs-lisp
+
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+    ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+
+#+end_src
+
+
+* Keybinds
+
+** Global
+#+begin_src emacs-lisp
+
+  (defun my-change-number-at-point (change increment)
+    (let ((number (number-at-point))
+          (point (point)))
+      (when number
+        (progn
+          (forward-word)
+          (search-backward (number-to-string number))
+          (replace-match (number-to-string (funcall change number increment)))
+          (goto-char point)))))
+
+  (defun my-increment-number-at-point (&optional increment)
+    "Increment number at point like vim's C-a"
+    (interactive "p")
+    (my-change-number-at-point '+ (or increment 1)))
+
+  (defun my-decrement-number-at-point (&optional increment)
+    "Decrement number at point like vim's C-x"
+    (interactive "p")
+    (my-change-number-at-point '- (or increment 1)))
+
+  (global-set-key (kbd "C-a") 'my-increment-number-at-point)
+  (global-set-key (kbd "C-d") 'my-decrement-number-at-point)
+
+  (global-set-key (kbd "C-s") 'save-buffer)
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+#+end_src
+
+** General
+#+begin_src emacs-lisp
+
+  (use-package general
+    :config
+    (general-create-definer amnesia/leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+
+    (amnesia/leader-keys
+      "fe" '(find-file :which-key "find file")
+      "cc" '(comment-line :which-key "comment line")
+      "uu" '(undo-tree-visualize :which-key "show undo tree")
+      "ww" '(lsp-treemacs-symbols :which-key "treemacs symbols")
+      "ee" '(treemacs :which-key "toggle treemacs")))
+
+#+End_src
+
+** Evil
+#+begin_src emacs-lisp
+
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode 1))
+
+  (use-package evil
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-undo-system 'undo-tree)
+    :config
+    (evil-mode 1)
+
+    ;; Use visual line motions even outside of visual-line-mode buffers
+    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal)
+
+    (define-key evil-normal-state-map (kbd "C-f") 'swiper))
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
+#+end_src
+
+
+* UI Configuration
+
+** Basic UI
+#+begin_src emacs-lisp
+
+  (setq inhibit-startup-message t)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
+
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  (setq display-line-numbers 'relative)
+  (dolist (mode '(term-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  undo-tree-visualizer-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+#+end_src
+
+** Fonts
+#+begin_src emacs-lisp
+
+  (defvar amnesia/default-font-size 150)
+
+  (set-face-attribute 'default nil :font "Source Code Pro" :height amnesia/default-font-size)
+
+#+end_src
+
+** Theme and Modeline
+#+begin_src emacs-lisp
+
+  (use-package doom-themes
+    :init (load-theme 'doom-gruvbox t))
+
+  (use-package all-the-icons)
+
+  (use-package highlight-numbers
+    :hook (prog-mode . highlight-numbers-mode))
+
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 40)))
+
+#+end_src
+
+
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters)
+
+#+end_src
+
+** Auto Minor Mode
+#+begin_src emacs-lisp
+
+  (use-package auto-minor-mode
+    :config
+    (add-to-list 'auto-minor-mode-alist '("\\.el\\'" . rainbow-delimiters-mode))
+    (add-to-list 'auto-minor-mode-alist '("\\.org\\'" . rainbow-delimiters-mode)))
+
+#+end_src
+
+** Which Key
+#+begin_src emacs-lisp
+
+  (use-package which-key
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.3))
+
+#+end_src
+
+** Ivy
+#+begin_src emacs-lisp
+
+  (use-package ivy
+    :diminish
+    :bind (:map ivy-minibuffer-map
+           ("RET" . ivy-alt-done)
+           ("TAB" . ivy-next-line)
+           ("S-TAB" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("S-TAB" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("S-TAB" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
+
+  (use-package ivy-rich
+    :init
+    (ivy-rich-mode 1))
+
+#+end_src
+
+** Counsel
+#+begin_src emacs-lisp
+
+  (use-package counsel
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :config
+    (counsel-mode 1))
+
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+#+end_src
+
+
+* Org Mode
+
+** Auto-tangle configuration files
+#+begin_src emacs-lisp
+
+  (defun amnesia/org-babel-tangle-config ()
+    (when (string-equal (buffer-file-name)
+			(expand-file-name "~/.emacs.d/init.org"))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+	(org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'amnesia/org-babel-tangle-config)))
+#+end_src
+
+** Font Setup
+#+begin_src emacs-lisp
+
+  (defun amnesia/org-font-setup ()
+    ;; Replace list hyphen with dot
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+    ;; Set faces for heading levels
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face))))
+
+#+end_src
+
+** Org Setup
+#+begin_src emacs-lisp
+
+  (defun amnesia/org-mode-setup ()
+    (org-indent-mode)
+    (visual-line-mode 1))
+
+  (use-package org
+    :hook (org-mode . amnesia/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (amnesia/org-font-setup))
+
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+
+** Babel Languages Setup 
+#+begin_src emacs-lisp
+
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((emacs-lisp . t)
+      (python . t)))
+
+  (setq org-confirm-babel-evaluate nil)
+
+#+end_src
+
+** Unix Conf Mode
+#+begin_src emacs-lisp
+
+  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+
+#+end_src
+
+** Structure Templates
+#+begin_src emacs-lisp
+
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+
+#+end_src
+
+
+* Programming
+
+** Projectile
+#+begin_src emacs-lisp
+
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/drives/Local/Projects/Godot")
+      (setq projectile-project-search-path '("~/drives/Local/Projects/Godot")))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :config (counsel-projectile-mode))
+
+#+end_src
+
+** Magit
+#+begin_src emacs-lisp
+
+  (use-package magit
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+#+end_src
+
+** Smart Parenthesies
+#+begin_src emacs-lisp
+
+  (use-package smartparens
+    :hook (prog-mode . smartparens-mode))
+
+#+end_src
+
+** Company Configuration
+#+begin_src emacs-lisp
+
+  (use-package company
+    :bind
+    :config
+    (add-hook 'after-init-hook 'global-company-mode)
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
+
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+
+#+end_src
+
+** LSP Configuration
+
+*** Setup
+#+begin_src emacs-lisp
+
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "C-l")
+    :config
+    (lsp-enable-which-key-integration t))
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (setq lsp-ui-doc-position 'bottom))
+
+  (use-package lsp-treemacs
+    :after lsp)
+
+#+end_src
+
+*** C#
+#+begin_src emacs-lisp
+
+  (use-package tree-sitter :ensure t)
+  (use-package tree-sitter-langs :ensure t)
+  (use-package tree-sitter-indent :ensure t)
+
+  (use-package csharp-mode
+    :mode "\\.cs\\'"
+    :hook (csharp-mode . lsp-deferred)
+    :config
+    (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
+
+#+end_src
+
+*** TODO
+surround
+company mode keys
+move lines with JK
+lsp ui sideline
+lsp ui doc focus
