@@ -17,7 +17,6 @@ alias r="ranger"
 alias v="nvim"
 alias vim="nvim"
 alias e="emacsclient -c -a 'emacs'"
-alias emacs="emacsclient -c -a 'emacs'"
 alias cat="bat"
 alias grep="rg"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'

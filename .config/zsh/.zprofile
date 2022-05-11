@@ -4,8 +4,8 @@ export PATH=$HOME/.local/bin:$HOME/scripts:$HOME/.local/share/neovim/bin:$HOME/.
 
 export TERMINAL=alacritty
 export BROWSER=brave
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR="emacsclient -c -a 'emacs'"
+export VISUAL="emacsclient -c -a 'emacs'"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
