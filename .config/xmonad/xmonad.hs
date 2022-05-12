@@ -266,9 +266,9 @@ myManageHook = composeAll
 --
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
+myHandleEventHook = multiScreenFocusHook
                 --  <+> swallowEventHook (className =? myTerminalClass) (return True)
-                <+> multiScreenFocusHook
+                --  <+> dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
 
 
 ------------------------------------------------------------------------

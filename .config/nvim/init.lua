@@ -76,7 +76,7 @@ require('commented').setup{
    keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
 }
 
-vim.opt.runtimepath:append("~/development/ezbookmarks.nvim")
+vim.opt.runtimepath:append("~/Development/ezbookmarks.nvim")
 require('ezbookmarks').setup{
     cwd_on_open = 1,
     use_bookmark_dir = 1,

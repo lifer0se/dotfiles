@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export PATH=$HOME/.local/bin:$HOME/scripts:$HOME/.local/share/neovim/bin:$HOME/.local/share/cargo/bin:$HOME/.cabal/bin:$HOME/.emacs.d/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/Scripts:$HOME/.local/share/neovim/bin:$HOME/.local/share/cargo/bin:$HOME/.cabal/bin:$HOME/.emacs.d/bin:$PATH
 
 export TERMINAL=alacritty
 export BROWSER=brave

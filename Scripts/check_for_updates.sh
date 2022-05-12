@@ -2,7 +2,7 @@
 
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-ICON="$HOME/downloads/package.svg"
+ICON="$HOME/.local/share/custom-icons/package.svg"
 
 ping -q -c 1 example.org > /dev/null || exit
 sudo pacman -Syyuw --noconfirm || notify-send -i $ICON "Error downloading updates." "Check your internet connection, if pacman is already running, or run update manually to see errors."
