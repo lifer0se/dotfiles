@@ -42,12 +42,13 @@
     :global-prefix "C-SPC")
 
   (amnesia/leader-keys
-    "ff" '(consult-locate :which-key "locate file")
+    "ff" '(dired :which-key "open dired")
     "fe" '(consult-buffer :which-key "buffer search")
     "fb" '(consult-bookmark :which-key "bookmark search")
     "fn" '(bookmark-set :which-key "add bookmark")
     "fd" '(bookmark-delete :which-key "remove bookmark")
-    "fv" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/init.org")))
+    "fo" '(hs-show-block :which-key "open fold")
+    "fc" '(hs-hide-block :which-key "close fold")
     "cc" '(evilnc-comment-or-uncomment-lines :which-key "toggle line comments")
     "uu" '(undo-tree-visualize :which-key "show undo tree")
     "ww" '(lsp-treemacs-symbols :which-key "treemacs symbols")
@@ -72,7 +73,8 @@
   (evil-set-initial-state 'dashboard-mode 'normal)
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  (define-key evil-normal-state-map (kbd "F") 'consult-line)
+  (define-key evil-normal-state-map (kbd "C-F") 'consult-line)
+  (define-key evil-visual-state-map (kbd "C-F") 'consult-line)
   (define-key evil-normal-state-map (kbd "E") 'lsp-ui-doc-glance)
   (define-key evil-normal-state-map "Q" (kbd "@@")))
 
@@ -163,11 +165,6 @@
 
 ;; Awesome Tab
 (defun my-awesome-tab-buffer-groups ()
-  "`awesome-tab-buffer-groups' control buffers' group rules.
-
-Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-All buffer name start with * will group to \"Emacs\".
-Other buffer group by `awesome-tab-get-group-name' with project name."
   (list
    (cond
     ((or (string-equal "*" (substring (buffer-name) 0 1))
@@ -482,8 +479,8 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   :bind-keymap
   ("C-p" . projectile-command-map)
   :init
-  (when (file-directory-p "~/drives/Local/Projects/Godot")
-    (setq projectile-project-search-path '("~/drives/Local/Projects/Godot"))))
+  (when (file-directory-p "~/Drives/Local/Projects/Godot")
+    (setq projectile-project-search-path '("~/Drives/Local/Projects/Godot"))))
 
 
 ;; Magit
@@ -496,6 +493,7 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   :custom
   (lsp-completion-provider :none)
   (lsp-eldoc-enable-hover t)
+  (lsp-enable-which-key-integration t)
   (read-process-output-max (* 1024 1024)) ;; Control how much data emacs can read in one pass from server. For efficiency.
   (lsp-eldoc-hook nil)
   :init
@@ -506,7 +504,6 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
   :config
-  (lsp-enable-which-key-integration t)
   (setq lsp-headerline-breadcrumb-enable nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-enable-folding nil)
@@ -514,9 +511,7 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   (setq lsp-signature-doc-lines 2))
 
 (use-package flycheck
-  :after lsp-mode
-  :init
-  (global-flycheck-mode))
+  :defer t)
 
 (use-package lsp-ui
   :after lsp-mode
@@ -544,6 +539,8 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   (lsp-ui-sideline-enable nil)
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-sideline-show-code-actions nil)
+  :config
+  (setq hs-minor-mode 1)
 )
 
 (use-package lsp-treemacs
@@ -552,7 +549,8 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 (use-package consult-lsp
   :after lsp-mode)
 
-(use-package posframe)
+;; (use-package posframe)
+
 
 
 ;; Treesitter
@@ -571,15 +569,12 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
   :mode "\\.hs\\'"
   :commands (lsp lsp-deferred))
 
+
 (use-package haskell-mode
   :mode "\\.hs\\'"
   :commands (lsp lsp-deferred)
   :hook ((haskell-mode . lsp-deferred)
-	 (haskell-literate-mode . lsp-deferred))
-  :config
-  (setq haskell-process-type 'cabal-repl))
-	 ;; (turn-on-haskell-doc-mode . haskell-mode)
-	 ;; (turn-on-haskell-indentation . haskell-mode)))
+	 (haskell-literate-mode . lsp-deferred)))
 
 
 ;; Elisp

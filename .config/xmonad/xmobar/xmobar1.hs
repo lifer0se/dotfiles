@@ -41,11 +41,11 @@ Config { font = "xft:Roboto:size=12:bold"
             \<action=setsid -f $TERMINAL -e ~/scripts/pop_upgrade.sh>%updates%</action>\
             \<action=xdotool key super+y>\
             \     \
-            \%cpu%\
+            \%memory%\
             \     \
             \|\
             \     \
-            \%memory%\
+            \%cpu%\
             \     \
             \|\
             \     \

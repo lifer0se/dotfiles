@@ -2,10 +2,10 @@
 # usage: ex <file>
 ex ()
 {
-    if [ -f "$2" ]; then
+    if [ -d "$2" ]; then
         CWD=$2
     else
-        CWD=$(pwd)
+        CWD=$pwd
     fi
 
     echo "Extracting: $1 to $2"

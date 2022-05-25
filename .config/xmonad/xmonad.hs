@@ -120,6 +120,7 @@ myAditionalKeys =
   , ("M-S-w", spawn "brave --incognito")
   , ("M-S-f", spawn "pcmanfm")
   , ("M-s", spawn "spotify")
+  , ("M-t", spawn "transmission-gtk")
   , ("<Print>", spawn "flameshot gui")
   , ("M-e", spawn "emacsclient -c -a 'emacs'")
   , ("M-C-d", spawn "def-lookup.sh")
@@ -267,7 +268,7 @@ myManageHook = composeAll
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = multiScreenFocusHook
-                --  <+> swallowEventHook (className =? myTerminalClass) (return True)
+                 <+> swallowEventHook (className =? myTerminalClass <&&> className =? "Emacs") (return True)
                 --  <+> dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
 
 
@@ -405,6 +406,6 @@ main = xmonad
         , startupHook        = myStartupHook
 
         , rootMask = rootMask def .|. pointerMotionMask
-        --  , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
+        -- , logHook            = logHook def <+> myUpdatePointer (0.75, 0.75) (0, 0)
         , handleEventHook    = myHandleEventHook
         } `additionalKeysP` myAditionalKeys
