@@ -38,7 +38,7 @@ Config { font = "xft:Roboto:size=12:bold"
             \}\
             \<action=xdotool key super+r>%date%</action>\
             \{\
-            \<action=setsid -f $TERMINAL -e ~/scripts/pop_upgrade.sh>%updates%</action>\
+            \<action=setsid -f $TERMINAL -e ~/Scripts/pop_upgrade.sh>%updates%</action>\
             \<action=xdotool key super+y>\
             \     \
             \%memory%\

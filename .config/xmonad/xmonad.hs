@@ -257,7 +257,8 @@ myManageHook = composeAll
   , className =? "awakened-poe-trade" --> doFloat
   , className =? "poe-overlay" --> doFloat
   , className =? "steam_app_238960" --> doFloat
-  , appName =? "pavucontrol" -->doFloat
+  , className =? "Blueberry.py" --> doFloat
+  , appName =? "pavucontrol" --> doFloat
   , title =? myTerminalClass --> insertPosition End Newer
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
@@ -277,7 +278,7 @@ myHandleEventHook = multiScreenFocusHook
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 

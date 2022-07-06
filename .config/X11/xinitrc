@@ -1,13 +1,15 @@
 xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr &
 numlockx &
-setxkbmap -option ctrl:caps us,gr
+setxkbmap us,gr
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
 nitrogen --restore &
 check_from_updates.sh
 dunst &
 picom &
 nm-applet &
-blueman-applet &
+blueberry &
+solaar &
 volumeicon &
 emacs --daemon &
 

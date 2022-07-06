@@ -4,6 +4,7 @@ ex ()
 {
     if [ -d "$2" ]; then
         CWD=$2
+	cd $CWD
     else
         CWD=$pwd
     fi

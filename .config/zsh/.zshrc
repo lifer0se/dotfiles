@@ -28,3 +28,4 @@ alias dfa='dotfiles add'
 alias dfr='dotfiles rm'
 alias neo='neo-matrix -D -s -c cyan'
 alias ls="exa --icons -l"
+alias keys="xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 }'"

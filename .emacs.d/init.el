@@ -21,6 +21,7 @@
 
 
 ;; No Littering
+(setq create-lockfiles nil)
 (setq user-emacs-directory "~/.cache/emacs")
 (use-package no-littering)
 (setq auto-save-file-name-transforms
@@ -43,6 +44,7 @@
 
   (amnesia/leader-keys
     "ff" '(dired :which-key "open dired")
+    "fl" '(consult-locate :which-key "locate file")
     "fe" '(consult-buffer :which-key "buffer search")
     "fb" '(consult-bookmark :which-key "bookmark search")
     "fn" '(bookmark-set :which-key "add bookmark")
@@ -50,6 +52,8 @@
     "fo" '(hs-show-block :which-key "open fold")
     "fc" '(hs-hide-block :which-key "close fold")
     "cc" '(evilnc-comment-or-uncomment-lines :which-key "toggle line comments")
+    "rr" '(replace-string :which-key "replace string")
+    "ss" '(evil-replace-word-selection :which-key "replace string")
     "uu" '(undo-tree-visualize :which-key "show undo tree")
     "ww" '(lsp-treemacs-symbols :which-key "treemacs symbols")
     "ee" '(treemacs :which-key "toggle treemacs")))
@@ -73,6 +77,9 @@
   (evil-set-initial-state 'dashboard-mode 'normal)
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (define-key evil-normal-state-map (kbd "TAB") 'evil-indent-line)
+  (define-key evil-visual-state-map (kbd "TAB") 'evil-indent)
+  (define-key evil-normal-state-map (kbd "g n") 'consult-lsp-diagnostics)
   (define-key evil-normal-state-map (kbd "C-F") 'consult-line)
   (define-key evil-visual-state-map (kbd "C-F") 'consult-line)
   (define-key evil-normal-state-map (kbd "E") 'lsp-ui-doc-glance)
@@ -106,6 +113,17 @@
 
 (advice-add 'evil-yank :around 'meain/evil-yank-advice)
 
+; replace current word or selection using vim style for evil mode
+(defun evil-replace-word-selection()
+(interactive)
+(if (use-region-p)
+    (let (
+            (selection (buffer-substring-no-properties (region-beginning) (region-end))))
+        (if (= (length selection) 0)
+        (message "empty string")
+        (evil-ex (concat "%s/" selection "/" selection "/gc"))
+        ))
+    (evil-ex (concat "%s/" (thing-at-point 'word) "/" (thing-at-point 'word) "/gc"))))
 
 ;; Move Region
 (use-package drag-stuff
@@ -419,20 +437,15 @@
   (corfu-cycle t)
   (corfu-quit-at-boundary nil)
   (corfu-separator ?\s)
-  (corfu-quit-no-match 'separator)
-  (corfu-preview-current 'insert)
+  (corfu-quit-at-boundary nil)
+  (corfu-quit-no-match t)  (corfu-preview-current 'insert)
   (corfu-preselect-first nil)
   (corfu-auto-prefix 1)
-  (corfu-min-width 30)
-  (corfu-max-width corfu-min-width)
   (corfu-auto-delay 0)
   (corfu-quit-no-match 'separator)
   :config
   (general-add-advice '(corfu--setup corfu--teardown) :after 'evil-normalize-keymaps)
   (evil-make-overriding-map corfu-map))
-
-
-
 
 
 (use-package kind-icon
@@ -461,10 +474,11 @@
 
 ;; Orderless
 (use-package orderless
+  :ensure t
   :init
-  (setq completion-styles '(orderless basic)
+  (setq completion-styles '(orderless)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+        completion-category-overrides '((file (styles . (partial-completion))))))
 
 ;; WS Butler
 (use-package ws-butler
@@ -487,6 +501,9 @@
 (use-package magit)
 
 
+(defun my/lsp-mode-setup-completion ()
+  (setf (alist-get 'lsp-capf completion-category-defaults) '((styles . (orderless)))))
+
 ;; LSP Configuration
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -498,9 +515,6 @@
   (lsp-eldoc-hook nil)
   :init
   (setq lsp-keymap-prefix "C-l")
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
   :config
@@ -509,6 +523,7 @@
   (setq lsp-enable-folding nil)
   (setq lsp-signature-function 'lsp-signature-posframe)
   (setq lsp-signature-doc-lines 2))
+
 
 (use-package flycheck
   :defer t)
@@ -540,8 +555,7 @@
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-sideline-show-code-actions nil)
   :config
-  (setq hs-minor-mode 1)
-)
+  (setq hs-minor-mode 1))
 
 (use-package lsp-treemacs
   :after lsp-mode)
@@ -549,9 +563,9 @@
 (use-package consult-lsp
   :after lsp-mode)
 
-;; (use-package posframe)
-
-
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
 
 ;; Treesitter
 (use-package tree-sitter)
@@ -591,9 +605,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("47db50ff66e35d3a440485357fb6acb767c100e135ccdf459060407f8baea7b2" "d47f868fd34613bd1fc11721fe055f26fd163426a299d45ce69bef1f109e1e71" "234dbb732ef054b109a9e5ee5b499632c63cc24f7c2383a849815dacc1727cb6" "1d5e33500bc9548f800f9e248b57d1b2a9ecde79cb40c0b1398dec51ee820daf" default))
+   '("c4063322b5011829f7fdd7509979b5823e8eea2abf1fe5572ec4b7af1dd78519" "47db50ff66e35d3a440485357fb6acb767c100e135ccdf459060407f8baea7b2" "d47f868fd34613bd1fc11721fe055f26fd163426a299d45ce69bef1f109e1e71" "234dbb732ef054b109a9e5ee5b499632c63cc24f7c2383a849815dacc1727cb6" "1d5e33500bc9548f800f9e248b57d1b2a9ecde79cb40c0b1398dec51ee820daf" default))
  '(package-selected-packages
-   '(flycheck haskell-mode awesome-tab evil-visualstar rainbow-mode hexcolour consult-lsp elisp-format corfu-doc ws-butler which-key vertico use-package undo-tree tree-sitter-langs tree-sitter-indent smartparens ranger rainbow-delimiters org-bullets orderless no-littering move-dup minions magit lsp-ui lsp-treemacs kind-icon highlight-numbers helpful general evil-surround evil-numbers evil-nerd-commenter evil-collection drag-stuff doom-themes doom-modeline diminish dashboard csharp-mode counsel-projectile corfu consult)))
+   '(yasnippet-snippets evil-visual-replace flycheck haskell-mode awesome-tab evil-visualstar rainbow-mode hexcolour consult-lsp elisp-format corfu-doc ws-butler which-key vertico use-package undo-tree tree-sitter-langs tree-sitter-indent smartparens ranger rainbow-delimiters org-bullets orderless no-littering move-dup minions magit lsp-ui lsp-treemacs kind-icon highlight-numbers helpful general evil-surround evil-numbers evil-nerd-commenter evil-collection drag-stuff doom-themes doom-modeline diminish dashboard csharp-mode counsel-projectile corfu consult)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
