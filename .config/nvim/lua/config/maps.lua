@@ -15,7 +15,7 @@ local map = function(key)
 end
 
 vim.g.mapleader = " "
-map { 'n', noremap = false, '<2-LeftMouse>', 'viw' }
+map { 'n', noremap = false, '<1-LeftMouse>', 'viw' }
 map { 'n', noremap = false, 'Q', '@q' }
 map { 'n', noremap = false, '<C-s>', ':w!<CR>' }
 map { 'v', noremap = false, '<C-s>', ':w!<CR>' }
@@ -25,13 +25,11 @@ map { 'n', noremap = false, '<leader>gc', ':Git commit<CR>' }
 map { 'n', noremap = false, '<leader>gp', ':Git push<CR>' }
 map { 'n', noremap = false, '<leader>u', ':UndotreeToggle<CR>' }
 map { 'n', noremap = false, 'Y', 'y$' }
-map { 'n', noremap = false, '<leader>p', '"_dP' }
-map { 'n', noremap = false, '<leader>P', '"_dp' }
-map { 'v', noremap = false, '<leader>p', '"_dP' }
-map { 'v', noremap = false, '<leader>P', '"_dp' }
+map { 'v', noremap = false, '<leader>p', '"_dp' }
+map { 'v', noremap = false, '<leader>P', '"_dP' }
 map { 'i', noremap = false, '<C-p>', '<C-R>+' }
 map { 'n', noremap = false, '<leader>tn', ':tabnew<CR>' }
-map { 'n', noremap = false, silent = true, '<C-z>', ':bd!<CR>' }
+map { 'n', noremap = false, silent = true, '<C-q>', ':bd!<CR>' }
 map { 'n', noremap = false, '<C-c>', '<C-w>c' }
 map { 'n', noremap = false, '<C-h>', '<C-w>h' }
 map { 'n', noremap = false, '<C-j>', '<C-w>j' }
@@ -65,13 +63,14 @@ map { 'v', noremap = false, 's>', 'c<<C-R>"><Esc>' }
 map { 'c', noremap = false, 'w!!', 'execute \'silent! write !sudo tee % >/dev/null\' <bar> edit!<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>he', ':h <C-R>=escape(expand("<cWORD>"), "/")<CR><CR>' }
 map { 'v', noremap = false, silent = true, '<leader>he', 'y:h <C-r>"<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope current_buffer_fuzzy_find<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ff', '<cmd>FZF<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ft', '<cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fb', ':Telescope buffers<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fq', ':Telescope registers<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fc', ':Telescope command_history<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fh', ':Telescope help_tags<CR>' }
 map { 'n', noremap = false, silent = true, '<F5>', ':lua require(\'utils.autoreload\').reload()<CR>' }
-map { 'n', noremap = false, silent = true, '<leader>ee', ':NvimTreeRefresh<CR>:NvimTreeToggle<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>ee', ':NvimTreeFindFileToggle<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>a', ':Alpha<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fn', '<cmd>lua require("ezbookmarks").AddBookmark()<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>fd', '<cmd>lua require("ezbookmarks").AddBookmarkDirectory()<CR>' }
@@ -85,6 +84,8 @@ map { 'n', noremap = false, silent = true, 'J', ':m .+1<CR>==' }
 map { 'n', noremap = false, silent = true, 'K', ':m .-2<CR>==' }
 map { 'n', noremap = false, silent = true, '<A-h>', '<cmd>BufferLineCyclePrev<CR>'}
 map { 'n', noremap = false, silent = true, '<A-l>', '<cmd>BufferLineCycleNext<CR>'}
+map { 'n', noremap = false, silent = true, '<A-S-h>', '<cmd>BufferLineMovePrev<CR>'}
+map { 'n', noremap = false, silent = true, '<A-S-l>', '<cmd>BufferLineMoveNext<CR>'}
 -- map { 'n', noremap = false, silent = true, '/', '<cmd>lua require("searchbox").incsearch({clear_matches = true})<CR>' }
 -- map { 'v', noremap = false, silent = true, '/', '<Esc><cmd>lua require("searchbox").incsearch({visual_mode = true})<CR>' }
 map { 'n', noremap = false, silent = false, '<leader>ss', ':%s///gc<Left><Left><Left>' }
@@ -92,4 +93,4 @@ map { 'v', noremap = false, silent = false, '<leader>ss', 'y:%s/<C-R>"/<C-R>"/gc
 map { 'v', noremap = false, silent = true, '<C-f>', '"1y0/<C-r>1<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>ww', ':SymbolsOutline<CR>' }
 map { 'n', noremap = false, silent = true, '<leader>sa', 'ggVG' }
-map { 'n', noremap = false, silent = true, '<F4>', ':cd %:p:h<CR>:vs<CR>:terminal<CR>apython main.py && exit 1<CR>' }
+map { 'n', noremap = false, silent = true, '<leader>fp', ":lua require('telescope').extensions.project.project{}<CR>" }

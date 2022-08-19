@@ -11,6 +11,8 @@ import Data.Bits (testBit)
 import Control.Monad (unless, when)
 import Foreign.C (CInt)
 import Data.Foldable (find)
+import Graphics.X11.Xinerama (getScreenInfo)
+
 
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.DynamicLog
@@ -122,7 +124,8 @@ myAditionalKeys =
   , ("M-s", spawn "spotify")
   , ("M-t", spawn "transmission-gtk")
   , ("<Print>", spawn "flameshot gui")
-  , ("M-e", spawn "emacsclient -c -a 'emacs'")
+  , ("M-e", spawn $ myTerminal ++ " --title Nvim -e nvim")
+  --  , ("M-e", spawn "emacsclient -c -a 'emacs'")
   , ("M-C-d", spawn "def-lookup.sh")
   , ("M-z", spawn "xkb-switch -n")
   , ("M-q", kill)
@@ -253,6 +256,7 @@ myManageHook = composeAll
   , isDialog --> doCenterFloat
   , title =? "Godot Engine" --> doFloat
   , className ~? "(DEBUG)" --> doFloat
+  , appName ~? "Chat - Twitch" --> doFloat
   , appName =? "blueman-manager" --> doFloat
   , className =? "awakened-poe-trade" --> doFloat
   , className =? "poe-overlay" --> doFloat
@@ -269,16 +273,19 @@ myManageHook = composeAll
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = multiScreenFocusHook
-                 <+> swallowEventHook (className =? myTerminalClass <&&> className =? "Emacs") (return True)
+                 -- <+> swallowEventHook (className =? myTerminalClass) (return True)
                 --  <+> dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
 
 
 ------------------------------------------------------------------------
 --
 
+screenCount :: X Int
+screenCount = withDisplay (io.fmap length.getScreenInfo)
+
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 

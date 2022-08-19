@@ -14,6 +14,8 @@ plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history
 ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
+eval $(thefuck --alias)
+
 alias r="ranger"
 alias v="nvim"
 alias vim="nvim"

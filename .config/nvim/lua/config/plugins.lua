@@ -4,13 +4,14 @@ return require('packer').startup(function(use)
     use { 'wbthomason/packer.nvim' }
     use { 'goolord/alpha-nvim' }
     use { 'mbbill/undotree' }
-    use { 'winston0410/commented.nvim' }
+    use { 'numToStr/Comment.nvim' }
     use { 'tpope/vim-surround' }
     use { 'kyazdani42/nvim-tree.lua' }
     use { 'akinsho/toggleterm.nvim' }
     use { 'tpope/vim-fugitive' }
     use { 'kyazdani42/nvim-web-devicons' }
     use { 'morhetz/gruvbox' }
+    use { 'drewtempelmeyer/palenight.vim' }
     use { 'norcalli/nvim-colorizer.lua' }
     use { 'nvim-lua/popup.nvim' }
     use { 'nvim-lua/plenary.nvim' }
@@ -32,6 +33,7 @@ return require('packer').startup(function(use)
     use { 'nvim-treesitter/playground' }
     use { 'nvim-telescope/telescope.nvim' }
     use { 'nvim-telescope/telescope-fzy-native.nvim' }
+    use { 'nvim-telescope/telescope-project.nvim' }
     use { 'hoob3rt/lualine.nvim' }
     use { 'akinsho/bufferline.nvim' }
     use { 'tmsvg/pear-tree' }
@@ -40,6 +42,9 @@ return require('packer').startup(function(use)
     use { 'simrat39/symbols-outline.nvim'}
     use {'kevinhwang91/nvim-fFHighlight'}
     use {'Mofiqul/trld.nvim'}
+    use {'nathom/filetype.nvim'}
+    use {'folke/which-key.nvim'}
+    use {'mfussenegger/nvim-dap'}
   -- use { 'lifer0se/ezbookmarks.nvim' }
 
 end)

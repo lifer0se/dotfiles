@@ -4,7 +4,7 @@
 
 
 local set = vim.opt
-set.guifont = "Source Code Pro:h13"
+set.guifont = "Source Code Pro:h14"
 set.completeopt = { 'menu', 'menuone', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
 set.fillchars:append { eob = " " }
@@ -49,6 +49,7 @@ require('config.lsp')
 require('config.lspkind')
 require('config.cmp')
 require('config.treesitter')
+require('config.dap')
 require('config.lualine')
 require('config.bufferline')
 require('config.telescope')
@@ -58,7 +59,7 @@ require('config.alpha')
 require('config.peartree')
 require('config.indent_blankline')
 require('config.symbols')
--- require('fFHighlight').setup()
+require('config.comment')
 
 require('colorizer').setup()
 require('trld').setup()
@@ -72,9 +73,15 @@ require("fidget").setup{
     }
 }
 
-require('commented').setup{
-   keybindings = {n = "<leader>cc", v = "<leader>cc", nl = "<leader>cc"}
-}
+
+require('filetype').setup({
+    overrides = {
+        extensions = {
+            vert = "glsl",
+            frag = "glsl",
+        }
+    }
+})
 
 vim.opt.runtimepath:append("~/Development/ezbookmarks.nvim")
 require('ezbookmarks').setup{
@@ -83,44 +90,18 @@ require('ezbookmarks').setup{
     open_new_tab = 0,
 }
 
+require("which-key").setup {}
+
 package.loaded[ "bop" ] = nil
 vim.opt.runtimepath:append("~/development/bop.nvim")
 
-
 vim.cmd[[
-  colorscheme gruvbox
-  highlight Normal guibg=NONE
-  highlight SignColumn guibg=NONE
-  highlight CursorLine guibg=NONE
-  highlight CursorLineNr guibg=NONE guifg=#FABD2F
-  highlight Search guibg=#515873 guifg=#EDA36D gui=NONE
-  highlight VertSplit guibg=NONE guifg=#2B2E37
-  highlight Visual guibg=#515873 guifg=#91AFEB gui=NONE
-  highlight ErrorMsg guibg=NONE guifg=#cc241d gui=bold
-  highlight DiagnosticError guifg=#cc241d guibg=NONE
-  highlight DiagnosticWarning guifg=#FABD2F guibg=NONE
-  highlight DiagnosticHint guifg=#688D6A guibg=NONE
-  highlight NvimTreeCursorLine guibg=NONE guifg=#91AFEB
-  highlight NvimTreeWindowPicker guibg=NONE guifg=#91AFEB
-  highlight Pmenu guibg=#2B2E37
-  highlight PmenuSel guibg=#91AFEB
-  highlight PmenuSbar guibg=#2B2E37
-  highlight PmenuThumb guibg=#515873
-  highlight CmpItemAbbrDefault guifg=#AFA58A
-  highlight CmpItemAbbrMatch guifg=#91AFEB
-  highlight CmpItemAbbrMatchFuzzy guifg=#91AFEB
-  highlight CmpItemKindDefault guifg=#AFAFAF
-  highlight CmpItemMenuDefault guifg=#AFAFAF
-  highlight NormalFloat guifg=#91AFEB guibg=None
-  highlight FloatBorder guifg=#91AFEB guibg=None
-  highlight TelescopeBorder guifg=#91AFEB
-  highlight TelescopeMatching guifg=#EDA36D guibg=none
-  highlight TelescopeSelection guifg=#91AFEB guibg=none
-  highlight StatusLine guifg=NONE guibg=#2B2E37 gui=NONE
-  highlight StatusLineNC guifg=NONE guibg=#2B2E37 gui=NONE
-  highlight IndentBlanklineChar guifg=#3C4050
-  highlight IndentBlanklineContextChar guifg=#51566B
-  highlight FocusedSymbol guibg=NONE guifg=#91AFEB gui=bold
+    colorscheme palenight
+    highlight CursorLineNr guifg=#FABD2F
+    highlight CursorLine guibg=#202230
+    highlight Search guibg=#515873 guifg=#EDA36D gui=NONE
+    highlight IndentBlanklineChar guifg=#3C4050
+    highlight IndentBlanklineContextChar guifg=#51566B
 ]]
 
 
@@ -156,9 +137,9 @@ autocmd.VimEnter = function ()
 end
 
 -- cd buffer directory on enter
--- autocmd.BufEnter = function()
-	-- vim.cmd("silent! lcd %:p:h")
--- end
+autocmd.BufEnter = function()
+	vim.cmd("silent! lcd %:p:h")
+end
 
 -- autocmd.CursorHold = function()
   -- vim.cmd("let @/ = '\\V\\<'.escape(expand('<cword>'), '\\').'\\>'")

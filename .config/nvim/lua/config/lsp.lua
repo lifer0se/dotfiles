@@ -1,25 +1,23 @@
 
 local on_attach = function(client, bufnr)
-  local buf_map = vim.api.nvim_buf_set_keymap
-  buf_map(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {})
-  buf_map(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {})
-  buf_map(bufnr, "n", "E", "<cmd>lua vim.lsp.buf.hover()<CR>", {})
-  buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.diagnostic.open_float(0, { show_header = false, border = 'rounded', focusable = false })<CR>", {})
-	buf_map(bufnr, "n", "gn", "<cmd>lua vim.diagnostic.goto_next({float = { border = 'rounded', show_header = false, focusable=false }})<CR>", {})
+    local buf_map = vim.api.nvim_buf_set_keymap
+    buf_map(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {})
+    buf_map(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {})
+    buf_map(bufnr, "n", "E", "<cmd>lua vim.lsp.buf.hover()<CR>", {})
+    buf_map(bufnr, "n", "<C-e>", "<cmd>lua vim.diagnostic.open_float(0, { show_header = false, border = 'rounded', focusable = false })<CR>", {})
+    buf_map(bufnr, "n", "gn", "<cmd>lua vim.diagnostic.goto_next({float = { border = 'rounded', show_header = false, focusable=false }})<CR>", {})
 	buf_map(bufnr, "n", "gp", "<cmd>lua vim.diagnostic.goto_prev({float = { border = 'rounded', show_header = false, focusable=false }})<CR>", {})
-  buf_map(bufnr, "n", "ga", "<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<CR>", {})
+    buf_map(bufnr, "n", "ga", "<cmd>lua vim.lsp.buf.code_action()<CR>", {})
 end
 
 
 vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded"})
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  -- update_in_insert = false,
-  -- underline = true,
-  -- virtual_text = {
-    -- prefix = ''
-  -- }
--- })
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  update_in_insert = true,
+  underline = true,
+  virtual_text = false
+})
 
 local signs = { Error = "ﰲ", Warn = "ﰲ", Hint = "ﰲ", Info = "ﰲ" }
 for type, icon in pairs(signs) do
@@ -36,8 +34,12 @@ require "lsp_signature".setup({
   },
 })
 
-
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- require('lspconfig')['glslls'].setup{
+    -- on_attach = on_attach
+-- }
+
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
   local opts = {

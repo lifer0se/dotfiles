@@ -1,5 +1,9 @@
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = { "c", "lua", "haskell", "c_sharp", "cpp", "bash", "rust", "python"},
+    ensure_installed = { "c", "lua", "haskell", "c_sharp", "cpp", "bash", "rust", "python", "glsl" },
+    auto_install = true,
+    indent = {
+        enable = true,
+    },
     highlight = {
         enable = true,
     },

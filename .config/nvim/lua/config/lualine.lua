@@ -1,15 +1,8 @@
 
-local custom_onedark = require'lualine.themes.onedark'
-custom_onedark.normal.b.bg = '#20222E'
-custom_onedark.normal.b.fg = '#ebdbb2'
-custom_onedark.normal.c.bg = '#2B2E37'
-custom_onedark.normal.c.fg = '#ebdbb2'
-custom_onedark.inactive.c.bg = '#2B2E37'
-
 require'lualine'.setup {
   options = {
     icons_enabled = true,
-    theme = custom_onedark,
+    theme = 'palenight',
     component_separators = {'', ''},
     section_separators = {'', ''},
     disabled_filetypes = { 'NvimTree', 'alpha' },

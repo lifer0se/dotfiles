@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-export PATH=$HOME/.local/bin:$HOME/Scripts:$HOME/.local/share/neovim/bin:$HOME/.local/share/cargo/bin:$HOME/.cabal/bin:$HOME/.emacs.d/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/Scripts:$HOME/.local/share/neovim/bin:$HOME/.local/share/cargo/bin:$HOME/.cabal/bin:$PATH
 
 export TERMINAL=alacritty
 export BROWSER=brave
-export EDITOR="emacsclient -c -a 'emacs'"
-export VISUAL="emacsclient -c -a 'emacs'"
+export EDITOR="nvim"
+export VISUAL="nvim"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
