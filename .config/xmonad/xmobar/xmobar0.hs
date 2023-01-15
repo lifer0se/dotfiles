@@ -28,7 +28,6 @@ Config { font = "xft:Roboto:size=12:bold"
          , Run Com "/home/amnesia/.config/xmonad/xmobar/volume.sh" [] "volume" 10
          , Run Com "/home/amnesia/.config/xmonad/xmobar/bluetooth.sh" [] "bluetooth" 10
          , Run Com "/home/amnesia/.config/xmonad/xmobar/wifi.sh" [] "network" 10
-         , Run Com "/home/amnesia/.config/xmonad/xmobar/trayer-padding.sh" [] "trayerpad" 10
          ]
        , sepChar = "%"
        , alignSep = "}{"
@@ -51,6 +50,5 @@ Config { font = "xft:Roboto:size=12:bold"
             \     \
             \%gpu%\
             \       \
-            \</action>\
-            \%trayerpad%"
+            \</action>"
        }

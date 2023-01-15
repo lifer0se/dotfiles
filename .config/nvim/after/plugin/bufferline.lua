@@ -44,31 +44,35 @@ require'bufferline'.setup{
 	highlights = {
 		buffer_selected =
         {
-			gui = "bold"
+			italic = false,
+			bold = true
 		},
         modified =
         {
-			gui = "bold"
+			italic = false,
+			bold = true
 		},
 		modified_visible =
         {
-			gui = "bold"
+			italic = false,
+			bold = true
 		},
 		modified_selected =
         {
-			gui = "bold"
+			italic = false,
+			bold = true
 		},
 		duplicate_selected =
         {
-			gui = "italic",
+			italic = true,
 		},
 		duplicate_visible =
         {
-			gui = "italic",
+			italic = true,
 		},
 		duplicate =
         {
-			gui = "italic",
+			italic = true,
 		},
 	};
 }

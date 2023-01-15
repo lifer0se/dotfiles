@@ -1,0 +1,5 @@
+require("amnesia.packer")
+require("amnesia.set")
+require("amnesia.map")
+require("amnesia.function")
+require("amnesia.ezbookmarks")

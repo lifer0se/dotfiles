@@ -14,7 +14,7 @@ import Data.Foldable (find)
 import Graphics.X11.Xinerama (getScreenInfo)
 
 
-import XMonad.Hooks.DynamicProperty
+import XMonad.Hooks.OnPropertyChange
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.InsertPosition (insertPosition, Focus(Newer), Position (Master, End))
 import XMonad.Hooks.ManageDocks
@@ -26,7 +26,7 @@ import XMonad.Hooks.RefocusLast (isFloat)
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
 import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Layout.Named (named)
+import XMonad.Layout.Renamed
 import XMonad.Layout.Decoration (ModifiedLayout)
 import XMonad.Layout.DraggingVisualizer (draggingVisualizer)
 import XMonad.Layout.MultiToggle.Instances (StdTransformers (NBFULL))
@@ -90,6 +90,7 @@ myScratchPads =
   , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.05 0.13 0.21)
   , NS "brightness" "brightness-controller" (title =? "Brightness Controller") defaultFloating
   , NS "caprine" "caprine" (className =? "Caprine") defaultFloating
+  , NS "simplenote" "simplenote --no-sandbox" (className =? "Simplenote") (customFloating $ W.RationalRect 0.76 0.06 0.23 0.91)
   ]
 
 
@@ -118,8 +119,8 @@ myAditionalKeys =
   , ("M-d", spawn "rofi -show drun")
   , ("M-S-d", spawn "rofi -show run")
   , ("M-p", spawn "passmenu -p pass")
-  , ("M-w", spawn "brave")
-  , ("M-S-w", spawn "brave --incognito")
+  , ("M-w", spawn "firefox")
+  , ("M-S-w", spawn "firefox --incognito")
   , ("M-S-f", spawn "pcmanfm")
   , ("M-s", spawn "spotify")
   , ("M-t", spawn "transmission-gtk")
@@ -137,6 +138,7 @@ myAditionalKeys =
   , ("M-r", namedScratchpadAction myScratchPads "calendar")
   , ("M-b", namedScratchpadAction myScratchPads "brightness")
   , ("M-S-c", namedScratchpadAction myScratchPads "caprine")
+  , ("M-S-n", namedScratchpadAction myScratchPads "simplenote")
 
   -- spotify controls
   , ("M-<F9>", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
@@ -225,9 +227,9 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
 myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed
   where
-    layoutTall = mkToggle (NBFULL ?? EOT) . named "tall" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutGrid = mkToggle (NBFULL ?? EOT) . named "grid" $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . named "full" $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
+    layoutTall = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "tall"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
+    layoutGrid = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "grid"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "full"] $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -285,7 +287,17 @@ screenCount = withDisplay (io.fmap length.getScreenInfo)
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "killall trayer; trayer --monitor 2 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+    spawn "xrdb ~/.Xresources &"
+    spawn "xsetroot -cursor_name left_ptr &"
+    spawn "setxkbmap us,gr"
+    spawn "nitrogen --restore &"
+    spawn "pidof dunst >/dev/null || dunst &"
+    spawn "pidof picom >/dev/null || picom &"
+    spawn "pidof nm >/dev/null || nm-applet &"
+    spawn "pidof blueberry >/dev/null || blueberry &"
+    spawn "pidof solaar >/dev/null || solaar &"
+    spawn "pidof volumeicon >/dev/null || volumeicon &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 

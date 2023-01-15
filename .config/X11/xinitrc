@@ -2,7 +2,6 @@ xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr &
 numlockx &
 setxkbmap us,gr
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap && xmodmap -e 'clear lock'
 nitrogen --restore &
 check_from_updates.sh &
 dunst &
@@ -12,5 +11,6 @@ blueberry &
 solaar &
 volumeicon &
 emacs --daemon &
+# lxsession
 
 exec xmonad
