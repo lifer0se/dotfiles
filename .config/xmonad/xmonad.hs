@@ -25,7 +25,7 @@ import XMonad.Hooks.ManageHelpers (isDialog, doCenterFloat, doSink)
 import XMonad.Hooks.RefocusLast (isFloat)
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
-import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.NoBorders (smartBorders, hasBorder)
 import XMonad.Layout.Renamed
 import XMonad.Layout.Decoration (ModifiedLayout)
 import XMonad.Layout.DraggingVisualizer (draggingVisualizer)
@@ -67,6 +67,9 @@ orange = "#C45500"
 myWorkspaces :: [[Char]]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
+trayerRestartCommand :: [Char]
+trayerRestartCommand = "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
+
 actionPrefix, actionButton, actionSuffix :: [Char]
 actionPrefix = "<action=`xdotool key super+"
 actionButton = "` button="
@@ -84,7 +87,7 @@ addActions (x:xs) ws = addActions xs (actionPrefix ++ k ++ actionButton ++ show 
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
-  [ NS "gcolor" "gcolor2" (className =? "Gcolor2") defaultFloating
+  [ NS "simplecolorpicker" "simplecolorpicker" (className =? "simplecolorpicker") defaultFloating
   , NS "galculator" "galculator" (className =? "Galculator") (customFloating $ W.RationalRect 0.58 0.48 0.2 0.4)
   , NS "bashtop" (myTerminal ++ " --title bashtop -e bashtop") (title =? "bashtop") (customFloating $ W.RationalRect 0.17 0.15 0.7 0.7)
   , NS "calendar" "gsimplecal" (className =? "Gsimplecal") (customFloating $ W.RationalRect 0.435 0.05 0.13 0.21)
@@ -116,12 +119,13 @@ myAditionalKeys =
   , ("M-S-<Return>", spawn "open_term_at_dir.sh")
   , ("M-v", spawn $ myTerminal ++ " --title Nvim -e nvim")
   , ("M-f", spawn $ myTerminal ++ " --title Ranger -e ranger")
-  , ("M-d", spawn "rofi -show drun")
+  -- , ("M-d", spawn "rofi -show drun")
   , ("M-S-d", spawn "rofi -show run")
   , ("M-p", spawn "passmenu -p pass")
   , ("M-w", spawn "firefox")
-  , ("M-S-w", spawn "firefox --incognito")
+  , ("M-S-w", spawn "firefox --private-window")
   , ("M-S-f", spawn "pcmanfm")
+  , ("M-S-t", spawn trayerRestartCommand)
   , ("M-s", spawn "spotify")
   , ("M-t", spawn "transmission-gtk")
   , ("<Print>", spawn "flameshot gui")
@@ -132,7 +136,7 @@ myAditionalKeys =
   , ("M-q", kill)
 
   -- scratchpads
-  , ("M-g", namedScratchpadAction myScratchPads "gcolor")
+  , ("M-g", namedScratchpadAction myScratchPads "simplecolorpicker")
   , ("M-c", namedScratchpadAction myScratchPads "galculator")
   , ("M-y", namedScratchpadAction myScratchPads "bashtop")
   , ("M-r", namedScratchpadAction myScratchPads "calendar")
@@ -227,9 +231,9 @@ mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
 myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed
   where
-    layoutTall = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "tall"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
-    layoutGrid = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "grid"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
-    layoutTabbed = mkToggle (NBFULL ?? EOT) . renamed [PrependWords "full"] $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
+    layoutTall = mkToggle (NBFULL ?? EOT) . renamed [Replace "tall"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
+    layoutGrid = mkToggle (NBFULL ?? EOT) . renamed [Replace "grid"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
+    layoutTabbed = mkToggle (NBFULL ?? EOT) . renamed [Replace "full"] $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
       , activeColor         = grey1
@@ -254,17 +258,13 @@ q /=? x = fmap (/= x) q
 myManageHook :: ManageHook
 myManageHook = composeAll
   [ resource  =? "desktop_window" --> doIgnore
-  , isFloat --> doCenterFloat
   , isDialog --> doCenterFloat
-  , title =? "Godot Engine" --> doFloat
-  , className ~? "(DEBUG)" --> doFloat
-  , appName ~? "Chat - Twitch" --> doFloat
-  , appName =? "blueman-manager" --> doFloat
-  , className =? "awakened-poe-trade" --> doFloat
-  , className =? "poe-overlay" --> doFloat
-  , className =? "steam_app_238960" --> doFloat
-  , className =? "Blueberry.py" --> doFloat
-  , appName =? "pavucontrol" --> doFloat
+  , className =? "wow.exe" --> doCenterFloat
+  , className =? "battle.net.exe" --> doCenterFloat
+  , title =? "Godot" --> doCenterFloat
+  , className =? "Blueberry.py" --> doCenterFloat
+  , appName =? "blueman-manager" --> doCenterFloat
+  , appName =? "pavucontrol" --> doCenterFloat
   , title =? myTerminalClass --> insertPosition End Newer
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
@@ -287,17 +287,18 @@ screenCount = withDisplay (io.fmap length.getScreenInfo)
 
 myStartupHook :: X ()
 myStartupHook = do
-    spawn "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
-    spawn "xrdb ~/.Xresources &"
+    spawn trayerRestartCommand
     spawn "xsetroot -cursor_name left_ptr &"
     spawn "setxkbmap us,gr"
+    spawn "lxsession &"
     spawn "nitrogen --restore &"
-    spawn "pidof dunst >/dev/null || dunst &"
-    spawn "pidof picom >/dev/null || picom &"
-    spawn "pidof nm >/dev/null || nm-applet &"
-    spawn "pidof blueberry >/dev/null || blueberry &"
-    spawn "pidof solaar >/dev/null || solaar &"
-    spawn "pidof volumeicon >/dev/null || volumeicon &"
+    spawn "pgrep ulauncher >/dev/null || ulauncher &"
+    spawn "pgrep dunst >/dev/null || dunst &"
+    spawn "pgrep picom >/dev/null || picom &"
+    spawn "pgrep nm-applet >/dev/null || nm-applet &"
+    spawn "pgrep blueberry >/dev/null || blueberry &"
+    spawn "pgrep solaar >/dev/null || solaar &"
+    spawn "pgrep volumeicon >/dev/null || volumeicon &"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 

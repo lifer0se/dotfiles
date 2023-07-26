@@ -1,16 +1,16 @@
-xrdb ~/.Xresources
-xsetroot -cursor_name left_ptr &
-numlockx &
-setxkbmap us,gr
-nitrogen --restore &
-check_from_updates.sh &
-dunst &
-picom &
-nm-applet &
-blueberry &
-solaar &
-volumeicon &
-emacs --daemon &
+#xrdb ~/.Xresources
+#xsetroot -cursor_name left_ptr &
+#numlockx &
+#setxkbmap us,gr
+#nitrogen --restore &
+#check_from_updates.sh &
+#dunst &
+#picom &
+#nm-applet &
+#blueberry &
+#solaar &
+#volumeicon &
+# emacs --daemon &
 # lxsession
 
-exec xmonad
+exec /home/amnesia/.local/bin/xmonad

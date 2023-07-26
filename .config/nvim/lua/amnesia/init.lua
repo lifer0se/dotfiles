@@ -1,5 +1,5 @@
 require("amnesia.packer")
 require("amnesia.set")
-require("amnesia.map")
+require("amnesia.maps")
 require("amnesia.function")
 require("amnesia.ezbookmarks")

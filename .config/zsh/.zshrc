@@ -7,8 +7,8 @@ fi
 
 export ZSH="/home/amnesia/.config/zsh/.oh-my-zsh"
 
-source $ZDOTDIR"/cd.sh"
-source $ZDOTDIR"/ex.sh"
+source $ZDOTDIR"/cdls.sh"
+source $ZDOTDIR"/shell_automatic_cd.sh"
 
 autoload -U compinit && compinit
 autoload -Uz promptinit && promptinit
@@ -21,14 +21,13 @@ plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions history
 ZSH_THEME="powerlevel10k/powerlevel10k"
 source $ZSH/oh-my-zsh.sh
 
-eval $(thefuck --alias)
 
-alias r="ranger"
+alias r="ranger_cd"
 alias v="nvim"
 alias vim="nvim"
 alias e="emacsclient -c -a 'emacs'"
 alias cat="bat"
-alias grep="rg"
+alias dmenu="bat"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dfs='dotfiles status'
 alias dfc='dotfiles commit'
@@ -42,4 +41,4 @@ alias keys="xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-[ -f "/home/amnesia/.ghcup/env" ] && source "/home/amnesia/.ghcup/env" # ghcup-env
+[ -f "/home/amnesia/.local/share/ghcup/env" ] && source "/home/amnesia/.local/share/ghcup/env" # ghcup-env

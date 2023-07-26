@@ -19,12 +19,12 @@ require'bufferline'.setup{
       end
     end,
 		middle_mouse_command = 'bdelete! %d',
-    modified_icon = "",
+    modified_icon = "",
 		show_tab_indicators = true,
 		show_close_icon = false,
 		show_buffer_close_icons = false,
-    left_trunc_marker = 'ﰯ',
-    right_trunc_marker = 'ﰲ',
+    left_trunc_marker = '',
+    right_trunc_marker = '',
     separator_style = "none",
     offsets = offsets,
     custom_filter = function(buf)
