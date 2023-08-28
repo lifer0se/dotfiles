@@ -26,6 +26,7 @@ import XMonad.Hooks.RefocusLast (isFloat)
 
 import XMonad.Layout.Spacing (Spacing, spacingRaw, Border (Border))
 import XMonad.Layout.NoBorders (smartBorders, hasBorder)
+import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Renamed
 import XMonad.Layout.Decoration (ModifiedLayout)
 import XMonad.Layout.DraggingVisualizer (draggingVisualizer)
@@ -65,7 +66,7 @@ cyan   = "#8BABF0"
 orange = "#C45500"
 
 myWorkspaces :: [[Char]]
-myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 
 trayerRestartCommand :: [Char]
 trayerRestartCommand = "killall trayer; trayer --monitor 1 --edge top --align right --widthtype request --padding 7 --iconspacing 10 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x2B2E37  --height 29 --distance 5 &"
@@ -81,9 +82,7 @@ addActions (x:xs) ws = addActions xs (actionPrefix ++ k ++ actionButton ++ show 
     where k = fst x
           b = snd x
 
-
 ------------------------------------------------------------------------
---
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
@@ -96,9 +95,7 @@ myScratchPads =
   , NS "simplenote" "simplenote --no-sandbox" (className =? "Simplenote") (customFloating $ W.RationalRect 0.76 0.06 0.23 0.91)
   ]
 
-
 ------------------------------------------------------------------------
---
 
 currentScreen :: X ScreenId
 currentScreen = gets (W.screen . W.current . windowset)
@@ -210,9 +207,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = M.fromList
   , ((modm, button5), \_ -> moveTo Next workspaceOnCurrentScreen)
   ]
 
-
 ------------------------------------------------------------------------
---
 
 switchScreen :: Int -> X ()
 switchScreen d = do s <- screenBy d
@@ -222,17 +217,16 @@ switchScreen d = do s <- screenBy d
                          Nothing -> return ()
                          Just ws -> windows (W.view ws)
 
-
 ------------------------------------------------------------------------
---
 
 mySpacing :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i j = spacingRaw False (Border i i i i) True (Border j j j j) True
 
-myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed
+myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall ||| layoutTabbed ||| layoutFloat
   where
     layoutTall = mkToggle (NBFULL ?? EOT) . renamed [Replace "tall"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ mouseResizableTile { masterFrac = 0.65, draggerType = FixedDragger 0 30}
     layoutGrid = mkToggle (NBFULL ?? EOT) . renamed [Replace "grid"] $ draggingVisualizer $ smartBorders $ mySpacing 55 15 $ Grid False
+    layoutFloat = mkToggle (NBFULL ?? EOT) . renamed [Replace "float"] $ simpleFloat
     layoutTabbed = mkToggle (NBFULL ?? EOT) . renamed [Replace "full"] $ smartBorders $ mySpacing 65 5 $ tabbed shrinkText myTabTheme
     myTabTheme = def
       { fontName            = "xft:Roboto:size=12:bold"
@@ -245,9 +239,7 @@ myLayoutHook = avoidStruts $ onWorkspaces ["0_9", "1_9"] layoutGrid $ layoutTall
       , decoHeight          = 25
       }
 
-
 ------------------------------------------------------------------------
---
 
 (~?) :: Eq a => Query [a] -> [a] -> Query Bool
 q ~? x = fmap (x `L.isInfixOf`) q
@@ -269,21 +261,14 @@ myManageHook = composeAll
   , insertPosition Master Newer
   ] <+> manageDocks <+> namedScratchpadManageHook myScratchPads
 
-
 ------------------------------------------------------------------------
---
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = multiScreenFocusHook
                  -- <+> swallowEventHook (className =? myTerminalClass) (return True)
                 --  <+> dynamicPropertyChange "WM_NAME" (title =? "Spotify" --> doShift "1_8")
 
-
 ------------------------------------------------------------------------
---
-
-screenCount :: X Int
-screenCount = withDisplay (io.fmap length.getScreenInfo)
 
 myStartupHook :: X ()
 myStartupHook = do
@@ -292,18 +277,17 @@ myStartupHook = do
     spawn "setxkbmap us,gr"
     spawn "lxsession &"
     spawn "nitrogen --restore &"
-    spawn "pgrep ulauncher >/dev/null || ulauncher &"
-    spawn "pgrep dunst >/dev/null || dunst &"
-    spawn "pgrep picom >/dev/null || picom &"
-    spawn "pgrep nm-applet >/dev/null || nm-applet &"
-    spawn "pgrep blueberry >/dev/null || blueberry &"
-    spawn "pgrep solaar >/dev/null || solaar &"
-    spawn "pgrep volumeicon >/dev/null || volumeicon &"
+    spawn "autostart.sh ulauncher"
+    spawn "autostart.sh dunst"
+    spawn "autostart.sh picom"
+    spawn "autostart.sh nm-applet"
+    spawn "autostart.sh blueberry"
+    spawn "autostart.sh solaar"
+    spawn "autostart.sh volumeicon"
+    spawn "autostart.sh redshift"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
-
 ------------------------------------------------------------------------
---
 
 newtype MyUpdatePointerActive = MyUpdatePointerActive Bool
 instance ExtensionClass MyUpdatePointerActive where
@@ -321,9 +305,7 @@ myUpdatePointer refPos ratio =
   where
     isActive = (\(MyUpdatePointerActive b) -> b) <$> XS.get
 
-
 ------------------------------------------------------------------------
---
 
 multiScreenFocusHook :: Event -> X All
 multiScreenFocusHook MotionEvent { ev_x = x, ev_y = y } = do
@@ -352,9 +334,7 @@ multiScreenFocusHook MotionEvent { ev_x = x, ev_y = y } = do
         focusWS ids = windows (W.view ids)
 multiScreenFocusHook _ = return (All True)
 
-
 ------------------------------------------------------------------------
---
 
 myWorkspaceIndices :: M.Map [Char] Integer
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..]
@@ -387,7 +367,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
                 $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  titleColorIsActive s (shortenL 81 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 95 $ logTitleOnScreen s)
                 ]
   }
   where
@@ -401,9 +381,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
       c <- withWindowSet $ return . W.screen . W.current
       if n == c then wrapL "<icon=/home/amnesia/.config/xmonad/xmobar/icons/" "_selected.xpm/>" l else wrapL "<icon=/home/amnesia/.config/xmonad/xmobar/icons/" ".xpm/>" l
 
-
 ------------------------------------------------------------------------
---
 
 main :: IO ()
 main = xmonad

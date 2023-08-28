@@ -23,6 +23,7 @@ source $ZSH/oh-my-zsh.sh
 
 
 alias r="ranger_cd"
+alias f="ranger_cd"
 alias v="nvim"
 alias vim="nvim"
 alias e="emacsclient -c -a 'emacs'"
@@ -36,7 +37,7 @@ alias dfa='dotfiles add'
 alias dfr='dotfiles rm'
 alias neo='neo-matrix -D -s -c cyan'
 alias ls="exa --icons -l"
-alias keys="xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 }'"
+alias xevs="xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 }'"
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh

@@ -1,13 +1,13 @@
 #!/bin/sh
 
 TERM="alacritty"
-SERVER="/tmp/godot"
-
-FILE=$(echo $1 | sed 's! !\\ !g')
+SERVER="nvim.godot"
+FILE=$1
 LINE=$2
-let LINE+=1
-if [ ! -z `nvr --serverlist | grep $SERVER` ]; then
-  nvr --servername $SERVER +$LINE $FILE
+COL=$3
+
+if [ ! -z `ls /tmp/ | grep $SERVER` ]; then
+	nvim --server /tmp/$SERVER --remote-send "<esc>:n $FILE<CR>:call cursor($LINE,$COL)<CR>"
 else
-  $TERM -e nvr --servername $SERVER +$LINE $FILE
+	$TERM -e nvim --listen /tmp/$SERVER "+find $FILE" "+call cursor($LINE,$COL)"
 fi

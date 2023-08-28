@@ -49,8 +49,8 @@ return require('packer').startup(function(use)
         }
     }
     use {"ray-x/lsp_signature.nvim"}
-
     use { 'tpope/vim-fugitive' }
+    use { 'mfussenegger/nvim-dap' }
 
     use { 'mbbill/undotree' }
     use { 'numToStr/Comment.nvim' }

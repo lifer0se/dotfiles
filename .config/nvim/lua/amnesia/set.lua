@@ -8,8 +8,8 @@ set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
 set.scrolloff = 4
 set.shiftwidth = 4
 set.tabstop = 4
-set.expandtab = true
-set.smartindent = true
+-- set.expandtab = true
+-- set.smartindent = true
 set.ignorecase = true
 set.title = true
 set.splitbelow = true
