@@ -57,6 +57,9 @@ myTerminal, myTerminalClass :: [Char]
 myTerminal = "alacritty"
 myTerminalClass = "Alacritty"
 
+rofiMacro :: [Char]
+rofiMacro = "~/.config/rofi/launchers/universal.sh"
+
 grey1, grey2, grey3, grey4, cyan, orange :: String
 grey1  = "#2B2E37"
 grey2  = "#555E70"
@@ -116,8 +119,8 @@ myAditionalKeys =
   , ("M-S-<Return>", spawn "open_term_at_dir.sh")
   , ("M-v", spawn $ myTerminal ++ " --title Nvim -e nvim")
   , ("M-f", spawn $ myTerminal ++ " --title Ranger -e ranger")
-  -- , ("M-d", spawn "rofi -show drun")
-  , ("M-S-d", spawn "rofi -show run")
+  , ("M-d", spawn $ rofiMacro ++ " drun")
+  , ("M-S-d", spawn $ rofiMacro ++ " run")
   , ("M-p", spawn "passmenu -p pass")
   , ("M-w", spawn "firefox")
   , ("M-S-w", spawn "firefox --private-window")
@@ -173,6 +176,7 @@ myAditionalKeys =
   , ("M-S-a", sendMessage ToggleStruts)
   , ("M-n", sendMessage NextLayout)
   , ("M-m", spawn "xdotool key super+a && xdotool key super+A")
+  , ("M-S-m", spawn "sleep 1; xset dpms force suspend")
 
   -- workspace controls
   , ("M-<Left>", moveTo Prev workspaceOnCurrentScreen)
@@ -253,6 +257,7 @@ myManageHook = composeAll
   , isDialog --> doCenterFloat
   , className =? "wow.exe" --> doCenterFloat
   , className =? "battle.net.exe" --> doCenterFloat
+  , className =? "awakened-poe-trade" --> doCenterFloat
   , title =? "Godot" --> doCenterFloat
   , className =? "Blueberry.py" --> doCenterFloat
   , appName =? "blueman-manager" --> doCenterFloat
@@ -273,18 +278,18 @@ myHandleEventHook = multiScreenFocusHook
 myStartupHook :: X ()
 myStartupHook = do
     spawn trayerRestartCommand
+    spawn "nitrogen --restore &"
     spawn "xsetroot -cursor_name left_ptr &"
     spawn "setxkbmap us,gr"
-    spawn "lxsession &"
-    spawn "nitrogen --restore &"
-    spawn "autostart.sh ulauncher"
+    spawn "autostart.sh lxsession"
+    -- spawn "autostart.sh ulauncher"
     spawn "autostart.sh dunst"
     spawn "autostart.sh picom"
     spawn "autostart.sh nm-applet"
     spawn "autostart.sh blueberry"
     spawn "autostart.sh solaar"
     spawn "autostart.sh volumeicon"
-    spawn "autostart.sh redshift"
+    spawn "autostart.sh redshift-gtk"
     modify $ \xstate -> xstate { windowset = onlyOnScreen 1 "1_1" (windowset xstate) }
 
 ------------------------------------------------------------------------
@@ -367,7 +372,7 @@ myXmobarPP s  = filterOutWsPP [scratchpadWorkspaceTag] . marshallPP s $ def
                 $ wrapL (actionPrefix ++ "Right" ++ actionButton ++ "5>") actionSuffix
                 $ wrapL "    " "    " $ layoutColorIsActive s (logLayoutOnScreen s)
                 , wrapL (actionPrefix ++ "q" ++ actionButton ++ "2>") actionSuffix
-                $  titleColorIsActive s (shortenL 95 $ logTitleOnScreen s)
+                $  titleColorIsActive s (shortenL 81 $ logTitleOnScreen s)
                 ]
   }
   where

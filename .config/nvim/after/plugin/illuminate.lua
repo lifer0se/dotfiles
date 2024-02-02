@@ -1,0 +1,16 @@
+-- -- default configuration
+-- require('illuminate').configure({
+--     providers = {
+--         'lsp',
+--         'treesitter',
+--     },
+--     delay = 100,
+--     filetype_overrides = {},
+--     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+--     filetypes_denylist = {
+--         'fugitive',
+--         'nvim-tree',
+--     },
+--     min_count_to_highlight = 2,
+--
+-- })

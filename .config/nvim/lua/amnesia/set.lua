@@ -2,7 +2,6 @@ local set = vim.opt
 -- set.completeopt = { 'menu', 'menuone', 'noselect' }
 set.backspace = { 'indent', 'eol', 'start' }
 set.fillchars:append { eob = " " }
-set.fillchars:append('vert:▕')
 set.list = true
 set.listchars = { eol = "↲" , tab = "» ", trail = "·"}
 set.scrolloff = 4

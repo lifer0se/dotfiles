@@ -1,7 +1,7 @@
 #!/bin/sh
 
-temp1=70
-temp2=85
+temp1=75
+temp2=90
 
 temp=$(sensors | grep 'Package id 0:' | awk '{print $4}' | sed 's/+//'| sed 's/.0°C//')
 temp=${temp%???}

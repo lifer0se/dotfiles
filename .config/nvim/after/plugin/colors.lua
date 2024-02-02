@@ -1,3 +1,7 @@
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = '#292D3E' })
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = '#292D3E' })
 vim.api.nvim_set_hl(0, "CursorLineNr", { fg = '#FABD2F' })
 vim.api.nvim_set_hl(0, "CursorLine", { bg = '#202230' })
 vim.api.nvim_set_hl(0, "Search", { bg = '#515873', fg = '#EDA36D' })
+vim.api.nvim_set_hl(0, "TSDefinition", { bg = '#3E4452', bold = true })
+vim.api.nvim_set_hl(0, "TSDefinitionUsage", { bg = '#3E4452' })

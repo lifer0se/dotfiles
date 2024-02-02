@@ -7,7 +7,6 @@ end)
 require('telescope').setup{
   defaults = {
 		prompt_prefix = '🔍  ',
-		selection_caret = 'ﰲ ',
 		hidden = true,
 	},
 	pickers = {
